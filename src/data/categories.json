@@ -1,0 +1,105 @@
+{
+  "categories": [
+    {
+      "id": 0,
+      "name": "Sin categoría",
+      "description": "Selecciona esta opción si no conoces su categoría"
+    },
+    {
+      "id": 1,
+      "name": "Frutas y Verduras",
+      "description": "Productos frescos de origen vegetal.",
+      "examples": ["cambur", "cilantro", "lechosa", "plátano", "tomate", "cebolla", "pimentón", "aguacate"]
+    },
+    {
+      "id": 2,
+      "name": "Proteínas",
+      "description": "Carnes, pescados, pollo y otras fuentes proteicas.",
+      "examples": ["carne de res", "pollo", "cochino", "pescado fresco", "huevos", "pavo"]
+    },
+    {
+      "id": 3,
+      "name": "Charcutería",
+      "description": "Embutidos y fiambres.",
+      "examples": ["jamón", "salchichón", "chorizo", "mortadela", "queso llanero", "tocineta"]
+    },
+    {
+      "id": 4,
+      "name": "Lácteos",
+      "description": "Productos derivados de la leche y derivados.",
+      "examples": ["leche en polvo", "queso llanero", "natilla", "yogurt", "margarina", "queso guayanés"]
+    },
+    {
+      "id": 5,
+      "name": "Panadería y Pastelería",
+      "description": "Panes, dulces y productos horneados.",
+      "examples": ["pan campesino", "torta de pan", "golfeados", "torta negra", "pan de jamón", "dulce de lechosa"]
+    },
+    {
+      "id": 6,
+      "name": "Despensa Básica",
+      "description": "Alimentos esenciales de consumo diario.",
+      "examples": ["harina precocida", "arroz", "pasta", "granos", "aceite", "azúcar"]
+    },
+    {
+      "id": 7,
+      "name": "Enlatados y Conservas",
+      "description": "Alimentos no perecederos envasados.",
+      "examples": ["atún enlatado", "sardinas", "salsa de tomat", "maíz dulce"]
+    },
+    {
+      "id": 8,
+      "name": "Condimentos",
+      "description": "Aliños, especias y sazonadores.",
+      "examples": ["sal", "pimienta", "comino", "curry", "sazonador"]
+    },
+    {
+      "id": 9,
+      "name": "Bebidas",
+      "description": "Líquidos para consumo, alcohólicos y no alcohólicos.",
+      "examples": ["malta", "refrescos", "jugos", "café", "ron", "agua mineral"]
+    },
+    {
+      "id": 10,
+      "name": "Chucherías",
+      "description": "Snacks y productos dulces o salados.",
+      "examples": ["platanitos", "Chiquilín", "Doritos", "Tip Tops", "Pirulín", "bubbaloo"]
+    },
+    {
+      "id": 11,
+      "name": "Productos de Limpieza",
+      "description": "Artículos para higiene del hogar.",
+      "examples": ["detergente en polvo", "cloro", "jabón azul", "limpiavidrios", "desinfectante"]
+    },
+    {
+      "id": 12,
+      "name": "Cuidado Personal",
+      "description": "Artículos de higiene y belleza.",
+      "examples": ["shampoo", "jabón corporal", "crema dental", "toallas sanitarias", "pañales"]
+    },
+    {
+      "id": 13,
+      "name": "Salud",
+      "description": "Productos médicos y de bienestar general.",
+      "examples": ["acetaminofén", "vitaminas", "termómetro", "curitas", "alcohol antiséptico"]
+    },
+    {
+      "id": 14,
+      "name": "Electrodomésticos",
+      "description": "Utensilios y equipos para la cocina.",
+      "examples": ["arrocera", "cafetera", "licuadora", "microondas", "tostadora"]
+    },
+    {
+      "id": 15,
+      "name": "Mascotas",
+      "description": "Productos para animales domésticos.",
+      "examples": ["perrarina Dog Chow", "arena para gatos", "pecheras", "juguetes para gatos", "shampoo para perros"]
+    },
+    {
+      "id": 16,
+      "name": "Platos Listos",
+      "description": "Comidas precocinadas o preparadas para consumo inmediato.",
+      "examples": ["pasticho", "pizza precocida", "ensalada de gallina", "pollo asado", "empanadas"]
+    }
+  ]
+}

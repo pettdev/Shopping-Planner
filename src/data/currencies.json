@@ -1,0 +1,14 @@
+{
+  "currencies": [
+    {
+      "code": "VES",
+      "name": "Bolívar Digital",
+      "symbol": "Bs."
+    },
+    {
+      "code": "USD",
+      "name": "United States Dollar",
+      "symbol": "$"
+    }
+  ]
+}

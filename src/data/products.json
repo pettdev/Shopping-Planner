@@ -1,0 +1,22 @@
+{
+	"products": [
+		{
+		"name": "Cebolla",
+		"description": "A granel",
+		"category": "Verduras",
+		"brand": "SuperLíder",
+		"image": ["cebolla.jpg"],
+		"id": 398492,
+		"createdAt": "2023-10-01T08:30:00Z"
+		},
+		{
+		"name": "Tomate",
+		"description": "A granel",
+		"category": "Verduras",
+		"brand": "Luxor",
+		"image": ["tomate.jpg"],
+		"id": 758390,
+		"createdAt": "2023-10-10T08:30:00Z"
+		}
+	]
+}
