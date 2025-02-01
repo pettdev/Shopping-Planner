@@ -1,50 +1,48 @@
 import { useState, useEffect } from "react";
-import { Input, SelectOption, Button, CheckToggler } from "../../../common";
+import { Input, SelectOption, Button } from "../../../common";
 import { categories, units } from "../../../../data";
-import { useCreatedItemContext } from "../../../../context/CreateItemContext/";
-import { itemFactory } from "../itemFactory";
+import ItemFactory from "./ItemFactory";
 
 const CreateItemForm = () => {
-  // Obtener la función de actualización del contexto
-  const { formData, updateFormData } = useCreatedItemContext();
+
   
   // Estado para controlar la visibilidad del formulario
   const [showForm, setShowForm] = useState(false);
   
-  // Estado para almacenar los datos temporales del formulario
-  const [tempData, setTempData] = useState({
+
+  const [formData, setFormData] = useState({
     name: '',
     description: '',
     brand: '',
     selected_category: '',
     selected_unit: '',
-    exempt:''
   });
 
-  //console.log(itemFactory(tempData.brand, ))
+  const factory = new ItemFactory({ ...formData });
 
   // Manejar cambios en los campos de entrada
   const handleChange = (e) => {
     
     if(e.target.id === 'exempt') {
-      setTempData({...tempData, [e.target.id]: e.target.checked})
+      setFormData({...formData, [e.target.id]: e.target.checked})
     } else {
-      setTempData({...tempData, [e.target.id]: e.target.value})
+      setFormData({...formData, [e.target.id]: e.target.value})
     }
   };
 
   // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (tempData.name && tempData.description) {
-      console.log(`sent tempData: ${JSON.stringify(tempData)}`)
-      updateFormData(tempData); // Actualizar datos en el contexto
-      console.log(`saved updateFormData: ${JSON.stringify(formData)}`)
-      setShowForm(false); // Ocultar formulario tras enviar
+    console.log(JSON.stringify(formData))
+    
+    if (formData.name && 
+        formData.selected_unit && 
+        formData.selected_category) {
+      factory.build()
+      setShowForm(false);
     }
   };
 
-  // En otro lugar del componente:
   useEffect(() => {
   console.log("formData actualizado:", formData); // ✅ Valor nuevo
   }, [formData]);
@@ -69,7 +67,6 @@ const CreateItemForm = () => {
           />
           <br/>
           <Input
-            required
             labelText="Descripción:"
             type="textarea" 
             id="description" 
@@ -86,6 +83,7 @@ const CreateItemForm = () => {
           />
           <br/>
           <SelectOption
+            required
             labelText="Categoría:"
             id="selected_category"
             options={allCategories}
@@ -93,15 +91,10 @@ const CreateItemForm = () => {
           />
           <br/>
           <SelectOption
+            required
             labelText="Unidad:"
             id="selected_unit"
             options={allSellingUnits}
-            onChange={handleChange}
-          />
-          <br/>
-          <CheckToggler 
-            labelText={'Exento de impuestos:'}
-            id='exempt'
             onChange={handleChange}
           />
           <br/>
