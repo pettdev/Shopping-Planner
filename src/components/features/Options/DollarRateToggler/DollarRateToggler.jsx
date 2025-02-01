@@ -2,7 +2,7 @@ import {useDollarRate} from '../../../../context/DollarRateContext'
 import {CheckToggler} from '../../../common';
 
 function DollarRateToggler() {
-    const {price, updatePrice} = useDollarRate()
+    const {updatePrice} = useDollarRate()
     
     return (
       <>
@@ -17,6 +17,7 @@ function DollarRateToggler() {
               conditionalPlaceholder={'Ingresar tasa'}
               onChange={updatePrice}
               conditionalButtonLabel={'Aplicar'}
+              renderOnCondition={true}
             />
           }
         </form>

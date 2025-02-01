@@ -8,6 +8,7 @@
  * @param {string} props.conditionalPlaceholder - The placeholder text for the conditional input field.
  * @param {string} props.conditionalButtonLabel - The label text for the conditional button.
  * @param {function} props.onChange - The function to call when the value of the conditional input changes.
+ * @param {boolean} props.renderOnCondition - The boolean to determine then renderization of conditional elements on check's input.
  * @param {number} [props.min] - The minimum value for the conditional input field (optional).
  * @param {number} [props.max] - The maximum value for the conditional input field (optional).
  *
@@ -18,19 +19,20 @@ import { Label, Button, Input } from '../'
 
 function CheckToggler({
   labelText, 
-  id, 
+  id,
+  renderOnCondition=false, 
   conditionalInputType, 
   conditionalPlaceholder, 
   conditionalButtonLabel, 
-  onChange, 
   min, 
-  max
+  max,
+  ...props
 }) {
   
   const [isChecked, setIsChecked] = useState(false)
   
   const onChangeHandler = (e) => {
-    onChange(e.target.value) // Autoaplica los cambios en la pieza de estado onChange
+    props.onChange(e.target.value) // Autoaplica los cambios en la pieza de estado onChange
   }
 
   const onClickHandler = (e) => {
@@ -40,14 +42,21 @@ function CheckToggler({
   return (
     <>
       <Label htmlFor={id} labelText={labelText}>
-        <Input 
+        {renderOnCondition === false ? 
+          <Input 
+          id={id}
+          type="checkbox"
+          {...props}/> // Para que onChange reciba su evento
+          : 
+          <Input 
             id={id}
             type="checkbox"
             checked={isChecked}
             onChange={() => setIsChecked(!isChecked)}/>
+        }
       </Label>
       
-      {isChecked && (
+      {isChecked && renderOnCondition && (
         <>
           <Input
             id={`${id}Contidional`} 

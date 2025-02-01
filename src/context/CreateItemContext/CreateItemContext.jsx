@@ -9,6 +9,7 @@ export const CreateItemProvider = ({children}) => {
     brand: '',
     selected_category: '',
     selected_unit: '',
+    exempt:''
   })
 
   const updateFormData = (newFormData) => setFormData(newFormData)

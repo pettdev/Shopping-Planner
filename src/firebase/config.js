@@ -22,10 +22,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+//const app = initializeApp(firebaseConfig); <-
 
 // Inicializa Analytics (opcional, solo si lo necesitas)
-const analytics = getAnalytics(app);
+//const analytics = getAnalytics(app); <-
 
 // Inicializa y exporta los servicios de Firebase que uses
 export const db = getFirestore(app); // Firestore

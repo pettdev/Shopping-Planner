@@ -1,0 +1,335 @@
+{
+  "id": 0,
+  "name": "Venezuela",
+  "ioc_code": "VEN",
+  "states": [
+    {
+      "id": 0,
+      "name": "Amazonas",
+      "cities": [
+        { "id": 0, "name": "Puerto Ayacucho" },
+        { "id": 1, "name": "Maroa" },
+        { "id": 2, "name": "San Carlos de Río Negro" },
+        { "id": 3, "name": "San Fernando de Atabapo" },
+        { "id": 4, "name": "La Esmeralda" },
+        { "id": 5, "name": "Yavita" },
+        { "id": 6, "name": "Isla Ratón" }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Anzoátegui",
+      "cities": [
+        { "id": 0, "name": "Barcelona" },
+        { "id": 1, "name": "Puerto La Cruz" },
+        { "id": 2, "name": "El Tigre" },
+        { "id": 3, "name": "Anaco" },
+        { "id": 4, "name": "Cantaura" },
+        { "id": 5, "name": "Lechería" },
+        { "id": 6, "name": "Guanta" },
+        { "id": 7, "name": "Pariaguán" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Apure",
+      "cities": [
+        { "id": 0, "name": "San Fernando de Apure" },
+        { "id": 1, "name": "Guasdualito" },
+        { "id": 2, "name": "Achaguas" },
+        { "id": 3, "name": "Biruaca" },
+        { "id": 4, "name": "Elorza" },
+        { "id": 5, "name": "Mantecal" },
+        { "id": 6, "name": "Puerto Páez" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Aragua",
+      "cities": [
+        { "id": 0, "name": "Maracay" },
+        { "id": 1, "name": "Turmero" },
+        { "id": 2, "name": "La Victoria" },
+        { "id": 3, "name": "Cagua" },
+        { "id": 4, "name": "El Limón" },
+        { "id": 5, "name": "Villa de Cura" },
+        { "id": 6, "name": "Palo Negro" },
+        { "id": 7, "name": "San Mateo" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Barinas",
+      "cities": [
+        { "id": 0, "name": "Barinas" },
+        { "id": 1, "name": "Altamira" },
+        { "id": 2, "name": "Socopó" },
+        { "id": 3, "name": "Santa Bárbara" },
+        { "id": 4, "name": "Barinitas" },
+        { "id": 5, "name": "Calderas" },
+        { "id": 6, "name": "Sabaneta" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Bolívar",
+      "cities": [
+        { "id": 0, "name": "Ciudad Bolívar" },
+        { "id": 1, "name": "Ciudad Guayana" },
+        { "id": 2, "name": "Upata" },
+        { "id": 3, "name": "Caicara del Orinoco" },
+        { "id": 4, "name": "El Callao" },
+        { "id": 5, "name": "Tumeremo" },
+        { "id": 6, "name": "Guasipati" },
+        { "id": 7, "name": "Santa Elena de Uairén" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Carabobo",
+      "cities": [
+        { "id": 0, "name": "Valencia" },
+        { "id": 1, "name": "Puerto Cabello" },
+        { "id": 2, "name": "Guacara" },
+        { "id": 3, "name": "Mariara" },
+        { "id": 4, "name": "San Joaquín" },
+        { "id": 5, "name": "Bejuma" },
+        { "id": 6, "name": "Los Guayos" },
+        { "id": 7, "name": "Guigue" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Cojedes",
+      "cities": [
+        { "id": 0, "name": "San Carlos" },
+        { "id": 1, "name": "Tinaco" },
+        { "id": 2, "name": "El Pao" },
+        { "id": 3, "name": "Tinaquillo" },
+        { "id": 4, "name": "El Baúl" },
+        { "id": 5, "name": "Las Vegas" },
+        { "id": 6, "name": "Libertad" }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Delta Amacuro",
+      "cities": [
+        { "id": 0, "name": "Tucupita" },
+        { "id": 1, "name": "Pedernales" },
+        { "id": 2, "name": "Curiapo" },
+        { "id": 3, "name": "Sierra Imataca" },
+        { "id": 4, "name": "Juan Millán" },
+        { "id": 5, "name": "Capure" }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Falcón",
+      "cities": [
+        { "id": 0, "name": "Coro" },
+        { "id": 1, "name": "Punto Fijo" },
+        { "id": 2, "name": "La Vela de Coro" },
+        { "id": 3, "name": "Pueblo Nuevo" },
+        { "id": 4, "name": "Adícora" },
+        { "id": 5, "name": "Dabajuro" },
+        { "id": 6, "name": "Mirimire" }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Guárico",
+      "cities": [
+        { "id": 0, "name": "San Juan de los Morros" },
+        { "id": 1, "name": "Calabozo" },
+        { "id": 2, "name": "Valle de La Pascua" },
+        { "id": 3, "name": "Altagracia de Orituco" },
+        { "id": 4, "name": "Tucupido" },
+        { "id": 5, "name": "Chaguaramas" },
+        { "id": 6, "name": "El Sombrero" }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Lara",
+      "cities": [
+        { "id": 0, "name": "Barquisimeto" },
+        { "id": 1, "name": "Carora" },
+        { "id": 2, "name": "El Tocuyo" },
+        { "id": 3, "name": "Quíbor" },
+        { "id": 4, "name": "Duaca" },
+        { "id": 5, "name": "Cabudare" },
+        { "id": 6, "name": "Sanare" }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Mérida",
+      "cities": [
+        { "id": 0, "name": "Mérida" },
+        { "id": 1, "name": "El Vigía" },
+        { "id": 2, "name": "Tovar" },
+        { "id": 3, "name": "Ejido" },
+        { "id": 4, "name": "Lagunillas" },
+        { "id": 5, "name": "Mucuchíes" },
+        { "id": 6, "name": "Bailadores" }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Miranda",
+      "cities": [
+        { "id": 0, "name": "Los Teques" },
+        { "id": 1, "name": "Petare" },
+        { "id": 2, "name": "Guatire" },
+        { "id": 3, "name": "Ocumare del Tuy" },
+        { "id": 4, "name": "Santa Teresa del Tuy" },
+        { "id": 5, "name": "Charallave" },
+        { "id": 6, "name": "Cúa" }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Monagas",
+      "cities": [
+        { "id": 0, "name": "Maturín" },
+        { "id": 1, "name": "Punta de Mata" },
+        { "id": 2, "name": "Caripito" },
+        { "id": 3, "name": "Aragua de Maturín" },
+        { "id": 4, "name": "Caripe" },
+        { "id": 5, "name": "Barrancas" },
+        { "id": 6, "name": "Quiriquire" }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Nueva Esparta",
+      "cities": [
+        { "id": 0, "name": "La Asunción" },
+        { "id": 1, "name": "Porlamar" },
+        { "id": 2, "name": "Pampatar" },
+        { "id": 3, "name": "Juan Griego" },
+        { "id": 4, "name": "Santa Ana" },
+        { "id": 5, "name": "El Valle del Espíritu Santo" },
+        { "id": 6, "name": "San Juan Bautista" }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Portuguesa",
+      "cities": [
+        { "id": 0, "name": "Guanare" },
+        { "id": 1, "name": "Acarigua" },
+        { "id": 2, "name": "Araure" },
+        { "id": 3, "name": "Ospino" },
+        { "id": 4, "name": "Agua Blanca" },
+        { "id": 5, "name": "Guanarito" },
+        { "id": 6, "name": "Villa Bruzual" }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Sucre",
+      "cities": [
+        { "id": 0, "name": "Cumaná" },
+        { "id": 1, "name": "Carúpano" },
+        { "id": 2, "name": "Güiria" },
+        { "id": 3, "name": "Cumanacoa" },
+        { "id": 4, "name": "Araya" },
+        { "id": 5, "name": "Casanay" },
+        { "id": 6, "name": "Río Caribe" }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Táchira",
+      "cities": [
+        { "id": 0, "name": "San Cristóbal" },
+        { "id": 1, "name": "Táriba" },
+        { "id": 2, "name": "Rubio" },
+        { "id": 3, "name": "La Fría" },
+        { "id": 4, "name": "Colón" },
+        { "id": 5, "name": "San Antonio del Táchira" },
+        { "id": 6, "name": "Palmira" }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Trujillo",
+      "cities": [
+        { "id": 0, "name": "Trujillo" },
+        { "id": 1, "name": "Valera" },
+        { "id": 2, "name": "Boconó" },
+        { "id": 3, "name": "La Puerta" },
+        { "id": 4, "name": "Carache" },
+        { "id": 5, "name": "Betijoque" },
+        { "id": 6, "name": "Escuque" }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Vargas",
+      "cities": [
+        { "id": 0, "name": "La Guaira" },
+        { "id": 1, "name": "Catia La Mar" },
+        { "id": 2, "name": "Maiquetía" },
+        { "id": 3, "name": "Caraballeda" },
+        { "id": 4, "name": "Macuto" },
+        { "id": 5, "name": "Naiguatá" },
+        { "id": 6, "name": "Chuspa" }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Yaracuy",
+      "cities": [
+        { "id": 0, "name": "San Felipe" },
+        { "id": 1, "name": "Yaritagua" },
+        { "id": 2, "name": "Chivacoa" },
+        { "id": 3, "name": "Nirgua" },
+        { "id": 4, "name": "Cocorote" },
+        { "id": 5, "name": "Urachiche" },
+        { "id": 6, "name": "Albarico" }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Zulia",
+      "cities": [
+        { "id": 0, "name": "Maracaibo" },
+        { "id": 1, "name": "Cabimas" },
+        { "id": 2, "name": "Ciudad Ojeda" },
+        { "id": 3, "name": "Santa Bárbara del Zulia" },
+        { "id": 4, "name": "Machiques" },
+        { "id": 5, "name": "La Concepción" },
+        { "id": 6, "name": "Villa del Rosario" }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Distrito Capital",
+      "cities": [
+        { "id": 0, "name": "Caracas" },
+        { "id": 1, "name": "El Hatillo" },
+        { "id": 2, "name": "Baruta" },
+        { "id": 3, "name": "Chacao" },
+        { "id": 4, "name": "Sucre" },
+        { "id": 5, "name": "Antímano" },
+        { "id": 6, "name": "La Candelaria" }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Dependencias Federales",
+      "cities": [
+        { "id": 0, "name": "Los Roques" },
+        { "id": 1, "name": "La Orchila" },
+        { "id": 2, "name": "Los Testigos" },
+        { "id": 3, "name": "La Tortuga" },
+        { "id": 4, "name": "Isla de Aves" },
+        { "id": 5, "name": "Isla La Blanquilla" },
+        { "id": 6, "name": "Isla La Sola" }
+      ]
+    }
+  ]
+}

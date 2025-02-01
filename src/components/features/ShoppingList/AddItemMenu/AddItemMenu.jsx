@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Input, Button } from "../../../common";
+import StateOnChange from "../../../../utils/StateOnChange";
 
 const AddItemMenu = () => {
   
@@ -13,17 +14,9 @@ const AddItemMenu = () => {
     setPrice('')
   }
 
-  const handleQuantityChange = (value) => {
-    if (/^\d*\.?\d{0,2}$/.test(value)) {
-      setQuantity(value);
-    }
-  };
+  const handleQuantityChange = new StateOnChange
+  const handlePriceChange = new StateOnChange
 
-  const handlePriceChange = (value) => {
-    if (/^\d*\.?\d{0,2}$/.test(value)) {
-      setPrice(value);
-    }
-  };
 
   const previewTotal = () => {
     const parsedQuantity = parseFloat(quantity);
@@ -81,7 +74,7 @@ const AddItemMenu = () => {
             labelText={newItem.quantity.label}
             placeholder={newItem.quantity.placeholder}
             value={quantity}
-            onChange={(e) => handleQuantityChange(e.target.value)}/>
+            onChange={(e) => handleQuantityChange.update(e.target.value, setQuantity)}/>
 
           <Button 
             text={'-'} 
@@ -107,7 +100,7 @@ const AddItemMenu = () => {
             labelText={newItem.pricing.label}
             placeholder={newItem.pricing.placeholder}
             value={price}
-            onChange={e => handlePriceChange(e.target.value)}/>
+            onChange={e => handlePriceChange.update(e.target.value, setPrice)}/>
 
           <br/>
 
