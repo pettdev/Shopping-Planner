@@ -1,8 +1,9 @@
-function ShoppingList() {
+function ShoppingList({children}) {
   
   return (
-    <>
-    </>
+    <ol>
+      {children}
+    </ol>
   )
 }
 

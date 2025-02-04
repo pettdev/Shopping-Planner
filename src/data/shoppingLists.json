@@ -1,0 +1,69 @@
+{
+  "current" : {
+  "id": "id_name",
+  "name": "shopping list name",
+  "createdAt": "hora formateada",
+  "lastUpdate": "fecha formateada sobreescrita",
+  "options": {
+    "budget": 0,
+    "dollarRate": 0
+    },
+    
+  "items": [
+      {
+        "id": "id_name",
+        "name": "itemName",
+        "quantity": 0,
+        "price": 0,
+        "brand": "my brand",
+        "selected_category": "category",
+        "selling_unit": "g,_gramos"
+      }
+    ]
+  },
+  
+  "saved": [
+    {
+    "id": "id_name",
+    "name": "shopping list name",
+    "createdAt": "hora formateada",
+    "lastUpdate": "fecha formateada sobreescrita",
+    "options": {
+      "budget": 0,
+      "dollarRate": 0
+      },
+    "items": [
+        {
+          "id": "id_name",
+          "name": "itemName",
+          "quantity": 0,
+          "price": 0,
+          "brand": "my brand",
+          "selected_category": "category",
+          "selling_unit": "g,_gramos"
+        }
+      ]
+    },
+    {
+      "id": "id_name",
+      "name": "shopping list name",
+      "createdAt": "hora formateada",
+      "lastUpdate": "fecha formateada sobreescrita",
+      "options": {
+        "budget": 0,
+        "dollarRate": 0
+        },
+      "items": [
+          {
+            "id": "id_name",
+            "name": "itemName",
+            "quantity": 0,
+            "price": 0,
+            "brand": "my brand",
+            "selected_category": "category",
+            "selling_unit": "g,_gramos"
+          }
+        ]
+      }
+  ]
+}
