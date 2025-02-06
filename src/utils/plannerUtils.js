@@ -1,5 +1,5 @@
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc, addDoc, collection, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/config"
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc, addDoc, collection, deleteDoc, getDocs } from "firebase/firestore";
 
 // INICIALIZAR LA ESTRUCTURA (defaultPlanner Y currentList)
 
@@ -215,5 +215,28 @@ export const deletedSavedList = async (savedListId) => {
     
   } catch (error) {
     console.error('Error al intentar eliminar la lista guardada:', error)
+  }
+}
+
+// OBTENER LISTAS GUARDADAS
+
+export const getSavedLists = async () => {
+  try {
+    const savedListsRef = collection(db, 'planners', 'defaultPlanner', 'savedLists')
+    const savedListsSnap = await getDocs(savedListsRef)
+
+    if (!savedListsSnap.empty) {
+      const savedLists = savedListsSnap.docs.map(doc => doc.data())
+      console.log('Listas guardadas recopiladas exitosamente:', savedLists)
+      return savedLists
+    }
+
+    console.warn('Listas no encontradas')
+    return []
+    
+    
+  } catch (error) {
+    console.error('Error al recopilar listas guardadas:', error)
+    
   }
 }

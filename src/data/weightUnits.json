@@ -1,0 +1,13 @@
+{
+  "units": [
+    { "name": "unidad", "symbol": "u", "representation": "u, unidad"},
+    { "name": "gramos", "symbol": "g", "representation": "g, gramos" },
+    { "name": "kilogramos", "symbol": "kg", "representation": "kg, kilogramos" },
+    { "name": "miligramos", "symbol": "mg", "representation": "mg, miligramos" },
+    { "name": "mililitros", "symbol": "mL", "representation": "mL, mililitros" },
+    { "name": "litros", "symbol": "L", "representation": "L, litros" },
+    { "name": "metros", "symbol": "m", "representation": "m, metros" },
+    { "name": "centímetros", "symbol": "cm", "representation": "cm, centímetros" },
+    { "name": "onzas", "symbol": "oz", "representation": "oz, onzas" }
+  ]
+}

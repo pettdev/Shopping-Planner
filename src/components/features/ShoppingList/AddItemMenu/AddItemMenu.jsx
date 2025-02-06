@@ -1,35 +1,26 @@
 import { useState } from "react";
 import { Input, Button } from "../../../common";
-import StateOnChange from "../../../../utils/StateOnChange";
+import StateValidator from "../../../../utils/StateValidator";
+import ProductTotal from "./ProductTotal";
 
 const AddItemMenu = () => {
   
   const [showMenu, setShowMenu] = useState(false)
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("")
+  const [items, setItems] = useState(null)
   const toggleShowForm = () => setShowMenu(!showMenu);
   
-  const resetter = () => {
+  // Reset react state fields
+  const useReset = () => {
     setQuantity('')
     setPrice('')
   }
 
-  const handleQuantityChange = new StateOnChange
-  const handlePriceChange = new StateOnChange
+  // Clase usada para validar cantidades en un input al ser invocado por un evento Click
+  const handleQuantityChange = new StateValidator
+  const handlePriceChange = new StateValidator
 
-
-  const previewTotal = () => {
-    const parsedQuantity = parseFloat(quantity);
-    const parsedPrice = parseFloat(price);
-
-    if (isNaN(parsedQuantity) || isNaN(parsedPrice)) {
-      return '0';
-    }
-
-    return (parsedQuantity * parsedPrice).toFixed(2);
-  }
-
-  
   const newItem = {
     name: {
       id: 'name',
@@ -74,7 +65,7 @@ const AddItemMenu = () => {
             labelText={newItem.quantity.label}
             placeholder={newItem.quantity.placeholder}
             value={quantity}
-            onChange={(e) => handleQuantityChange.update(e.target.value, setQuantity)}/>
+            onChange={(e) => handleQuantityChange.run(e.target.value, setQuantity)}/>
 
           <Button 
             text={'-'} 
@@ -100,12 +91,13 @@ const AddItemMenu = () => {
             labelText={newItem.pricing.label}
             placeholder={newItem.pricing.placeholder}
             value={price}
-            onChange={e => handlePriceChange.update(e.target.value, setPrice)}/>
+            onChange={e => handlePriceChange.run(e.target.value, setPrice)}/>
 
           <br/>
 
           {/* PREVISUALIZAR MONTO */}
-          <span>{`Preview: ${previewTotal()}`}</span>
+          <ProductTotal quantity={quantity} price={price}/>
+
           <br/>
           
           {/* ENVIAR DATOS */}
@@ -118,7 +110,7 @@ const AddItemMenu = () => {
             text={'X'}
             onClick={()=>{
               toggleShowForm()
-              resetter()}}/>
+              useReset()}}/>
               
       </form>) : (
 
@@ -126,7 +118,6 @@ const AddItemMenu = () => {
         text={'+'} 
         onClick={toggleShowForm}/>
       )}
-
     </>
   )
 }

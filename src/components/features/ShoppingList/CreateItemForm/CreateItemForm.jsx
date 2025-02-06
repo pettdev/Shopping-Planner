@@ -1,57 +1,92 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Input, SelectOption, Button } from "../../../common";
-import { categories, units } from "../../../../data";
+import { categories, weightUnits } from "../../../../data";
 import ItemFactory from "./ItemFactory";
+import { addGlobalItems } from "../../../../utils/globalItemsUtils";
+import StateValidator from "../../../../utils/StateValidator";
 
 const CreateItemForm = () => {
-
-  
   // Estado para controlar la visibilidad del formulario
   const [showForm, setShowForm] = useState(false);
   
-
   const [formData, setFormData] = useState({
     name: '',
+    category: '',
     description: '',
     brand: '',
-    selected_category: '',
-    selected_unit: '',
+    netWeight: '',
+    weightUnit: '',
   });
 
-  const factory = new ItemFactory({ ...formData });
+
+  //Builds the item object with the object's state properties
+  const factory = new ItemFactory();
+
 
   // Manejar cambios en los campos de entrada
   const handleChange = (e) => {
+    e.preventDefault();
+    const { value, id } = e.target;
     
-    if(e.target.id === 'exempt') {
-      setFormData({...formData, [e.target.id]: e.target.checked})
-    } else {
-      setFormData({...formData, [e.target.id]: e.target.value})
+    // Validar y aplicar cambios en netWeight específicamente
+    if (id === 'netWeight') {
+      const validValue = new StateValidator().run(value);
+      if (validValue !== undefined) {
+        setFormData(prev => ({ ...prev, [id]: validValue }));
+      } else {
+        e.target.value = ''; // Immediate feedback for invalid input
+      }
+      return;
     }
+    
+    // Aplicar cambios en el resto de los campos
+    setFormData(prev => ({ ...prev, [id]: value }));
   };
+
+  useEffect(() =>
+    {console.log(formData.netWeight)}
+  ,[formData.netWeight])
+
+  // Reseteador
+  const resetFormData = () => {
+    setFormData({
+      name: '',
+      category: '',
+      description: '',
+      brand: '',
+      netWeight: '',
+      weightUnit: '',
+    });
+  }
+
 
   // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(JSON.stringify(formData))
-    
-    if (formData.name && 
-        formData.selected_unit && 
-        formData.selected_category) {
-      factory.build()
+
+    // Make sure these fields are filled 
+    if (formData.name &&
+        formData.category &&
+        formData.netWeight && 
+        formData.weightUnit) {
+
+      // build() es para construir el item con las propiedades de formData
+      const item = factory.build(formData);
+
+      // Agregar item fabricado para globalItems en la base de datos de Firestore
+      addGlobalItems(item)
+      resetFormData()
       setShowForm(false);
     }
   };
 
-  useEffect(() => {
-  console.log("formData actualizado:", formData); // ✅ Valor nuevo
-  }, [formData]);
 
   // Extraer nombres de categorías de los datos
   const allCategories = categories.categories.map((category) => category.name);
   
   // Extraer unidades de los datos
-  const allSellingUnits = units.units.map((unit) => unit.represented);
+  const allWeightUnits = weightUnits.units.map((unit) => unit.representation);
+
 
   return (
     <>
@@ -63,43 +98,48 @@ const CreateItemForm = () => {
             type="text" 
             id="name" 
             placeholder="Nombre del producto" 
-            onChange={handleChange}
-          />
+            onChange={handleChange}/>
           <br/>
           <Input
+            
             labelText="Descripción:"
             type="textarea" 
             id="description" 
             placeholder="Breve descripción"
-            onChange={handleChange}
-          />
+            onChange={handleChange}/>
           <br/>
           <Input
             labelText="Marca:"
             type="text"
             id="brand"
             placeholder="Luxor, Nestlé, SuperLíder"
-            onChange={handleChange}
-          />
+            onChange={handleChange}/>
           <br/>
           <SelectOption
             required
             labelText="Categoría:"
-            id="selected_category"
+            id="category"
             options={allCategories}
-            onChange={handleChange}
-          />
+            onChange={handleChange}/>
+          <br/>
+          <Input
+            required
+            labelText="Peso neto:"
+            type="number"
+            min={1}
+            id="netWeight"
+            placeholder="Cantidad de peso neto"
+            onChange={handleChange}/>
           <br/>
           <SelectOption
             required
-            labelText="Unidad:"
-            id="selected_unit"
-            options={allSellingUnits}
-            onChange={handleChange}
-          />
+            labelText="Unidad de peso:"
+            id="weightUnit"
+            options={allWeightUnits}
+            onChange={handleChange}/>
           <br/>
-          <Button type="submit" text="Crear" />
-          <Button text="X" onClick={() => setShowForm(false)} />
+          <Button type="submit" text="Crear"/>
+          <Button text="X" onClick={() => setShowForm(false)}/>
         </form>
       ) : (
         <Button text="Crear nuevo producto" onClick={() => setShowForm(true)} />

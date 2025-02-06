@@ -1,11 +1,18 @@
 import DollarRateToggler from "./DollarRateToggler"
-import { DollarRateProvider } from "../../../context/DollarRateContext"
+import { DollarRateProvider, BudgetContextProvider } from "../../../context"
+import {Budget} from "./Budget"
 
 function Options() {
   return (
-    <DollarRateProvider>
-      <DollarRateToggler/>
-    </DollarRateProvider>
+    <>
+      <BudgetContextProvider>
+        <Budget/> 
+      </BudgetContextProvider>
+      
+      <DollarRateProvider>
+        <DollarRateToggler/>
+      </DollarRateProvider>
+    </>
   )
 }
 

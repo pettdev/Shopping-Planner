@@ -1,5 +1,5 @@
 /**
- * CheckToggler component renders a checkbox with an optional conditional input and button.
+ * CheckToggler component that renders a checkbox with optional conditional input and button.
  *
  * @param {Object} props - The properties object.
  * @param {string} props.labelText - The text for the label associated with the checkbox.
@@ -7,10 +7,10 @@
  * @param {string} props.conditionalInputType - The type of the conditional input field.
  * @param {string} props.conditionalPlaceholder - The placeholder text for the conditional input field.
  * @param {string} props.conditionalButtonLabel - The label text for the conditional button.
- * @param {function} props.onChange - The function to call when the value of the conditional input changes.
- * @param {boolean} props.renderOnCondition - The boolean to determine then renderization of conditional elements on check's input.
+ * @param {boolean} props.renderOnCondition - Boolean to determine the rendering of conditional elements when the checkbox is checked.
  * @param {number} [props.min] - The minimum value for the conditional input field (optional).
  * @param {number} [props.max] - The maximum value for the conditional input field (optional).
+ * @param {JSX.Element} props.children - The child elements to render when the checkbox is checked.
  *
  * @returns {JSX.Element} The rendered CheckToggler component.
  */
@@ -18,23 +18,29 @@ import { useState } from 'react'
 import { Label, Button, Input } from '../'
 
 function CheckToggler({
-  labelText, 
+  labelText,
   id,
-  renderOnCondition=false, 
-  conditionalInputType, 
-  conditionalPlaceholder, 
-  conditionalButtonLabel, 
-  min, 
+  renderOnCondition=false,
+  conditionalInputType,
+  conditionalPlaceholder,
+  conditionalButtonLabel,
+  conditionalOnChange,
+  min,
   max,
+  children,
   ...props
 }) {
   
   const [isChecked, setIsChecked] = useState(false)
   
+  // Manejador de cambio para el input condicional
   const onChangeHandler = (e) => {
-    props.onChange(e.target.value) // Autoaplica los cambios en la pieza de estado onChange
+    const rawValue = e.target.value
+    console.log('value:', rawValue)
+    conditionalOnChange(rawValue)
   }
 
+  // Manejador de clic para el botón condicional
   const onClickHandler = (e) => {
     e.preventDefault()
   }
@@ -42,18 +48,12 @@ function CheckToggler({
   return (
     <>
       <Label htmlFor={id} labelText={labelText}>
-        {renderOnCondition === false ? 
-          <Input 
+        <Input 
           id={id}
           type="checkbox"
-          {...props}/> // Para que onChange reciba su evento
-          : 
-          <Input 
-            id={id}
-            type="checkbox"
-            checked={isChecked}
-            onChange={() => setIsChecked(!isChecked)}/>
-        }
+          checked={isChecked}
+          onChange={() => setIsChecked(!isChecked)}
+          {...props}/>
       </Label>
       
       {isChecked && renderOnCondition && (
@@ -64,15 +64,18 @@ function CheckToggler({
             placeholder={conditionalPlaceholder}
             min={min || 0}
             max={max}
-            onChange={onChangeHandler}/>
+            onChange={onChangeHandler}
+          />
 
-          {conditionalButtonLabel &&
-          <Button 
-            onClick={onClickHandler} 
-            text={conditionalButtonLabel}/>}
+          {conditionalButtonLabel && (
+            <Button 
+              onClick={onClickHandler} 
+              text={conditionalButtonLabel}
+            />
+          )}
+          {children}
         </>
-        )
-      } 
+      )}
     </>
   )
 }
