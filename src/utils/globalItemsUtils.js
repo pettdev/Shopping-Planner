@@ -2,20 +2,21 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore"
 import { db } from "../firebase/config"
 
 
-const generateId = (name, brand) => {
+const generateId = (name, brand, netWeight, weightUnit) => {
 
-  return brand ? `${name}-${brand}` : name;
+  return brand ? `${name}-${brand}-${netWeight}-${weightUnit}` : `${name}-${netWeight}`;
 }
 
 
 export const addGlobalItems = async (globalItem) => {
+
   try {
-    if (!globalItem || !globalItem.name|| !globalItem.netWeight || !globalItem.category) {
+    if (!globalItem || !globalItem.name|| !globalItem.netWeight || !globalItem.category || !globalItem.weightUnit) {
       throw new Error('Item inválido. Asegúrate de enviar un objeto compatible');
     }
 
-    // Generar el id usando la función generateId con normalización
-    const id = generateId(globalItem.name, globalItem.brand);
+    // Generar el id
+    const id = generateId(globalItem.name, globalItem.brand, globalItem.netWeight, globalItem.weightUnit);
 
     const globalItemRef = doc(db, 'globalItems', id);
     const globalItemSnap = await getDoc(globalItemRef);

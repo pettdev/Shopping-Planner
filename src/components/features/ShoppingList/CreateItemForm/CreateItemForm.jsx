@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Input, SelectOption, Button } from "../../../common";
 import { categories, weightUnits } from "../../../../data";
 import ItemFactory from "./ItemFactory";
 import { addGlobalItems } from "../../../../utils/globalItemsUtils";
 import StateValidator from "../../../../utils/StateValidator";
+
 
 const CreateItemForm = () => {
   // Estado para controlar la visibilidad del formulario
@@ -43,9 +44,6 @@ const CreateItemForm = () => {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-  useEffect(() =>
-    {console.log(formData.netWeight)}
-  ,[formData.netWeight])
 
   // Reseteador
   const resetFormData = () => {
@@ -63,7 +61,6 @@ const CreateItemForm = () => {
   // Manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-
     // Make sure these fields are filled 
     if (formData.name &&
         formData.category &&
