@@ -36,7 +36,7 @@ const CreateItemForm = () => {
     
     // Validar y aplicar cambios en netWeight específicamente
     if (id === 'netWeight') {
-      const sanitizedValue = validator.sanitize(String(value).toLowerCase);
+      const sanitizedValue = validator.sanitize(String(value).toLowerCase());
       if (sanitizedValue !== undefined) {
         setFormData(prev => ({ ...prev, [id]: sanitizedValue }));
       } else {
