@@ -1,0 +1,20 @@
+.divRelative {
+  position: relative;
+  display: inline-block; /* Necesario para contener el ancho del input */
+}
+
+.divResults {
+  position: absolute;
+  width: 100%; /* Hereda el ancho del .divRelative */
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  box-sizing: border-box; /* Imprescindible para cálculo exacto */
+}
+
+.divSelection:hover {
+  cursor: pointer;
+  font-weight: 700; /* Más semántico que 'bolder' */
+  background: #f3f3f3;
+}

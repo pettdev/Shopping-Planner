@@ -2,32 +2,37 @@ import { useState } from "react";
 import { Input, Button } from "../../../common";
 import StateValidator from "../../../../utils/StateValidator";
 import ProductTotal from "./ProductTotal";
+import InputSearcher from "./InputSearcher/InputSearcher";
 
-const AddItemMenu = () => {
+const MenuAddItem = () => {
   
+  // Estados para agregar items existentes en un Menú
   const [showMenu, setShowMenu] = useState(false)
   const [quantity, setQuantity] = useState("");
   const [price, setPrice] = useState("")
-  const [items, setItems] = useState(null)
+
+  
+  // Toggler para abrir o cerrar menú
   const toggleShowForm = () => setShowMenu(!showMenu);
   
   // Reset react state fields
-  const useReset = () => {
+  const reset = () => {
     setQuantity('')
     setPrice('')
   }
 
-  // Clase usada para validar cantidades en un input al ser invocado por un evento Click
-  const handleQuantityChange = new StateValidator
-  const handlePriceChange = new StateValidator
+  // Clase usada para validar cantidades en un 
+  // input al ser invocado por un evento Click
+  const validator = new StateValidator
 
-  const newItem = {
-    name: {
-      id: 'name',
-      label: 'Nombre:',
-      placeholder: 'Escribe un producto'
-    },
-    quantity: {
+  const validate = (value, setStateFn) => {
+    const sanitizedValue = validator.sanitize(value)
+    setStateFn(sanitizedValue)
+  }
+
+
+  const newItemInputProps = {
+   quantity: {
       id: 'quantity',
       label: 'Cantidad:',
       placeholder: 'Ingresa una cantidad'
@@ -44,54 +49,50 @@ const AddItemMenu = () => {
       {showMenu ? (
         <form onSubmit={(e) => {
           e.preventDefault()
-          toggleShowForm()
-          }}>
+          toggleShowForm()}}>
 
-          {/* NOMBRE DEL PRODUCTO */}
-          <Input
-            required
-            type={'text'}
-            id={newItem.name.id}
-            labelText={newItem.name.label}
-            placeholder={newItem.name.placeholder}/>
+          <InputSearcher/>
 
           <br/>
 
           {/* CANTIDAD */}
           <Input
             required
-            type={'text'}
-            id={newItem.quantity.id}
-            labelText={newItem.quantity.label}
-            placeholder={newItem.quantity.placeholder}
+            type={'number'}
+            id={newItemInputProps.quantity.id}
+            labelText={newItemInputProps.quantity.label}
+            placeholder={newItemInputProps.quantity.placeholder}
             value={quantity}
-            onChange={(e) => handleQuantityChange.run(e.target.value, setQuantity)}/>
+            onChange={e => validate(e.target.value, setQuantity)}/>
 
+          {/* BOTÓN PARA DISMINUIR CANTIDAD EN 1 */}
           <Button 
             text={'-'} 
             onClick={() => {
               const num = parseFloat(quantity) || 0;
-              setQuantity(Math.max(0, num - 1).toFixed(2));  // Redondea a 2 decimales
+              setQuantity(Math.max(0, num - 1).toFixed(2));
             }}/>
 
+
+          {/* BOTÓN PARA AUMENTAR CANTIDAD EN 1 */}
           <Button 
             text={'+'} 
             onClick={() => {
               const num = parseFloat(quantity) || 0;
-              setQuantity((num + 1).toFixed(2));  // Redondea a 2 decimales
+              setQuantity((num + 1).toFixed(2));
             }}/>
-
+          
           <br/>
-
+          
           {/* PRECIO */}
           <Input
             required
-            type={'text'}
-            id={newItem.pricing.id}
-            labelText={newItem.pricing.label}
-            placeholder={newItem.pricing.placeholder}
+            type={'number'}
+            id={newItemInputProps.pricing.id}
+            labelText={newItemInputProps.pricing.label}
+            placeholder={newItemInputProps.pricing.placeholder}
             value={price}
-            onChange={e => handlePriceChange.run(e.target.value, setPrice)}/>
+            onChange={e => validate(e.target.value, setPrice)}/>
 
           <br/>
 
@@ -110,7 +111,7 @@ const AddItemMenu = () => {
             text={'X'}
             onClick={()=>{
               toggleShowForm()
-              useReset()}}/>
+              reset()}}/>
               
       </form>) : (
 
@@ -122,4 +123,4 @@ const AddItemMenu = () => {
   )
 }
 
-export default AddItemMenu
+export default MenuAddItem

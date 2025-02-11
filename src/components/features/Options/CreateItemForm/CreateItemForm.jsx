@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input, SelectOption, Button } from "../../../common";
 import { categories, weightUnits } from "../../../../data";
-import ItemFactory from "./ItemFactory";
-import { addGlobalItems } from "../../../../utils/globalItemsUtils";
+import ItemBody from "./ItemBody";
+import { addGlobalItem } from "../../../../utils/globalItemsUtils";
 import StateValidator from "../../../../utils/StateValidator";
 
 
@@ -21,7 +21,12 @@ const CreateItemForm = () => {
 
 
   //Builds the item object with the object's state properties
-  const factory = new ItemFactory();
+  const itemBody = new ItemBody();
+
+  // Crea un validador de campos de estado
+  const validator = new StateValidator()
+
+
 
 
   // Manejar cambios en los campos de entrada
@@ -31,9 +36,9 @@ const CreateItemForm = () => {
     
     // Validar y aplicar cambios en netWeight específicamente
     if (id === 'netWeight') {
-      const validValue = new StateValidator().run(value);
-      if (validValue !== undefined) {
-        setFormData(prev => ({ ...prev, [id]: validValue }));
+      const sanitizedValue = validator.sanitize(String(value).toLowerCase);
+      if (sanitizedValue !== undefined) {
+        setFormData(prev => ({ ...prev, [id]: sanitizedValue }));
       } else {
         e.target.value = ''; // Immediate feedback for invalid input
       }
@@ -68,10 +73,10 @@ const CreateItemForm = () => {
         formData.weightUnit) {
 
       // build() es para construir el item con las propiedades de formData
-      const item = factory.build(formData);
+      const item = itemBody.build(formData);
 
       // Agregar item fabricado para globalItems en la base de datos de Firestore
-      addGlobalItems(item)
+      addGlobalItem(item)
       resetFormData()
       setShowForm(false);
     }
@@ -139,7 +144,7 @@ const CreateItemForm = () => {
           <Button text="X" onClick={() => setShowForm(false)}/>
         </form>
       ) : (
-        <Button text="Crear nuevo producto" onClick={() => setShowForm(true)} />
+        <Button text="Crear producto nuevo" onClick={() => setShowForm(true)} />
       )}
     </>
   );

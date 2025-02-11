@@ -17,7 +17,7 @@ export const BudgetContextProvider = ({children}) => {
 export const useBudget = () => {
   const context = useContext(BudgetContext)
 
-  if(!context) throw new Error('The component that use useBudget function must be placed within a BudgetContextProvider component')
+  if(!context) throw new Error('The component that uses useBudget function must be placed within a BudgetContextProvider component')
   
   return context
 }

@@ -17,7 +17,7 @@ class StateValidator {
    * @param {string} value - Input to validate.
    * @returns {string|undefined} Valid value or undefined if invalid.
    */
-  run(value) {
+  sanitize(value) {
     if (parseFloat(value) === 0) return undefined;
     if (value.startsWith('-')) return undefined;
     return this.regex.test(value) ? value : undefined;

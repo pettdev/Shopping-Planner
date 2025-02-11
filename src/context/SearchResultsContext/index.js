@@ -1,0 +1,1 @@
+export {SearchResultsContextProvider, useSearchResults} from './SearchResultsContext'

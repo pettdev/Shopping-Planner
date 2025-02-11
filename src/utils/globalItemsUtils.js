@@ -8,7 +8,7 @@ const generateId = (name, brand, netWeight, weightUnit) => {
 }
 
 
-export const addGlobalItems = async (globalItem) => {
+export const addGlobalItem = async (globalItem) => {
 
   try {
     if (!globalItem || !globalItem.name|| !globalItem.netWeight || !globalItem.category || !globalItem.weightUnit) {

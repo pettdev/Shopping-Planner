@@ -1,9 +1,13 @@
-function ShoppingList({children}) {
+import { SearchResultsContextProvider } from "../../../context/SearchResultsContext"
+import MenuAddItem from "./MenuAddItem/MenuAddItem"
+
+
+function ShoppingList() {
   
   return (
-    <ol>
-      {children}
-    </ol>
+    <SearchResultsContextProvider>
+      <MenuAddItem/>
+    </SearchResultsContextProvider>
   )
 }
 

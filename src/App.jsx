@@ -1,14 +1,12 @@
 import '../src/app.css'
 import Options from "./components/features/Options"
-import CreateItemForm from "./components/features/ShoppingList/CreateItemForm"
-import AddItemMenu from "./components/features/ShoppingList/AddItemMenu/AddItemMenu"
+import ShoppingList from './components/features/ShoppingList/ShoppingList'
 function App() {
 
   return (
     <>
       <Options/>
-      <CreateItemForm/>
-      <AddItemMenu/>
+      <ShoppingList/>
     </>
   )
 }

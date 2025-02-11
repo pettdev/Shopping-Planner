@@ -1,5 +1,5 @@
 
-class ItemFactory {
+class ItemBody {
 
   build(item) {
     return {
@@ -13,4 +13,4 @@ class ItemFactory {
   }
 }
 
-export default ItemFactory;
+export default ItemBody;

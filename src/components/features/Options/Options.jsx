@@ -1,5 +1,6 @@
 import DollarRateToggler from "./DollarRateToggler"
 import { DollarRateProvider, BudgetContextProvider } from "../../../context"
+import { CreateItemForm } from "./CreateItemForm"
 import {Budget} from "./Budget"
 
 function Options() {
@@ -12,6 +13,8 @@ function Options() {
       <DollarRateProvider>
         <DollarRateToggler/>
       </DollarRateProvider>
+
+      <CreateItemForm/>
     </>
   )
 }
