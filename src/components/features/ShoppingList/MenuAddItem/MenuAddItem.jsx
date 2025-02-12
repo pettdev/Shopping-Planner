@@ -1,30 +1,31 @@
-import { useState } from "react";
-import { Input, Button } from "../../../common";
-import StateValidator from "../../../../utils/StateValidator";
-import ProductTotal from "./ProductTotal";
-import InputSearcher from "./InputSearcher/InputSearcher";
+import { useState } from "react"
+import { Input, Button } from "../../../common"
+import StateValidator from "../../../../utils/StateValidator"
+import ProductTotal from "./ProductTotal"
+import InputSearcher from "./InputSearcher/InputSearcher"
+import { useItemsList } from "../../../../context/ItemsListContext"
 
 const MenuAddItem = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
+  const [showMenu, setShowMenu] = useState(false)
+  const [quantity, setQuantity] = useState("")
+  const [price, setPrice] = useState("")
+  const {list, updateList} = useItemsList()
 
-
-  const validator = new StateValidator
+  const validator = new StateValidator()
 
   const toggleShowForm = () => setShowMenu(!showMenu);
 
   const reset = () => {
-    setQuantity('');
-    setPrice('');
-  };
+    setQuantity('')
+    setPrice('')
+  }
 
   const handleNumberChange = (value, setStateFn) => {
     // Permitir decimales y borrado completo
     if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
-      setStateFn(value);
+      setStateFn(value)
     }
-  };
+  }
 
   const handleOperation = (mode) => {
     const num = parseFloat(quantity) || 0;
@@ -42,9 +43,16 @@ const MenuAddItem = () => {
         console.warn(`handleOperation llamada con modo inválido: ${mode}`);
         return; // Salir de la función si el modo no es válido
     }
-  
     setQuantity(newValue.toFixed(2));
-  };
+  }
+
+  // Al hacer clic en Agregar
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    toggleShowForm()
+
+    
+  }
 
   const newItemInputProps = {
     quantity: {
@@ -62,10 +70,7 @@ const MenuAddItem = () => {
   return (
     <>
       {showMenu ? (
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          toggleShowForm();
-        }}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <InputSearcher/>
 
           <br/>

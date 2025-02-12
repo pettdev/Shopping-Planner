@@ -1,9 +1,9 @@
-.divRelative {
+.searchBox {
   position: relative;
   display: inline-block; /* Necesario para contener el ancho del input */
 }
 
-.divResults {
+.results {
   position: absolute;
   width: 100%; /* Hereda el ancho del .divRelative */
   top: 100%;
@@ -13,8 +13,19 @@
   box-sizing: border-box;
 }
 
-.divSelection:hover {
+.selection {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px 0 5px;
+}
+
+.selection:hover {
   cursor: pointer;
   font-weight: 700; /* Más semántico que 'bolder' */
   background: #f3f3f3;
+}
+
+.itemProps {
+  color: gray;
+  font-size: smaller;
 }

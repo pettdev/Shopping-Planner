@@ -1,4 +1,6 @@
+import { ItemsListProvider } from "../../../context/ItemsListContext"
 import { SearchResultsContextProvider } from "../../../context/SearchResultsContext"
+ItemsListProvider
 import MenuAddItem from "./MenuAddItem/MenuAddItem"
 
 
@@ -6,7 +8,9 @@ function ShoppingList() {
   
   return (
     <SearchResultsContextProvider>
-      <MenuAddItem/>
+      <ItemsListProvider>
+        <MenuAddItem/>
+      </ItemsListProvider>
     </SearchResultsContextProvider>
   )
 }
