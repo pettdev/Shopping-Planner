@@ -5,11 +5,8 @@ import ItemBody from "./ItemBody";
 import { addGlobalItem } from "../../../../utils/globalItemsUtils";
 import StateValidator from "../../../../utils/StateValidator";
 
-
 const CreateItemForm = () => {
-  // Estado para controlar la visibilidad del formulario
   const [showForm, setShowForm] = useState(false);
-  
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -19,76 +16,67 @@ const CreateItemForm = () => {
     weightUnit: '',
   });
 
+  // Configuración de unidades de peso
+  const weightUnitOptions = weightUnits.units.map(unit => ({
+    symbol: unit.symbol,
+    representation: unit.representation
+  }));
 
-  //Builds the item object with the object's state properties
-  const itemBody = new ItemBody();
+  // Configuración de categorías
+  const categoryOptions = categories.categories.map(category => category.name);
 
-  // Crea un validador de campos de estado
-  const validator = new StateValidator()
+  // Validador de campos numéricos
+  const validator = new StateValidator();
 
-
-
-
-  // Manejar cambios en los campos de entrada
   const handleChange = (e) => {
-    e.preventDefault();
     const { value, id } = e.target;
     
-    // Validar y aplicar cambios en netWeight específicamente
     if (id === 'netWeight') {
-      const sanitizedValue = validator.sanitize(String(value).toLowerCase());
-      if (sanitizedValue !== undefined) {
-        setFormData(prev => ({ ...prev, [id]: sanitizedValue }));
-      } else {
-        e.target.value = ''; // Immediate feedback for invalid input
-      }
+      const sanitizedValue = validator.sanitize(value);
+      setFormData(prev => ({ 
+        ...prev, 
+        [id]: sanitizedValue || ''
+      }));
       return;
     }
     
-    // Aplicar cambios en el resto de los campos
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-
-  // Reseteador
-  const resetFormData = () => {
-    setFormData({
-      name: '',
-      category: '',
-      description: '',
-      brand: '',
-      netWeight: '',
-      weightUnit: '',
-    });
-  }
-
-
-  // Manejar el envío del formulario
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Make sure these fields are filled 
-    if (formData.name &&
-        formData.category &&
-        formData.netWeight && 
-        formData.weightUnit) {
-
-      // build() es para construir el item con las propiedades de formData
-      const item = itemBody.build(formData);
-
-      // Agregar item fabricado para globalItems en la base de datos de Firestore
-      addGlobalItem(item)
-      resetFormData()
-      setShowForm(false);
+  const handleUnitChange = (selectedRepresentation) => {
+    const selectedUnit = weightUnitOptions.find(
+      unit => unit.representation === selectedRepresentation
+    );
+    if (selectedUnit) {
+      setFormData(prev => ({
+        ...prev,
+        weightUnit: selectedUnit.symbol
+      }));
     }
   };
 
-
-  // Extraer nombres de categorías de los datos
-  const allCategories = categories.categories.map((category) => category.name);
-  
-  // Extraer unidades de los datos
-  const allWeightUnits = weightUnits.units.map((unit) => unit.representation);
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formData.name &&
+        formData.category &&
+        formData.netWeight &&
+        formData.weightUnit) {
+      const item = new ItemBody().build({
+        ...formData,
+        netWeight: parseFloat(formData.netWeight)
+      });
+      addGlobalItem(item);
+      setShowForm(false);
+      setFormData({
+        name: '',
+        category: '',
+        description: '',
+        brand: '',
+        netWeight: '',
+        weightUnit: '',
+      });
+    }
+  };
 
   return (
     <>
@@ -99,52 +87,68 @@ const CreateItemForm = () => {
             labelText="Nombre:"
             type="text" 
             id="name" 
-            placeholder="Nombre del producto" 
-            onChange={handleChange}/>
-          <br/>
+            placeholder="Nombre del producto"
+            value={formData.name}
+            onChange={handleChange}
+          />
+
           <Input
-            
             labelText="Descripción:"
             type="textarea" 
             id="description" 
             placeholder="Breve descripción"
-            onChange={handleChange}/>
-          <br/>
+            value={formData.description}
+            onChange={handleChange}
+          />
+
           <Input
             labelText="Marca:"
             type="text"
             id="brand"
-            placeholder="Luxor, Nestlé, SuperLíder"
-            onChange={handleChange}/>
-          <br/>
+            placeholder="Ej: Pepsico, Nestlé"
+            value={formData.brand}
+            onChange={handleChange}
+          />
+
           <SelectOption
             required
             labelText="Categoría:"
             id="category"
-            options={allCategories}
-            onChange={handleChange}/>
-          <br/>
+            options={categoryOptions}
+            value={formData.category}
+            onChange={(e) => setFormData(prev => ({
+              ...prev, 
+              category: e.target.value
+              }))
+            }
+          />
+
           <Input
             required
             labelText="Peso neto:"
             type="number"
-            min={1}
+            step="0.01"
+            min="0.01"
             id="netWeight"
-            placeholder="Cantidad de peso neto"
-            onChange={handleChange}/>
-          <br/>
+            placeholder="Ej: 1.5"
+            value={formData.netWeight}
+            onChange={handleChange}
+          />
+
           <SelectOption
             required
             labelText="Unidad de peso:"
             id="weightUnit"
-            options={allWeightUnits}
-            onChange={handleChange}/>
-          <br/>
+            options={weightUnitOptions.map(unit => unit.representation)}
+            value={weightUnitOptions.find(u => u.symbol === formData.weightUnit)?.representation || ''}
+            onChange={(e) => handleUnitChange(e.target.value)}
+          />
+
           <Button type="submit" text="Crear"/>
-          <Button text="X" onClick={() => setShowForm(false)}/>
+          <Button text="Cancelar" onClick={() => setShowForm(false)}/>
         </form>
       ) : (
-        <Button text="Crear producto nuevo" onClick={() => setShowForm(true)} />
+        <Button text="Crear nuevo producto" onClick={() => setShowForm(true)} />
       )}
     </>
   );

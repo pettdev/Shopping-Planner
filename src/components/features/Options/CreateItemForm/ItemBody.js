@@ -1,6 +1,4 @@
-
 class ItemBody {
-
   build(item) {
     return {
       name: item.name,
@@ -9,6 +7,7 @@ class ItemBody {
       brand: item.brand,
       netWeight: item.netWeight,
       weightUnit: item.weightUnit,
+      searchTokens: [] // Se poblará automáticamente en globalItemsUtils
     };
   }
 }

@@ -10,7 +10,7 @@
   left: 0;
   background: white;
   border: 1px solid #ccc;
-  box-sizing: border-box; /* Imprescindible para cálculo exacto */
+  box-sizing: border-box;
 }
 
 .divSelection:hover {

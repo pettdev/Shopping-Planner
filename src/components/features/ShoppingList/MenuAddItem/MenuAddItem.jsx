@@ -5,94 +5,103 @@ import ProductTotal from "./ProductTotal";
 import InputSearcher from "./InputSearcher/InputSearcher";
 
 const MenuAddItem = () => {
-  
-  // Estados para agregar items existentes en un Menú
-  const [showMenu, setShowMenu] = useState(false)
+  const [showMenu, setShowMenu] = useState(false);
   const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState("");
 
-  
-  // Toggler para abrir o cerrar menú
-  const toggleShowForm = () => setShowMenu(!showMenu);
-  
-  // Reset react state fields
-  const reset = () => {
-    setQuantity('')
-    setPrice('')
-  }
 
-  // Clase usada para validar cantidades en un 
-  // input al ser invocado por un evento Click
   const validator = new StateValidator
 
-  const validate = (value, setStateFn) => {
-    const sanitizedValue = validator.sanitize(value)
-    setStateFn(sanitizedValue)
-  }
+  const toggleShowForm = () => setShowMenu(!showMenu);
 
+  const reset = () => {
+    setQuantity('');
+    setPrice('');
+  };
+
+  const handleNumberChange = (value, setStateFn) => {
+    // Permitir decimales y borrado completo
+    if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
+      setStateFn(value);
+    }
+  };
+
+  const handleOperation = (mode) => {
+    const num = parseFloat(quantity) || 0;
+    const sanitizedNum = parseFloat(validator.sanitize(num) || '0');
+    let newValue;
+  
+    switch (mode) {
+      case '+':
+        newValue = sanitizedNum + 1;
+        break;
+      case '-':
+        newValue = Math.max(0, sanitizedNum - 1); // Asegura que no sea negativo
+        break;
+      default:
+        console.warn(`handleOperation llamada con modo inválido: ${mode}`);
+        return; // Salir de la función si el modo no es válido
+    }
+  
+    setQuantity(newValue.toFixed(2));
+  };
 
   const newItemInputProps = {
-   quantity: {
+    quantity: {
       id: 'quantity',
       label: 'Cantidad:',
-      placeholder: 'Ingresa una cantidad'
+      placeholder: 'Ej: 1.5'
     },
     pricing: {
       id: 'price',
       label: 'Precio:',
-      placeholder: 'Escribe su precio'
+      placeholder: 'Ej: 3.99'
     }
-  }
+  };
 
   return (
     <>
       {showMenu ? (
         <form onSubmit={(e) => {
-          e.preventDefault()
-          toggleShowForm()}}>
-
+          e.preventDefault();
+          toggleShowForm();
+        }}>
           <InputSearcher/>
 
           <br/>
 
-          {/* CANTIDAD */}
           <Input
             required
-            type={'number'}
+            type={'text'}
+            inputMode={'decimal'}
             id={newItemInputProps.quantity.id}
             labelText={newItemInputProps.quantity.label}
             placeholder={newItemInputProps.quantity.placeholder}
             value={quantity}
-            onChange={e => validate(e.target.value, setQuantity)}/>
+            onChange={e => handleNumberChange(e.target.value, setQuantity)}/>
 
-          {/* BOTÓN PARA DISMINUIR CANTIDAD EN 1 */}
+          {/* BOTÓN DISMINUIR EN 1 */}
           <Button 
             text={'-'} 
-            onClick={() => {
-              const num = parseFloat(quantity) || 0;
-              setQuantity(Math.max(0, num - 1).toFixed(2));
-            }}/>
+            onClick={() => handleOperation('-')}/>
 
-
-          {/* BOTÓN PARA AUMENTAR CANTIDAD EN 1 */}
+          {/* BOTÓN AUMENTAR EN 1 */}
           <Button 
             text={'+'} 
-            onClick={() => {
-              const num = parseFloat(quantity) || 0;
-              setQuantity((num + 1).toFixed(2));
-            }}/>
+            onClick={() => handleOperation('+')}/>
           
           <br/>
           
           {/* PRECIO */}
           <Input
             required
-            type={'number'}
+            type={'text'}
+            inputMode={'decimal'}
             id={newItemInputProps.pricing.id}
             labelText={newItemInputProps.pricing.label}
             placeholder={newItemInputProps.pricing.placeholder}
             value={price}
-            onChange={e => validate(e.target.value, setPrice)}/>
+            onChange={e => handleNumberChange(e.target.value, setPrice)}/>
 
           <br/>
 
@@ -113,14 +122,12 @@ const MenuAddItem = () => {
               toggleShowForm()
               reset()}}/>
               
-      </form>) : (
-
-      <Button
-        text={'+'} 
-        onClick={toggleShowForm}/>
+              </form>
+      ) : (
+        <Button text={'+'} onClick={toggleShowForm}/>
       )}
     </>
-  )
-}
+  );
+};
 
-export default MenuAddItem
+export default MenuAddItem;
