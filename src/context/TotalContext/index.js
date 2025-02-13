@@ -1,0 +1,1 @@
+export {TotalProvider, useTotal} from './TotalContext'

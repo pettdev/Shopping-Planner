@@ -1,6 +1,7 @@
 import './InputSearcher.css'
 import { useState, useEffect } from 'react';
 import { useSearchResults } from '../../../../../context/SearchResultsContext';
+import { useSelectedItem } from '../../../../../context/SelectedItemContext';
 import performSearch from './helpers/performSearch';
 import { Input } from '../../../../common';
 import { highlightMatch } from '../../../../../utils';
@@ -10,6 +11,7 @@ const InputSearcher = () => {
   const { searchState, resultsState } = useSearchResults();
   const { searchTerm, updateSearchTerm } = searchState;
   const { results, updateResults } = resultsState;
+  const { item, updateItem } = useSelectedItem()
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -21,6 +23,10 @@ const InputSearcher = () => {
 
     return () => clearTimeout(handler);
   }, [searchTerm, updateResults]);
+
+  useEffect(()=>{
+    console.log('useEffect en InputSearcher.jsx, item saved:', item)
+    }, [item])
 
   return (
     <div className="searchBox">
@@ -44,6 +50,7 @@ const InputSearcher = () => {
               key={index}
               onClick={() => {
                 console.log("Seleccionado:", result);
+                updateItem(result) // GUARDAR ITEM EN EL CONTEXTO
                 setInputValue(result.name); // Se introduce la selección en el input
                 updateResults([]);
               }}

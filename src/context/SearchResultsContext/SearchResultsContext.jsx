@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useMemo } from "react";
 
 const SearchResultsContext = createContext()
 
-export const SearchResultsContextProvider = ({children}) => {
+export const SearchResultsProvider = ({children}) => {
   const [searchTerm, setSearchTerm] = useState('')
   const [results, setResults] = useState([])
 

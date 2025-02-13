@@ -1,12 +1,12 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useState } from "react";
 
 const DollarRateContext = createContext()
 
 export const DollarRateProvider = ({children}) => { 
     const [price, setPrice] = useState(0)
-    
+
     const updatePrice = (newPrice) => setPrice(newPrice)
-    
+
     return (
         <DollarRateContext.Provider value={ {price, updatePrice} }>
             {children}

@@ -1,21 +1,22 @@
-import DollarRateToggler from "./DollarRateToggler"
+import { ComposedProvider } from "../../../utils/ComposedProvider"
+import { DollarRateToggler } from './DollarRateToggler'
 import { DollarRateProvider, BudgetContextProvider } from "../../../context"
 import { CreateItemForm } from "./CreateItemForm"
-import {Budget} from "./Budget"
+import { Budget } from "./Budget"
+import { TotalProvider } from "../../../context/TotalContext"
+
 
 function Options() {
   return (
-    <>
-      <BudgetContextProvider>
-        <Budget/> 
-      </BudgetContextProvider>
-      
-      <DollarRateProvider>
-        <DollarRateToggler/>
-      </DollarRateProvider>
-
+    <ComposedProvider providers={
+      [BudgetContextProvider, DollarRateProvider,
+       TotalProvider]}
+    >
+      <Budget/>
+      <DollarRateToggler/>
       <CreateItemForm/>
-    </>
+
+    </ComposedProvider>  
   )
 }
 

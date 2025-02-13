@@ -1,1 +1,1 @@
-export {default} from './DollarRateToggler';
+export {default as DollarRateToggler} from './DollarRateToggler';

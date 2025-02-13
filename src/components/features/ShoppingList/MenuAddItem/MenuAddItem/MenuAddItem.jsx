@@ -1,16 +1,25 @@
-import { useState } from "react"
-import { Input, Button } from "../../../common"
-import StateValidator from "../../../../utils/StateValidator"
-import ProductTotal from "./ProductTotal"
-import InputSearcher from "./InputSearcher/InputSearcher"
-import { useItemsList } from "../../../../context/ItemsListContext"
+import { useState, useEffect } from "react"
+import { useItemsList } from "../../../../../context/ItemsListContext"
+import { useSelectedItem } from "../../../../../context/SelectedItemContext"
+import { useTotal } from "../../../../../context/TotalContext"
+import { Input, Button } from "../../../../common"
+import StateValidator from "../../../../../utils/StateValidator"
+import PreviewTotal from "./helpers/PreviewTotal"
+import InputSearcher from "../InputSearcher/InputSearcher"
 
 const MenuAddItem = () => {
   const [showMenu, setShowMenu] = useState(false)
   const [quantity, setQuantity] = useState("")
   const [price, setPrice] = useState("")
-  const {list, updateList} = useItemsList()
 
+  // Item seleccionado del buscador
+  const { item, updateItem } = useSelectedItem()
+  // Lista de items agregadas al planner
+  const { list, updateList } = useItemsList()
+  // Actualiza el total de toda la lista
+  const { updateTotal } = useTotal() 
+
+  // Validador de campos numericos con estado
   const validator = new StateValidator()
 
   const toggleShowForm = () => setShowMenu(!showMenu);
@@ -18,10 +27,13 @@ const MenuAddItem = () => {
   const reset = () => {
     setQuantity('')
     setPrice('')
+    updateItem({})
   }
 
-  const handleNumberChange = (value, setStateFn) => {
+  const handleNumberChange = (e, setStateFn) => {
     // Permitir decimales y borrado completo
+    e.preventDefault
+    const value = e.target.value
     if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
       setStateFn(value)
     }
@@ -50,22 +62,19 @@ const MenuAddItem = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     toggleShowForm()
-
-    
+    const subtotal = quantity * price
+    updateList(
+      // AGREGAR ITEM A LA LISTA
+      {...item, quantity, price, subtotal: subtotal})
+    // Acumular (sumar) subtotales
+    updateTotal(subtotal)
+    //Vaciar campos
+    reset()
   }
 
-  const newItemInputProps = {
-    quantity: {
-      id: 'quantity',
-      label: 'Cantidad:',
-      placeholder: 'Ej: 1.5'
-    },
-    pricing: {
-      id: 'price',
-      label: 'Precio:',
-      placeholder: 'Ej: 3.99'
-    }
-  };
+  useEffect(()=>{
+    console.log('Desde MenuAddItem.jsx, contexto list:', list)
+  }, [list])
 
   return (
     <>
@@ -79,11 +88,11 @@ const MenuAddItem = () => {
             required
             type={'text'}
             inputMode={'decimal'}
-            id={newItemInputProps.quantity.id}
-            labelText={newItemInputProps.quantity.label}
-            placeholder={newItemInputProps.quantity.placeholder}
+            id='quantity'
+            labelText='Cantidad:'
+            placeholder='Ej: 1.5'
             value={quantity}
-            onChange={e => handleNumberChange(e.target.value, setQuantity)}/>
+            onChange={e => handleNumberChange(e, setQuantity)}/>
 
           {/* BOTÓN DISMINUIR EN 1 */}
           <Button 
@@ -102,16 +111,16 @@ const MenuAddItem = () => {
             required
             type={'text'}
             inputMode={'decimal'}
-            id={newItemInputProps.pricing.id}
-            labelText={newItemInputProps.pricing.label}
-            placeholder={newItemInputProps.pricing.placeholder}
+            id='price'
+            labelText='Precio:'
+            placeholder='Ej: 3.99'
             value={price}
-            onChange={e => handleNumberChange(e.target.value, setPrice)}/>
+            onChange={e => handleNumberChange(e, setPrice)}/>
 
           <br/>
 
           {/* PREVISUALIZAR MONTO */}
-          <ProductTotal quantity={quantity} price={price}/>
+          <PreviewTotal quantity={quantity} price={price}/>
 
           <br/>
           

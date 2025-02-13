@@ -1,103 +1,69 @@
-import './budgetVisualizer.css'
-import { useState, useEffect } from "react"
+import './budgetVisualizer.css';
+import StateValidator from '../../../../../utils/StateValidator';
 
-export const BudgetVisualizer = ({budget, totalSpent}) => {
-
-  // Verificar si budget o totalSpent son undefined
-  if (budget === undefined || totalSpent === undefined) {
-    console.log(`BudgetVisualizer: budget o totalSpent es undefined`)
-    return null;
-  }
-
-  const [available, setAvailable] = useState(0.00)
-  const [fractionSpent, setFractionSpent] = useState(0.00)
-  const [colorStatus, setColorstatus] = useState(0.00)
-
-  // Calcular porcentaje gastado
-  const calcFractionSpent = (spent, budget) => {
-    const parsedSpent = parseFloat(spent, 10);
-    const parsedBudget = parseFloat(budget, 10);
-    // Validación
-    if (isNaN(parsedSpent) || isNaN(parsedBudget) || parsedBudget === 0) {
-      console.error("Los valores proporcionados no son válidos.");
-      return;
-    }
-    // Cálculo
-    const totalSum = ((parsedSpent / parsedBudget) * 100).toFixed(2);
-    setFractionSpent(Math.min(totalSum, 100));
-  };
-
-  // Calcular cantidad disponible para gastar
-  const calcAvailable = (spent, budget) => {
-    const parsedSpent = parseFloat(spent, 10)
-    const parsedBudget = parseFloat(budget, 10)
-
-    if (isNaN(parsedSpent) || isNaN(parsedBudget) || parsedBudget === 0) {
-      console.error("Los valores proporcionados no son válidos.");
-      return;
-    }
-
-    const available = (parsedBudget - parsedSpent).toFixed(2)
-    setAvailable(available)
-  }
+export const BudgetVisualizer = ({ budget, totalSpent }) => {
+  const validator = new StateValidator();
   
-  // useEffect para calcular y actualizar el estado del presupuesto y el
-  // color basado en los cambios de 'spent', 'total', y 'fractionSpent'
-  useEffect(() => {
-    console.log(`budget: ${budget}, totalSpent: ${totalSpent}`)
-    calcFractionSpent(totalSpent, budget)
+  console.log('Desde BudgetVisualizer.jsx, budget:', budget);
+  
+  // Parse y validación de valores
+  const parsedSpent = parseFloat(totalSpent);
+  const parsedBudget = parseFloat(budget);
+  
+  // Si el valor es NaN (por ejemplo, input vacío), lo tratamos como 0
+  const sanitizedSpent = isNaN(parsedSpent) ? 0 : validator.sanitize(parsedSpent);
+  const sanitizedBudget = isNaN(parsedBudget) ? 0 : validator.sanitize(parsedBudget);
+  
+  // Evitamos la división por cero
+  const fractionSpent = sanitizedBudget > 0 ? Math.min((sanitizedSpent / sanitizedBudget) * 100, 100) : 0;
+  const formattedFraction = fractionSpent.toFixed(2);
+  const available = sanitizedBudget > 0 ? (sanitizedBudget - sanitizedSpent).toFixed(2) : "0.00";
 
-    const colors = getColorStatus(fractionSpent);
-    setColorstatus(colors);
-    
-    calcAvailable(totalSpent, budget)
-  }, [totalSpent, budget, fractionSpent])
-
-  // Función para obtener el color y texto de estado según el porcentaje gastado
+  // Función para determinar el color y el texto de estado basado en el porcentaje gastado
   const getColorStatus = (fraction) => {
-    if (fraction <= 10) return { divColor: '#5ef05c', statusText: 'Óptimo' };
-    if (fraction <= 20) return { divColor: '#9ef05c', statusText: 'Muy favorable' };
-    if (fraction <= 30) return { divColor: '#c1f05c', statusText: 'Favorable' };
-    if (fraction <= 40) return { divColor: '#dff05c', statusText: 'Bajo control' };
-    if (fraction <= 50) return { divColor: '#f0e35c', statusText: 'Estable' };
-    if (fraction <= 60) return { divColor: '#f0c85c', statusText: 'Aceptable' };
-    if (fraction <= 70) return { divColor: '#f0b25c', statusText: 'Moderado' };
-    if (fraction <= 80) return { divColor: '#f0795c', statusText: 'Riesgo moderado' };
-    if (fraction <= 90) return { divColor: '#e15750', statusText: 'Riesgo elevado' };
-    if (fraction <= 99.99) return { divColor: '#e15750', statusText: 'Crítico' };
+    const f = parseFloat(fraction);
+    if (f <= 10) return { divColor: '#5ef05c', statusText: 'Óptimo' };
+    if (f <= 20) return { divColor: '#9ef05c', statusText: 'Muy favorable' };
+    if (f <= 30) return { divColor: '#c1f05c', statusText: 'Favorable' };
+    if (f <= 40) return { divColor: '#dff05c', statusText: 'Bajo control' };
+    if (f <= 50) return { divColor: '#f0e35c', statusText: 'Estable' };
+    if (f <= 60) return { divColor: '#f0c85c', statusText: 'Aceptable' };
+    if (f <= 70) return { divColor: '#f0b25c', statusText: 'Moderado' };
+    if (f <= 80) return { divColor: '#f0795c', statusText: 'Riesgo moderado' };
+    if (f <= 90) return { divColor: '#e15750', statusText: 'Riesgo elevado' };
+    if (f < 100) return { divColor: '#e15750', statusText: 'Crítico' };
     return { divColor: '#f4564e', statusText: 'Límite alcanzado' };
-  }
-
-  // Añadir una función para obtener el texto de estado basado en el monto disponible
-  const getAvailableStatusText = (available) => {
-    return parseFloat(available) >= 0 ? 'Restante' : 'Exceso';
   };
+
+  const colorStatus = getColorStatus(formattedFraction);
+  const availableStatusText = parseFloat(available) >= 0 ? 'Restante' : 'Exceso';
 
   // Estilos
   const budgetStyle = {
     backgroundColor: '#dddddd',
     maxWidth: '300px',
     height: '8px',
-    margin: '5px 0px',
+    margin: '5px 0',
     borderRadius: '4px',
-  }
+  };
+
   const spendingsStyle = {
     backgroundColor: colorStatus.divColor,
-    maxWidth: `${fractionSpent}%`,
+    maxWidth: `${formattedFraction}%`,
     height: '100%',
     borderRadius: '4px',
-    transition: 'max-width 0.4s ease-out, background-color 0.3s ease-out'
-  }
+    transition: 'max-width 0.4s ease-out, background-color 0.3s ease-out',
+  };
 
   return (
     <div className="budget-visualizer">
       <div style={budgetStyle}>
-        <div style={spendingsStyle}/>
+        <div style={spendingsStyle} />
       </div>
-      <span>{`${fractionSpent}% - ${colorStatus.statusText}`}</span>
+      <span>{`${formattedFraction}% - ${colorStatus.statusText}`}</span>
       <span style={{ color: parseFloat(available) < 0 ? '#f4564e' : '#444444' }}>
-        {Math.abs(available)} - {getAvailableStatusText(available)}
+        {Math.abs(available)} - {availableStatusText}
       </span>
     </div>
-  )
-}
+  );
+};

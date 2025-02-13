@@ -1,7 +1,7 @@
 import {useDollarRate} from '../../../../context/DollarRateContext'
 import {CheckToggler} from '../../../common';
 
-function DollarRateToggler() {
+const DollarRateToggler = () => {
     const {updatePrice} = useDollarRate()
     
     return (

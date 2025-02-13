@@ -7,7 +7,7 @@ import { useState, useEffect } from "react"
  * @param {string|number} props.price - The unit price of the product.
  * @returns {JSX.Element} The JSX element displaying the total price.
  */
-const ProductTotal = ({quantity, price}) => {
+const PreviewTotal = ({quantity, price}) => {
   // Estado para almacenar el precio total
   const [total, setTotal] = useState('0')
 
@@ -37,4 +37,4 @@ const ProductTotal = ({quantity, price}) => {
   )
 }
 
-export default ProductTotal
+export default PreviewTotal
