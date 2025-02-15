@@ -1,0 +1,89 @@
+.base, .baseOn {
+  cursor: pointer;
+  display: flex;
+  width: 50px; /* Puedes cambiar este valor a cualquier ancho */
+  height: 25px;
+  border-radius: 8px;
+  align-items: center;
+  padding: 4px;
+  transition: background-color 0.2s ease;
+  position: relative; /* Añadido */
+}
+
+.base {
+  background-color: #e15750;
+}
+.base:hover {
+  background-color: #b94842;
+}
+
+.baseOn {
+  background-color: #86f884;
+}
+.baseOn:hover {
+  background-color: rgb(118, 218, 117);
+}
+
+.lever {
+  position: absolute; /* Cambiado a absoluto */
+  background-color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  box-shadow: 0 2px 2px 0.1px rgba(49, 2, 2, 0.226);
+  left: 4px; /* Posición inicial basada en padding */
+}
+
+.leverOn {
+  animation: leverOnAnimation 0.5s forwards;
+}
+
+.leverOff {
+  animation: leverOffAnimation 0.5s forwards;
+}
+
+@keyframes leverOnAnimation {
+  0% {
+    left: 4px;
+  }
+  40% {
+    left: calc(100% - 18px - 4px + 2px); /* Overshoot dinámico */
+  }
+  60% {
+    left: calc(100% - 18px - 4px - 4px); /* Retroceso */
+  }
+  80% {
+    left: calc(100% - 18px - 4px + 1px); /* Ajuste fino */
+  }
+  100% {
+    left: calc(100% - 18px - 4px); /* Posición final */
+  }
+}
+
+@keyframes leverOffAnimation {
+  0% {
+    left: calc(100% - 18px - 4px);
+  }
+  40% {
+    left: 2px; /* Overshoot hacia la izquierda */
+  }
+  60% {
+    left: 8px; /* Retroceso */
+  }
+  80% {
+    left: 3px; /* Ajuste fino */
+  }
+  100% {
+    left: 4px; /* Posición final */
+  }
+}
+
+.toggleSwitch {
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -o-user-select: none; /* Opera */
+  user-select: none; /* Estándar */
+}

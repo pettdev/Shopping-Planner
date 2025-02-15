@@ -1,35 +1,93 @@
-import { CheckToggler } from "../../../common"
+import { ToggleSwitch } from "../../../common/ToggleSwitch"
+import { Button, Input } from "../../../common"
 import { BudgetVisualizer } from './BudgetVisualizer'
 import { useBudget } from "../../../../context"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useTotal } from "../../../../context/TotalContext"
 
 const Budget = () => {
-  const {budget, updateBudget} = useBudget()
+  const { budget, updateBudget } = useBudget()
   const { total } = useTotal()
+  const [budgetListener, setBudgetListener] = useState('')
+  const [apply, setApply] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
+  const [showBudgetInputs, setShowBudgetInputs] = useState(true)
+
+  const checkedOnChange = (value) => {
+    setIsChecked(value)
+  }
+
+  const applySwitch = () => setApply(prev => !prev)
+
+  const showBudgetInputsSwitch = () => setShowBudgetInputs(prev => !prev)
+
+  const budgetOnChange = (rawBudget) => {
+    setBudgetListener(rawBudget)
+  }
+
+  const resetAllStates = () => {
+    setBudgetListener('')
+    setShowBudgetInputs(true)
+    setApply(false)
+  }
+
+  const budgetHandler = () => {
+    if(apply && budgetListener > 0.01) {
+      updateBudget(budgetListener)
+      resetAllStates()
+      showBudgetInputsSwitch()
+    }
+  }
+
+  const cancelHandler = () => {
+    resetAllStates()
+    setShowBudgetInputs(false)
+  }
 
   useEffect(() => {
-    console.log(`Presupuesto actualizado: ${budget}`);
-  }, [budget]);
+    if(!isChecked) {
+      resetAllStates()
+      updateBudget(null) // resetear presupuesto en contexto
+    }
+  }, [isChecked])
 
-  const applyOnClickHandler = () => {
-    // To be implemented
+  useEffect(() => {
+    if(apply) {
+      budgetHandler()
+      setApply(false)
+    }
+  }, [apply])
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault()
+    setApply(true)
   }
+  
   return (
-    <CheckToggler
-      id={'budget'}
-      labelText={'Calcular presupuesto'}
-      renderOnCondition={true}
+    <>
+      <div style={{ display: 'flex', alignItems: 'center'}}>
+        <ToggleSwitch 
+          label={'Usar presupuesto'}
+          onChange={checkedOnChange}/>
+        
+        {(isChecked && !showBudgetInputs) && budget > 0 && (
+          <Button text='Editar' onClick={showBudgetInputsSwitch}/>
+        )}
+      </div>
 
-      conditionalInputType={'text'}
-      conditionalPlaceholder={'Ingresar presupuesto'}
-      conditionalButtonLabel={'Aplicar'}
-      conditionalOnChange={updateBudget}
-      conditionalValue={budget}
-      conditionalOnClick={applyOnClickHandler}
-    >
-      <BudgetVisualizer budget={budget} totalSpent={total}/>
-    </CheckToggler>
+      {isChecked && showBudgetInputs && (
+        <form onSubmit={onSubmitHandler}>
+          <Input
+            placeholder={'Ingresar presupuesto'}
+            value={budgetListener}
+            onChange={e => budgetOnChange(e.target.value)}/>
+          <Button text={'Aplicar'} type="submit"/>
+          <Button text="Cancelar" onClick={cancelHandler} type="button"/>
+        </form>
+      )}
+
+      {isChecked && budget > 0 && <BudgetVisualizer budget={budget} totalSpent={total}/>}
+    </>
   )
 }
 
