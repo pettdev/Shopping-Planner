@@ -1,28 +1,30 @@
 import { useEffect, useState } from 'react'
 import './ToggleSwitch.css'
 
-const ToggleSwitch = ({label, onChange}) => {
+const ToggleSwitch = ({ label, onChange, checked = false }) => {
+  const [on, setOn] = useState(checked)
 
-  const [on, setOn] = useState(false)
+  // Actualizamos el estado interno si la prop "checked" cambia
+  useEffect(() => {
+    setOn(checked)
+  }, [checked])
 
   const onClickHandler = () => {
-    setOn(!(on))
+    setOn(prev => !prev)
   }
 
   useEffect(() => {
-    console.log(on ? 'on' : 'off')
     try {
       onChange(on)
     } catch {
       console.error('onChange function not found.')
     }
-  },[on])
+  }, [on])
 
   return (
     <div className='toggleSwitch' onClick={onClickHandler}>
       {label}
-      <div 
-        className={on ? 'baseOn' : 'base'}>
+      <div className={on ? 'baseOn' : 'base'}>
         <div className={`lever ${on ? 'leverOn' : 'leverOff'}`}></div>
       </div>
     </div>

@@ -40,9 +40,15 @@ const Budget = () => {
   }
 
   const cancelHandler = () => {
+    // Si no hay un presupuesto válido (caso 1), apagamos el toggle
+    if (!budget || budget === '') {
+      setIsChecked(false)
+    }
     resetAllStates()
     setShowBudgetInputs(false)
   }
+  
+
 
   useEffect(() => {
     if(!isChecked) {
@@ -57,6 +63,7 @@ const Budget = () => {
       setApply(false)
     }
   }, [apply])
+  
 
   const onSubmitHandler = (e) => {
     e.preventDefault()
@@ -66,9 +73,12 @@ const Budget = () => {
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center'}}>
-        <ToggleSwitch 
-          label={'Usar presupuesto'}
-          onChange={checkedOnChange}/>
+      <ToggleSwitch 
+        label={'Usar presupuesto'}
+        onChange={checkedOnChange}
+        checked={isChecked}
+      />
+
         
         {(isChecked && !showBudgetInputs) && budget > 0 && (
           <Button text='Editar' onClick={showBudgetInputsSwitch}/>
