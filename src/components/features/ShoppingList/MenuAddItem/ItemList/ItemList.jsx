@@ -1,11 +1,13 @@
 import './ItemList.css'
 import Item from '../Item'
-import { useItemsList } from '../../../../../context/ItemsListContext'
-import { useTotal } from '../../../../../context/TotalContext'
+import { useItemsList, useTotal } from '../../../../../context'
 
 const ItemList = () => {
-  const {list} = useItemsList()
+
   const {total} = useTotal()
+  const {list} = useItemsList()
+
+  console.log('ItemList, total:', total)
   
   return (
     <>

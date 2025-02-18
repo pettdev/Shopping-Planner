@@ -1,1 +1,1 @@
-export {ItemsListProvider, useItemsList} from './ItemsListContext'
+export {default, useItemsList} from './ItemsListContext'

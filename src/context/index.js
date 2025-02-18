@@ -1,2 +1,6 @@
-export {BudgetContextProvider, useBudget} from './BudgetContext'
-export {DollarRateProvider, useDollarRate} from './DollarRateContext'
+export {default as BudgetContextProvider, useBudget} from './BudgetContext'
+export {default as DollarRateProvider, useDollarRate} from './DollarRateContext'
+export {default as ItemsListProvider, useItemsList} from './ItemsListContext'
+export {default as SearchResultsProvider, useSearchResults} from './SearchResultsContext'
+export {default as SelectedItemProvider, useSelectedItem} from './SelectedItemContext'
+export {default as TotalProvider, useTotal} from './TotalContext'

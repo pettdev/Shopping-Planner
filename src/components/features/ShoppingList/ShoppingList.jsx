@@ -1,23 +1,14 @@
-import { ItemsListProvider } from "../../../context/ItemsListContext"
-import { SearchResultsProvider } from "../../../context/SearchResultsContext"
-import { SelectedItemProvider } from '../../../context/SelectedItemContext'
-import { TotalProvider } from "../../../context/TotalContext/TotalContext"
-import MenuAddItem from "./MenuAddItem/MenuAddItem/MenuAddItem"
-import ItemList from "./MenuAddItem/ItemList"
-import {ComposedProvider} from '../../../utils/ComposedProvider'
-
+import React from 'react';
+import MenuAddItem from "./MenuAddItem/MenuAddItem/MenuAddItem";
+import ItemList from "./MenuAddItem/ItemList";
 
 function ShoppingList() {
   return (
-    <ComposedProvider providers={[
-      SearchResultsProvider,ItemsListProvider,
-      SelectedItemProvider,TotalProvider]}
-    >
-      <MenuAddItem/>
-      <ItemList/>
-      
-    </ComposedProvider>
+    <>
+      <MenuAddItem />
+      <ItemList />
+    </>
   );
 }
 
-export default ShoppingList
+export default ShoppingList;

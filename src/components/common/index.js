@@ -3,3 +3,4 @@ export { default as Input } from './Input';
 export { default as Label } from './Label';
 export { default as Checkbox } from './Checkbox';
 export { default as SelectOption} from './SelectOption'
+export { default as ToggleSwitch} from './ToggleSwitch'

@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react"
-import { useItemsList } from "../../../../../context/ItemsListContext"
-import { useSelectedItem } from "../../../../../context/SelectedItemContext"
-import { useTotal } from "../../../../../context/TotalContext"
+import { useItemsList, useSelectedItem, useTotal } from "../../../../../context"
 import { Input, Button } from "../../../../common"
-import StateValidator from "../../../../../utils/StateValidator"
+import DecimalInputSanitizer from "../../../../../utils/DecimalInputSanitizer"
 import PreviewTotal from "./helpers/PreviewTotal"
 import InputSearcher from "../InputSearcher/InputSearcher"
 
@@ -17,10 +15,10 @@ const MenuAddItem = () => {
   // Lista de items agregadas al planner
   const { list, updateList } = useItemsList()
   // Actualiza el total de toda la lista
-  const { updateTotal } = useTotal() 
+  const { updateTotal } = useTotal()
 
   // Validador de campos numericos con estado
-  const validator = new StateValidator()
+  const validator = new DecimalInputSanitizer()
 
   const toggleShowForm = () => setShowMenu(!showMenu);
 
@@ -34,22 +32,21 @@ const MenuAddItem = () => {
     // Permitir decimales y borrado completo
     e.preventDefault
     const value = e.target.value
-    if (value === "" || /^[0-9]*\.?[0-9]*$/.test(value)) {
-      setStateFn(value)
-    }
+    const getSanitizedOfdValue = validator.getSanitizedOf(value)
+    setStateFn(getSanitizedOfdValue)
   }
 
   const handleOperation = (mode) => {
     const num = parseFloat(quantity) || 0;
-    const sanitizedNum = parseFloat(validator.sanitize(num) || '0');
+    const getSanitizedOfdNum = parseFloat(validator.getSanitizedOf(num) || '0');
     let newValue;
   
     switch (mode) {
       case '+':
-        newValue = sanitizedNum + 1;
+        newValue = getSanitizedOfdNum + 1;
         break;
       case '-':
-        newValue = Math.max(0, sanitizedNum - 1); // Asegura que no sea negativo
+        newValue = Math.max(0, getSanitizedOfdNum - 1); // Asegura que no sea negativo
         break;
       default:
         console.warn(`handleOperation llamada con modo inválido: ${mode}`);
@@ -58,24 +55,28 @@ const MenuAddItem = () => {
     setQuantity(newValue.toFixed(2));
   }
 
-  // Al hacer clic en Agregar
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    toggleShowForm()
-    const subtotal = quantity * price
-    updateList(
-      // AGREGAR ITEM A LA LISTA
-      {...item, quantity, price, subtotal: subtotal})
-    // Acumular (sumar) subtotales
-    updateTotal(subtotal)
-    //Vaciar campos
-    reset()
+
+// Al hacer clic en Agregar
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const subtotal = quantity * price;
+
+  try {
+    updateList({ ...item, quantity, price, subtotal });
+    updateTotal(subtotal); // Actualizar total solo si la lista se actualiza exitosamente
+    toggleShowForm(); // Cerrar el formulario solo si la lista se actualiza exitosamente
+    reset(); // Resetear el formulario solo si la lista se actualiza exitosamente
+  } catch (error) {
+    if (error.message === 'Item ya existe en la lista') {
+      alert("Ya existe un producto con el mismo nombre en la lista."); // O usar un estado para mostrar el error
+    }
   }
+}
 
   useEffect(()=>{
     console.log('Desde MenuAddItem.jsx, contexto list:', list)
   }, [list])
-
+  
   return (
     <>
       {showMenu ? (

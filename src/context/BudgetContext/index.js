@@ -1,1 +1,1 @@
-export {BudgetContextProvider, useBudget} from './BudgetContext'
+export {default, useBudget} from './BudgetContext'

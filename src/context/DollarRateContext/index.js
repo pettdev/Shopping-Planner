@@ -1,1 +1,1 @@
-export {DollarRateProvider, useDollarRate} from './DollarRateContext'
+export {default, useDollarRate} from './DollarRateContext'

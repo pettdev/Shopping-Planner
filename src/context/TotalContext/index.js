@@ -1,1 +1,2 @@
-export {TotalProvider, useTotal} from './TotalContext'
+export {default, useTotal} from './TotalContext'
+

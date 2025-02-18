@@ -3,7 +3,7 @@ import { Input, SelectOption, Button } from "../../../common";
 import { categories, weightUnits } from "../../../../data";
 import ItemBody from "./ItemBody";
 import { addGlobalItem } from "../../../../utils/globalItemsUtils";
-import StateValidator from "../../../../utils/StateValidator";
+import DecimalInputSanitizer from "../../../../utils/DecimalInputSanitizer";
 
 const CreateItemForm = () => {
   const [showForm, setShowForm] = useState(false);
@@ -26,16 +26,16 @@ const CreateItemForm = () => {
   const categoryOptions = categories.categories.map(category => category.name);
 
   // Validador de campos numéricos
-  const validator = new StateValidator();
+  const validator = new DecimalInputSanitizer();
 
   const handleChange = (e) => {
     const { value, id } = e.target;
     
     if (id === 'netWeight') {
-      const sanitizedValue = validator.sanitize(value);
+      const getSanitizedOfdValue = validator.getSanitizedOf(value);
       setFormData(prev => ({ 
         ...prev, 
-        [id]: sanitizedValue || ''
+        [id]: getSanitizedOfdValue || ''
       }));
       return;
     }

@@ -1,28 +1,29 @@
-import { ToggleSwitch } from "../../../common/ToggleSwitch"
-import { Button, Input } from "../../../common"
-import { BudgetVisualizer } from './BudgetVisualizer'
-import { useBudget } from "../../../../context"
 import { useEffect, useState } from "react"
-import { useTotal } from "../../../../context/TotalContext"
+import { useBudget } from "../../../../context"
+import { DecimalInputSanitizer } from "../../../../utils"
+import { Button, Input, ToggleSwitch } from "../../../common"
+import { BudgetVisualizer } from './BudgetVisualizer'
 
 const Budget = () => {
-  const { budget, updateBudget } = useBudget()
-  const { total } = useTotal()
+  
   const [budgetListener, setBudgetListener] = useState('')
   const [apply, setApply] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [showBudgetInputs, setShowBudgetInputs] = useState(true)
+  const { budget, updateBudget } = useBudget()
 
   const checkedOnChange = (value) => {
     setIsChecked(value)
   }
 
-  const applySwitch = () => setApply(prev => !prev)
-
   const showBudgetInputsSwitch = () => setShowBudgetInputs(prev => !prev)
 
-  const budgetOnChange = (rawBudget) => {
-    setBudgetListener(rawBudget)
+  const validator = new DecimalInputSanitizer()
+
+  const budgetOnChange = (e) => {
+    const budget = e.target.value
+    const sanitizedBudget = validator.getSanitizedOf(budget)
+    setBudgetListener(sanitizedBudget)
   }
 
   const resetAllStates = () => {
@@ -72,14 +73,13 @@ const Budget = () => {
   
   return (
     <>
+      
       <div style={{ display: 'flex', alignItems: 'center'}}>
       <ToggleSwitch 
         label={'Usar presupuesto'}
         onChange={checkedOnChange}
-        checked={isChecked}
-      />
+        checked={isChecked}/>
 
-        
         {(isChecked && !showBudgetInputs) && budget > 0 && (
           <Button text='Editar' onClick={showBudgetInputsSwitch}/>
         )}
@@ -90,13 +90,13 @@ const Budget = () => {
           <Input
             placeholder={'Ingresar presupuesto'}
             value={budgetListener}
-            onChange={e => budgetOnChange(e.target.value)}/>
+            onChange={e => budgetOnChange(e)}/>
           <Button text={'Aplicar'} type="submit"/>
           <Button text="Cancelar" onClick={cancelHandler} type="button"/>
         </form>
       )}
-
-      {isChecked && budget > 0 && <BudgetVisualizer budget={budget} totalSpent={total}/>}
+      {isChecked && budget > 0 && (
+        <BudgetVisualizer/>)}
     </>
   )
 }

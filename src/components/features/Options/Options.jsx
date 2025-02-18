@@ -1,20 +1,14 @@
-import { ComposedProvider } from "../../../utils/ComposedProvider"
-import { DollarRateProvider, BudgetContextProvider } from "../../../context"
-import { CreateItemForm } from "./CreateItemForm"
-import { Budget } from "./Budget"
-import { TotalProvider } from "../../../context/TotalContext"
-
+import React from 'react';
+import { CreateItemForm } from "./CreateItemForm";
+import { Budget } from './Budget';
 
 function Options() {
   return (
-    <ComposedProvider providers={
-      [BudgetContextProvider, DollarRateProvider,
-       TotalProvider]}
-    >
-      <Budget/>
-      <CreateItemForm/>
-    </ComposedProvider>  
-  )
+    <>
+      <Budget />
+      <CreateItemForm />
+    </>
+  );
 }
 
-export default Options
+export default Options;

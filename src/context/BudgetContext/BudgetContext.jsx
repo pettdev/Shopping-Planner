@@ -1,15 +1,20 @@
 import { createContext, useContext, useState } from "react";
-import StateValidator from '../../utils/StateValidator'; // Asegúrate de la ruta correcta
+import DecimalInputSanitizer from '../../utils/DecimalInputSanitizer'; // Asegúrate de la ruta correcta
 
 const BudgetContext = createContext();
 
-export const BudgetContextProvider = ({ children }) => {
+const BudgetContextProvider = ({ children }) => {
   const [budget, setBudget] = useState(''); // Inicializa como cadena vacía
-
+  const validator = new DecimalInputSanitizer();  
+  
   const updateBudget = (newBudget) => {
-    const validator = new StateValidator();
-    const sanitized = validator.sanitize(newBudget);
-    setBudget(sanitized);
+    const sanitizedBudget = validator.getSanitizedOf(newBudget)
+    
+    console.log('BudgetContext, sanitizedBudget typeof:', typeof sanitizedBudget)
+    console.log('BudgetContext, sanitizedBudget', sanitizedBudget)
+
+    const parsedValue = parseFloat(sanitizedBudget)
+    setBudget(parsedValue);
   };
 
   return (
@@ -24,3 +29,5 @@ export const useBudget = () => {
   if (!context) throw new Error('Componente debe estar dentro de BudgetContextProvider');
   return context;
 };
+
+export default BudgetContextProvider

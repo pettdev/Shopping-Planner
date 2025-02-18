@@ -2,7 +2,7 @@ import {createContext, useContext, useState} from "react";
 
 const SelectedItemContext = createContext()
 
-export const SelectedItemProvider = ({children}) => { 
+const SelectedItemProvider = ({children}) => { 
     const [item, setItem] = useState({})
     
     const updateItem = (newItem) => setItem(newItem)
@@ -19,3 +19,5 @@ export const useSelectedItem = () => {
     if(!context) throw new Error('useSelectedItem must be used within a SelectedItemProvider component')
     return context
 }
+
+export default SelectedItemProvider

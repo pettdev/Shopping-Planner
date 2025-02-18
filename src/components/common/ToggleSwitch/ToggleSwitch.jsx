@@ -30,5 +30,4 @@ const ToggleSwitch = ({ label, onChange, checked = false }) => {
     </div>
   )
 }
-
 export default ToggleSwitch

@@ -1,1 +1,1 @@
-export {SearchResultsProvider, useSearchResults} from './SearchResultsContext'
+export {default, useSearchResults} from './SearchResultsContext'

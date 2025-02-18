@@ -1,1 +1,1 @@
-export {SelectedItemProvider, useSelectedItem} from './SelectedItemContext'
+export {default, useSelectedItem} from './SelectedItemContext'
