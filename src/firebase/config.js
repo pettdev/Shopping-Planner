@@ -28,7 +28,7 @@ const settings = {
 };
 
 // Initialize Firestore with settings
-initializeFirestore(app, settings);
+initializeFirestore(app, settings)
 
 // Firestore database
 const db = getFirestore(app);

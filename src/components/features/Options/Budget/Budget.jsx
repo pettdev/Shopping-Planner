@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useBudget } from "../../../../context"
+import { useBudget, useCurrency, useTotal } from "../../../../context"
 import { DecimalInputSanitizer } from "../../../../utils"
 import { Button, Input, ToggleSwitch } from "../../../common"
 import { BudgetVisualizer } from './BudgetVisualizer'
@@ -11,6 +11,8 @@ const Budget = () => {
   const [isChecked, setIsChecked] = useState(false)
   const [showBudgetInputs, setShowBudgetInputs] = useState(true)
   const { budget, updateBudget } = useBudget()
+  const { total } = useTotal()
+  const { currency } = useCurrency()
 
   const checkedOnChange = (value) => {
     setIsChecked(value)
@@ -33,7 +35,7 @@ const Budget = () => {
   }
 
   const budgetHandler = () => {
-    if(apply && budgetListener > 0.01) {
+    if(apply && budgetListener >= 0.01 ) {
       updateBudget(budgetListener)
       resetAllStates()
       showBudgetInputsSwitch()
@@ -48,8 +50,6 @@ const Budget = () => {
     resetAllStates()
     setShowBudgetInputs(false)
   }
-  
-
 
   useEffect(() => {
     if(!isChecked) {
@@ -73,7 +73,6 @@ const Budget = () => {
   
   return (
     <>
-      
       <div style={{ display: 'flex', alignItems: 'center'}}>
       <ToggleSwitch 
         label={'Usar presupuesto'}
@@ -88,7 +87,7 @@ const Budget = () => {
       {isChecked && showBudgetInputs && (
         <form onSubmit={onSubmitHandler}>
           <Input
-            placeholder={'Ingresar presupuesto'}
+            placeholder={`1000 ${currency.symbol}`}
             value={budgetListener}
             onChange={e => budgetOnChange(e)}/>
           <Button text={'Aplicar'} type="submit"/>
@@ -96,7 +95,7 @@ const Budget = () => {
         </form>
       )}
       {isChecked && budget > 0 && (
-        <BudgetVisualizer/>)}
+        <BudgetVisualizer budgetLimit={budget} totalSpent={total} currency={currency}/>)}
     </>
   )
 }

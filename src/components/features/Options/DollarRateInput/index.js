@@ -1,0 +1,1 @@
+export {default as DollarRate} from './DollarRate'

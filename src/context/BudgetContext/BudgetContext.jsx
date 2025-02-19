@@ -9,11 +9,8 @@ const BudgetContextProvider = ({ children }) => {
   
   const updateBudget = (newBudget) => {
     const sanitizedBudget = validator.getSanitizedOf(newBudget)
-    
-    console.log('BudgetContext, sanitizedBudget typeof:', typeof sanitizedBudget)
-    console.log('BudgetContext, sanitizedBudget', sanitizedBudget)
-
     const parsedValue = parseFloat(sanitizedBudget)
+    
     setBudget(parsedValue);
   };
 

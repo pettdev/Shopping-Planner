@@ -10,16 +10,13 @@ const SelectOption = ({id, labelText, options, value, ...props}) => {
       >
         <option value="" disabled>Seleccionar opción</option>
         {options.map((option) => (
-          <option 
-            key={option} 
-            value={option} // Usar valor original sin formatear
-          >
+          <option key={option} value={option}>
             {option}
           </option>
         ))}
       </select>
     </Label>
-  );
-};
+  )
+}
 
 export default SelectOption

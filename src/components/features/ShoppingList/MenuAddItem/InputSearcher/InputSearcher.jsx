@@ -11,22 +11,18 @@ const InputSearcher = () => {
   const { searchState, resultsState } = useSearchResults();
   const { searchTerm, updateSearchTerm } = searchState;
   const { results, updateResults } = resultsState;
-  const { item, updateItem } = useSelectedItem()
+  const { updateItem } = useSelectedItem()
 
   useEffect(() => {
     const handler = setTimeout(() => {
       (async () => {
-        const searchResults = await performSearch(searchTerm);
-        updateResults(searchResults);
-      })();
-    }, 150);
+        const searchResults = await performSearch(searchTerm)
+        updateResults(searchResults)
+      })()
+    }, 150)
 
     return () => clearTimeout(handler);
   }, [searchTerm, updateResults]);
-
-  useEffect(()=>{
-    console.log('useEffect en InputSearcher.jsx, item saved:', item)
-    }, [item])
 
   return (
     <div className="searchBox">
@@ -49,7 +45,6 @@ const InputSearcher = () => {
               className="selection"
               key={index}
               onClick={() => {
-                console.log("Seleccionado:", result);
                 updateItem(result) // GUARDAR ITEM EN EL CONTEXTO
                 setInputValue(result.name); // Se introduce la selección en el input
                 updateResults([]);

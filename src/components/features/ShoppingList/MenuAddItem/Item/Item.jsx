@@ -1,8 +1,10 @@
 import './Item.css'
 
-function Item({ item }) {
+
+function Item({ item, currencySymbol, currencyRate }) {
   const name = `${item.name}`
   const weight = `${item.netWeight} ${item.weightUnit}`
+  const convert = (value) => (value / (currencyRate || 1)).toFixed(2)
 
   return (
     <>
@@ -20,15 +22,11 @@ function Item({ item }) {
         </div>
 
         <div className="grid_item">
-          <div>{item.quantity}</div>
+          <div>{item.quantity} x {convert(item.price)} {currencySymbol}</div>
         </div>
 
         <div className="grid_item">
-          <div>{item.price}</div>
-        </div>
-
-        <div className="grid_item">
-          <div>{item.subtotal}</div>
+          <div>{convert(item.subtotal)} {currencySymbol}</div>
         </div>
       </div>
     </>

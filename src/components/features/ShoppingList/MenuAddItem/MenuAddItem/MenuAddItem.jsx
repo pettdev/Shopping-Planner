@@ -56,31 +56,28 @@ const MenuAddItem = () => {
   }
 
 
-// Al hacer clic en Agregar
-const handleSubmit = (e) => {
-  e.preventDefault();
-  const subtotal = quantity * price;
+  // Al hacer clic en Agregar
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const subtotal = (quantity * price).toFixed(2);
 
-  try {
-    updateList({ ...item, quantity, price, subtotal });
-    updateTotal(subtotal); // Actualizar total solo si la lista se actualiza exitosamente
-    toggleShowForm(); // Cerrar el formulario solo si la lista se actualiza exitosamente
-    reset(); // Resetear el formulario solo si la lista se actualiza exitosamente
-  } catch (error) {
-    if (error.message === 'Item ya existe en la lista') {
-      alert("Ya existe un producto con el mismo nombre en la lista."); // O usar un estado para mostrar el error
+    try {
+      updateList({ ...item, quantity, price, subtotal });
+      updateTotal(subtotal); // Actualizar total solo si la lista se actualiza exitosamente
+      toggleShowForm(); // Cerrar el formulario solo si la lista se actualiza exitosamente
+      reset(); // Resetear el formulario solo si la lista se actualiza exitosamente
+
+    } catch (error) {
+      if (error.message === 'Item ya existe en la lista') {
+        alert("Ya existe un producto con el mismo nombre."); // O usar un estado para mostrar el error
+      }
     }
-  }
 }
-
-  useEffect(()=>{
-    console.log('Desde MenuAddItem.jsx, contexto list:', list)
-  }, [list])
   
   return (
     <>
       {showMenu ? (
-        <form onSubmit={(e) => handleSubmit(e)}>
+        <form onSubmit={(e) => handleSubmit(e)} autoComplete="off">
           <InputSearcher/>
 
           <br/>

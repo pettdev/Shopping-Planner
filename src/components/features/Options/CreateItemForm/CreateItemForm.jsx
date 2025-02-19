@@ -81,7 +81,7 @@ const CreateItemForm = () => {
   return (
     <>
       {showForm ? (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <Input 
             required
             labelText="Nombre:"

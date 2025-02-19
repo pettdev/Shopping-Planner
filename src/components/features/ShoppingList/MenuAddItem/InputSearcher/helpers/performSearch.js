@@ -1,5 +1,5 @@
 import { db } from '../../../../../../firebase/config';
-import { collection, query, where, getDocs, limit} from 'firebase/firestore';
+import { collection, query, where, getDocs, limit, getDocsFromCache} from 'firebase/firestore';
 import { calculateRelevance } from '../../../../../../utils';
 
 
@@ -19,6 +19,8 @@ const performSearch = async (term) => { // Elimina useCallback
       where('searchTokens', 'array-contains-any', allSubstrings.slice(0, 10)),
       limit(10)
     );
+
+    
 
     const snapshot = await getDocs(q);
     const sortedResults = snapshot.docs
