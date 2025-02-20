@@ -1,5 +1,4 @@
 export {default as categories} from './categories.json'
-export {default as currencies} from './currencies.json'
 export {default as products} from './products.json'
 export {default as weightUnits} from './weightUnits.json'
 export {default as countries} from './countries.json'

@@ -1,13 +1,55 @@
-import { useDollarRate } from '../../../../../context';
 import './budgetVisualizer.css'
+import { useDollarRate } from '../../../../../context';
+import { exchanger } from '../../../../../context/CurrencyContext/helpers/exchangeVESforUSD';
+import { useEffect } from 'react';
 
-export const BudgetVisualizer = ({budgetLimit, totalSpent, currency}) => {
-  const {rate} = useDollarRate()
-  const total = totalSpent / (rate || 1)
-  const budget = budgetLimit / (rate || 1)
 
-  const spendingPercentage = budget > 0 ? Math.min((total / budget) * 100, 100).toFixed(2) : (0).toFixed(2);
-  const available = parseFloat(budget > 0 ? (budget - total).toFixed(2) : "0.00")
+export const BudgetVisualizer = ({ budgetLimit, totalSpent, currency }) => {
+  const { rate } = useDollarRate()
+
+  // El exchanger envía el rate a ambas monedas
+  exchanger.setRate(rate)
+
+  const isDefaultCurrency = exchanger.baseCurrency.isEqualTo(currency)
+  const defaultCurrency = exchanger.baseCurrency
+  const quoteCurrency = exchanger.quoteCurrency
+
+  // Variables temporales
+  let currentCurrency
+
+  // Manejar cambios de moneda
+  if (isDefaultCurrency) {
+    defaultCurrency.setAmount(budgetLimit)
+    currentCurrency = defaultCurrency
+
+  } else {
+    quoteCurrency.setAmount(budgetLimit)
+    currentCurrency = quoteCurrency
+  }
+
+  let convertedTotal
+  let convertedBudget
+
+  console.log(currentCurrency.code)
+
+  // POR AQUI QUEDE SEGURAMENTE NO RECORDARAS
+  if(defaultCurrency.type='base'){
+    convertedTotal = currentCurrency.convertAmount(totalSpent)
+    convertedBudget = currentCurrency.getConversion()
+  }
+
+  console.log('currentCurrency.rate:', currentCurrency.rate)
+  console.log('currentCurrency.amount:', currentCurrency.amount)
+
+  useEffect(()=>{
+    console.log('rate:', rate)
+    console.log('convertedTotal:', convertedTotal, 'typeof:', typeof convertedTotal)
+    console.log('convertedBudget:', convertedBudget, 'typeof:', typeof convertedBudget)
+
+  },[convertedTotal, convertedBudget, rate])
+
+  const spendingPercentage = convertedBudget > 0 ? Math.min((convertedTotal / convertedBudget) * 100, 100).toFixed(2) : (0).toFixed(2);
+  const available = parseFloat(convertedBudget > 0 ? (convertedBudget - convertedTotal).toFixed(2) : "0.00")
 
   // Función para determinar el color y el texto de estado basado en el porcentaje gastado
   const getColorStatus = (percentage) => {
@@ -53,10 +95,10 @@ export const BudgetVisualizer = ({budgetLimit, totalSpent, currency}) => {
   return (
     <div className="budget-visualizer">
       <div style={budgetStyle}>
-        <div style={spendingsStyle}/>
+        <div style={spendingsStyle} />
       </div>
       <span>{`${spendingPercentage}% - ${colorStatus.text}`}</span>
-      <span style={{ color: available < 0 && '#f4564e'}}>
+      <span style={{ color: available < 0 && '#f4564e' }}>
         {Math.abs(available)} {currency.symbol} - {availableText}
       </span>
     </div>

@@ -13,7 +13,7 @@ const MenuAddItem = () => {
   // Item seleccionado del buscador
   const { item, updateItem } = useSelectedItem()
   // Lista de items agregadas al planner
-  const { list, updateList } = useItemsList()
+  const { updateList } = useItemsList()
   // Actualiza el total de toda la lista
   const { updateTotal } = useTotal()
 

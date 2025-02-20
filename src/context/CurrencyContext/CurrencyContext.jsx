@@ -1,18 +1,17 @@
 import { createContext, useContext, useState } from "react"
-import { currencies } from "../../data"
+import { currencies } from "./helpers"
 
 const CurrencyContext = createContext()
 
 const CurrencyProvider = ({children}) => {
-  const DEFAULT_CURRENCY_CODE = 'VES'
-  const defaultCurrency = currencies.currencies.find(currency => currency.code === DEFAULT_CURRENCY_CODE)
-  const availableCurrencies = currencies.currencies.map(currency=> currency)
+  const DEFAULT_CURRENCY = currencies.DEFAULT_CURRENCY.getObject()
+  const availableCurrencies = currencies.all
   
-  const [currency, setCurrency] = useState(defaultCurrency)
+  const [currency, setCurrency] = useState(DEFAULT_CURRENCY)
 
   const selectCurrency = (selectedCurrency) => {
     try {
-      const exist = availableCurrencies.find(currency => currency.name === selectedCurrency.name)
+      const exist = availableCurrencies.find(currency => currency.code === selectedCurrency.code)
       exist && setCurrency(selectedCurrency)
     } catch (error) {
       console.error('Ha ocurrido un error con la moneda seleccionada:', error)

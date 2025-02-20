@@ -4,8 +4,8 @@ import { DecimalInputSanitizer } from "../../../../utils"
 import { Button, Input, ToggleSwitch } from "../../../common"
 import { BudgetVisualizer } from './BudgetVisualizer'
 
+
 const Budget = () => {
-  
   const [budgetListener, setBudgetListener] = useState('')
   const [apply, setApply] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
