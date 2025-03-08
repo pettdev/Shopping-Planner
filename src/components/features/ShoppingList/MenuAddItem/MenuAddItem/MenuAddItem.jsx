@@ -1,14 +1,17 @@
 import { useState } from "react"
-import { useItemsList, useSelectedItem, useTotal, useDollarRate } from "../../../../../context"
+import { useItemsList, useSelectedItem, useTotal, useCurrency } from "../../../../../context"
 import { Input, Button } from "../../../../common"
 import DecimalInputSanitizer from "../../../../../utils/DecimalInputSanitizer"
 import PreviewTotal from "./helpers/PreviewTotal"
 import InputSearcher from "../InputSearcher/InputSearcher"
+import { exchangeVESforUSD as exchanger } from "../../../../../context/CurrencyContext/helpers/exchangeVESforUSD"
+
 
 const MenuAddItem = () => {
   const [showMenu, setShowMenu] = useState(false)
   const [quantity, setQuantity] = useState("")
   const [price, setPrice] = useState("")
+  const { currency } = useCurrency()
 
   // Item seleccionado del buscador
   const { item, updateItem } = useSelectedItem()
@@ -16,14 +19,11 @@ const MenuAddItem = () => {
   const { updateList } = useItemsList()
   // Actualiza el total de toda la lista
   const { updateTotal } = useTotal()
-  // Tasa de cambio
-  const { rate } = useDollarRate()
-
-
   // Validador de campos numericos con estado
   const validator = new DecimalInputSanitizer()
+  const [bolivar, dollar] = exchanger.getPair()
 
-  const toggleShowForm = () => setShowMenu(!showMenu);
+  const toggleShowForm = () => setShowMenu(!showMenu)
 
   const reset = () => {
     setQuantity('')
@@ -40,43 +40,38 @@ const MenuAddItem = () => {
   }
 
   const handleOperation = (mode) => {
-    const num = parseFloat(quantity) || 0;
-    const getSanitizedOfdNum = parseFloat(validator.getSanitizedOf(num) || '0');
-    let newValue;
+    const num = parseFloat(quantity) || 0
+    const getSanitizedOfdNum = parseFloat(validator.getSanitizedOf(num) || '0')
+    let newValue
   
     switch (mode) {
       case '+':
-        newValue = getSanitizedOfdNum + 1;
-        break;
+        newValue = getSanitizedOfdNum + 1
+        break
       case '-':
-        newValue = Math.max(0, getSanitizedOfdNum - 1); // Asegura que no sea negativo
-        break;
+        newValue = Math.max(0, getSanitizedOfdNum - 1) // Asegura que no sea negativo
+        break
       default:
-        console.warn(`handleOperation llamada con modo inválido: ${mode}`);
-        return; // Salir de la función si el modo no es válido
+        console.warn(`handleOperation llamada con modo inválido: ${mode}`)
+        return // Salir de la función si el modo no es válido
     }
-    setQuantity(newValue.toFixed(2));
+    setQuantity(newValue.toFixed(2))
   }
-
 
   // Al hacer clic en Agregar
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const subtotal = rate ? (quantity * price) / rate : quantity * price;
-
+    e.preventDefault()
+    const subtotal = quantity * price // Almacenar en VES (sin conversión)
+    
     try {
-      updateList({ ...item, quantity, price, subtotal });
-      updateTotal(subtotal); // Actualizar total
-      toggleShowForm(); // Cerrar el formulario
-      reset(); // Resetear el formulario
-
+      updateList({...item, quantity, price, subtotal})
+      updateTotal(subtotal)
+      toggleShowForm()
+      reset()
     } catch (error) {
-      if (error.message === 'Item ya existe en la lista') {
-        alert("Ya existe un producto con el mismo nombre."); // O usar un estado para mostrar el error
-      }
+      // Manejar error
     }
-}
-  
+  }
   return (
     <>
       {showMenu ? (
@@ -142,7 +137,7 @@ const MenuAddItem = () => {
         <Button text={'+'} onClick={toggleShowForm}/>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MenuAddItem;
+export default MenuAddItem

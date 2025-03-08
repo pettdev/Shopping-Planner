@@ -11,19 +11,22 @@ export const BudgetVisualizer = ({budget}) => {
   const [bolivar, dollar] = exchanger.getPair()
 
   useEffect(() => {
-    // Por defecto, el presupuesto se refleja en VES
-    bolivar.setAmount(budget)
-
-    const isUSD = currency.isEqualTo(dollar)
-
-    if (isUSD) {
-      exchanger.convertBaseToQuote()
-      console.log(dollar)
-      setConvertedBudget(dollar.amount)
+    // Si el dolar es seleccionado, el presupuesto se refleja en dólares
+    if (currency.isEqualTo(dollar)) {
+      // Si el dolar es seleccionado y ya está en dólares, no es necesario convertir
+      if (dollar.amount > 0) {
+        setConvertedBudget(budget)
+      } else {
+        // Si el dolar seleccionado aun está en VES, hay que convertirlo primero
+        dollar.setAmount(budget)
+        exchanger.convertBaseToQuote()
+        setConvertedBudget(dollar.amount)
+      }
     } else {
+      // Por defecto, el presupuesto se refleja en VES
+      bolivar.setAmount(budget)
       setConvertedBudget(bolivar.amount)
     }
-
   }, [currency, rate, budget])
 
   let spendingPercentage
@@ -79,27 +82,15 @@ export const BudgetVisualizer = ({budget}) => {
 
   return (
     <div className="budget-visualizer">
-      <div style={{
-        backgroundColor: '#dddddd',
-        maxWidth: '300px',
-        height: '8px',
-        margin: '5px 0',
-        borderRadius: '4px',
-      }}>
-        <div style={{
-          backgroundColor: spendingPercentage <= 50 ? '#5ef05c' : '#e15750',
-          maxWidth: `${spendingPercentage}%`,
-          height: '100%',
-          borderRadius: '4px',
-          transition: 'max-width 0.4s ease-out, background-color 0.3s ease-out',
-        }} />
+      <div style={budgetStyle}>
+        <div style={spendingsStyle} />
       </div>
       <span style={{ fontWeight: 'bold' }}>
-        {convertedBudget.toFixed(2)} {currency.code}
+        {convertedBudget.toFixed(2)} {currency.code} 
       </span>
       <span>{`${spendingPercentage}%`}</span>
-      <span style={{ color: available < 0 && '#f4564e' }}>
-        {Math.abs(available)} {currency.symbol}
+      <span style={{ color: available < 0 && '#f4564e' } }>
+        {Math.abs(available)} {currency.symbol} {availableText}
       </span>
     </div>
   )

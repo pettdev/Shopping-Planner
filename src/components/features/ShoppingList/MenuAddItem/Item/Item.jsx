@@ -1,10 +1,14 @@
 import './Item.css'
 
 
-function Item({ item, currencySymbol, currencyRate }) {
+function Item({ item, currency }) {
   const name = `${item.name}`
   const weight = `${item.netWeight} ${item.weightUnit}`
-  const convert = (value) => (value / (currencyRate || 1)).toFixed(2)
+  const convert = (value) => {
+    // Si la moneda es USD, convierte usando la tasa
+    const rate = currency.rate || 1
+    return (value / rate).toFixed(2)
+  }
 
   return (
     <>
@@ -22,15 +26,15 @@ function Item({ item, currencySymbol, currencyRate }) {
         </div>
 
         <div className="grid_item">
-          <div>{item.quantity} x {convert(item.price)} {currencySymbol}</div>
+          <div>{item.quantity} x {convert(item.price)} {currency.symbol}</div>
         </div>
 
         <div className="grid_item">
-          <div>{convert(item.subtotal)} {currencySymbol}</div>
+          <div>{convert(item.subtotal)} {currency.symbol}</div>
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Item;
+export default Item

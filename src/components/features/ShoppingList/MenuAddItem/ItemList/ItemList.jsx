@@ -3,14 +3,18 @@ import Item from '../Item'
 import { useCurrency, useItemsList, useTotal } from '../../../../../context'
 
 const ItemList = () => {
-  const { convertedTotal, total } = useTotal();
-  const { list } = useItemsList();
-  const { currency } = useCurrency();
+  const {convertedTotal, total} = useTotal()
+  const {list} = useItemsList()
+  const {currency} = useCurrency()
   
   return (
     <div className='listContainer'>
       {list.map(item => 
-        <Item key={item.id} item={item} currencySymbol={currency.symbol} />
+        <Item 
+          key={item.id} 
+          item={item} 
+          currency={currency}
+        />
       )}
       {total > 0 && (
         <div className='grid_item total'>
@@ -18,7 +22,7 @@ const ItemList = () => {
         </div>  
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ItemList;
+export default ItemList

@@ -153,15 +153,15 @@ const DollarRate = () => {
           <Button text="Cancelar" onClick={cancelHandler} />
         </>
       )}
-
+      {/* Si la tasa es manual, se muestra el input para editarla */}
       {!showInputs && (isChecked && rate > 0.01) && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa personalizada.</div>
       )}
-
+      {/* Si la tasa es la del Banco Central de Venezuela, se muestra el mensaje */}
       {isChecked && option === optionBCV && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa Banco Central de Venezuela.</div>
       )}
-
+      {/* Si la tasa es la del paralelo, se muestra el mensaje */}
       {isChecked && option === optionParalelo && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa EnParaleloVzla.</div>
       )}
