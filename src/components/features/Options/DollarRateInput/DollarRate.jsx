@@ -11,7 +11,7 @@ const DollarRate = () => {
   const [isChecked, setIsChecked] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [option, setOption] = useState('')
-  const [manualRate, setManualValue] = useState('')
+  const [manualRate, setManualRate] = useState('')
   const [showInputs, setShowInputs] = useState(true)
 
   // Custom context hooks
@@ -78,17 +78,16 @@ const DollarRate = () => {
   }
  
   const selectDollarAsCurrency = (dollarRate) => {
-    if (dollarRate >= 0.01) {
+    if (dollarRate > 1) {
       if (isChecked && !currency.isEqualTo(dollar)) {
-        selectCurrency(dollar)
+        selectCurrency(dollar);
       }
     }
   }
 
   const manualValueHandler = (e) => {
     const value = e.target.value
-    const sanitizedValue = validator.getSanitizedOf(value)
-    setManualValue(sanitizedValue)
+    setManualRate(validator.getSanitizedOf(value))
   }
 
 

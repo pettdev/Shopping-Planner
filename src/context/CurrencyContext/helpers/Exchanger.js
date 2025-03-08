@@ -57,7 +57,7 @@ class Exchanger {
     console.log('this.rate: ', this.rate)
     if (this.rate > 1) {
       console.log('pasó por this.convertBaseToQuote()')
-      this.baseCurrency.setAmount(this.quoteCurrency.amount * this.this.rate)
+      this.baseCurrency.setAmount(this.quoteCurrency.amount * this.rate)
       this.quoteCurrency.setAmount(0)
     }
   }
@@ -68,11 +68,16 @@ class Exchanger {
    * @returns {void}
    */
   convertBaseToQuote() {
-    console.log('this.rate: ', this.rate)
     if (this.rate > 1) {
-      console.log('pasó por this.convertBaseToQuote()')
-      this.quoteCurrency.setAmount(this.baseCurrency.amount / this.rate)
-      this.baseCurrency.setAmount(0)
+      // 1. Calcular el valor en USD
+      const rawUSD = this.baseCurrency.amount / this.rate;
+      
+      // 2. Redondear al centavo más cercano
+      const roundedUSD = Math.round(rawUSD * 100) / 100; // <- Clave aquí
+      
+      // 3. Asignar el valor redondeado
+      this.quoteCurrency.setAmount(roundedUSD);
+      this.baseCurrency.setAmount(0);
     }
   }
 

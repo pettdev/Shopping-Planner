@@ -11,30 +11,32 @@ export const BudgetVisualizer = ({budget}) => {
   const [bolivar, dollar] = exchanger.getPair()
 
   useEffect(() => {
-    // Si el dolar es seleccionado, el presupuesto se refleja en dólares
     if (currency.isEqualTo(dollar)) {
-      // Si el dolar es seleccionado y ya está en dólares, no es necesario convertir
       if (dollar.amount > 0) {
+        // Si ya está en USD, actualiza directamente
         setConvertedBudget(budget)
       } else {
-        // Si el dolar seleccionado aun está en VES, hay que convertirlo primero
-        dollar.setAmount(budget)
+        // Convierte VES (base) a USD (quote)
         exchanger.convertBaseToQuote()
-        setConvertedBudget(dollar.amount)
+        setConvertedBudget(dollar.amount) // Usa el monto convertido
       }
     } else {
-      // Por defecto, el presupuesto se refleja en VES
+      // Por defecto, el presupuesto está en VES
       bolivar.setAmount(budget)
       setConvertedBudget(bolivar.amount)
     }
   }, [currency, rate, budget])
 
-  let spendingPercentage
-  if (convertedBudget > 0) {
-    spendingPercentage = Math.min((convertedTotal / convertedBudget) * 100, 100).toFixed(2)
-  } else {
-    spendingPercentage = (0).toFixed(2)
-  }
+let spendingPercentage;
+if (convertedBudget > 0) {
+  // Redondeamos a centavos (2 decimales) antes de la división
+  const total = Number(convertedTotal.toFixed(2));
+  const budget = Number(convertedBudget.toFixed(2));
+  
+  spendingPercentage = Math.min((total / budget) * 100, 100).toFixed(2);
+} else {
+  spendingPercentage = (0).toFixed(2);
+}
 
   const available = parseFloat(convertedBudget - convertedTotal).toFixed(2)
 
@@ -79,19 +81,20 @@ export const BudgetVisualizer = ({budget}) => {
     transition: 'max-width 0.4s ease-out, background-color 0.3s ease-out',
   }
 
+  const fontBold = {
+    fontWeight: 'bold',
+  }
 
   return (
     <div className="budget-visualizer">
-      <div style={budgetStyle}>
-        <div style={spendingsStyle} />
-      </div>
-      <span style={{ fontWeight: 'bold' }}>
-        {convertedBudget.toFixed(2)} {currency.code} 
-      </span>
+      <div style={budgetStyle}> <div style={spendingsStyle}/> </div>
+
+      <span style={fontBold}> {convertedBudget.toFixed(2)} {currency.code} </span>
       <span>{`${spendingPercentage}%`}</span>
-      <span style={{ color: available < 0 && '#f4564e' } }>
+      <span style={{ color: available < 0 && '#f4564e' }}>
         {Math.abs(available)} {currency.symbol} {availableText}
       </span>
+
     </div>
   )
 }

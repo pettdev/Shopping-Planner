@@ -11,7 +11,6 @@ const DollarRateProvider = ({ children }) => {
     const updateRate = (newRate) => {
         const sanitizedRate = validator.getSanitizedOf(newRate)
         setRate(sanitizedRate)
-        console.log('sanitizedRate', sanitizedRate)
         exchanger.setRate(sanitizedRate)
     }
 
