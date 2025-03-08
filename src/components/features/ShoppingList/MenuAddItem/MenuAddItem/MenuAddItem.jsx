@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { useItemsList, useSelectedItem, useTotal } from "../../../../../context"
+import { useState } from "react"
+import { useItemsList, useSelectedItem, useTotal, useDollarRate } from "../../../../../context"
 import { Input, Button } from "../../../../common"
 import DecimalInputSanitizer from "../../../../../utils/DecimalInputSanitizer"
 import PreviewTotal from "./helpers/PreviewTotal"
@@ -16,6 +16,9 @@ const MenuAddItem = () => {
   const { updateList } = useItemsList()
   // Actualiza el total de toda la lista
   const { updateTotal } = useTotal()
+  // Tasa de cambio
+  const { rate } = useDollarRate()
+
 
   // Validador de campos numericos con estado
   const validator = new DecimalInputSanitizer()
@@ -59,13 +62,13 @@ const MenuAddItem = () => {
   // Al hacer clic en Agregar
   const handleSubmit = (e) => {
     e.preventDefault();
-    const subtotal = (quantity * price).toFixed(2);
+    const subtotal = rate ? (quantity * price) / rate : quantity * price;
 
     try {
       updateList({ ...item, quantity, price, subtotal });
-      updateTotal(subtotal); // Actualizar total solo si la lista se actualiza exitosamente
-      toggleShowForm(); // Cerrar el formulario solo si la lista se actualiza exitosamente
-      reset(); // Resetear el formulario solo si la lista se actualiza exitosamente
+      updateTotal(subtotal); // Actualizar total
+      toggleShowForm(); // Cerrar el formulario
+      reset(); // Resetear el formulario
 
     } catch (error) {
       if (error.message === 'Item ya existe en la lista') {

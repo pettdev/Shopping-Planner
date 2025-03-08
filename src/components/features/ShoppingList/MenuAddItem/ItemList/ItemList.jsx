@@ -1,30 +1,24 @@
 import './ItemList.css'
 import Item from '../Item'
-import { useCurrency, useDollarRate, useItemsList, useTotal } from '../../../../../context'
-
+import { useCurrency, useItemsList, useTotal } from '../../../../../context'
 
 const ItemList = () => {
-  const {total} = useTotal()
-  const {list} = useItemsList()
-  const {currency} = useCurrency()
-  const {rate} = useDollarRate()
-  const totalConverted = (rate ? total / rate : total).toFixed(2)
-  console.log('selected:', currency)
+  const { convertedTotal, total } = useTotal();
+  const { list } = useItemsList();
+  const { currency } = useCurrency();
   
   return (
-    <>
-      <div className='listContainer'>
-        {list.map(item => 
-          <Item key={item.id} item={item} currencySymbol={currency.symbol} currencyRate={rate}/>
-        )}
+    <div className='listContainer'>
+      {list.map(item => 
+        <Item key={item.id} item={item} currencySymbol={currency.symbol} />
+      )}
       {total > 0 && (
         <div className='grid_item total'>
-          Total: {totalConverted} {currency.symbol}
+          Total: {convertedTotal.toFixed(2)} {currency.symbol}
         </div>  
       )}
-      </div>
-    </>
-  )
-}
+    </div>
+  );
+};
 
-export default ItemList
+export default ItemList;

@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react'
 import { useCurrency, useDollarRate } from '../../../../context'
 import { Button, Input, SelectOption, ToggleSwitch } from '../../../common'
 import { DecimalInputSanitizer } from '../../../../utils'
-import currencies from '../../../../context/CurrencyContext/helpers/currencies'
 import { getBCV, getParalelo } from '../../../../services/DollarRates/pyDolarVenezuelaAPI'
+import { exchangeVESforUSD as exchanger } from '../../../../context/CurrencyContext/helpers/exchangeVESforUSD'
 
 const DollarRate = () => {
   // React states
   const [isChecked, setIsChecked] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [option, setOption] = useState('')
-  const [manualValue, setManualValue] = useState('')
+  const [manualRate, setManualValue] = useState('')
   const [showInputs, setShowInputs] = useState(true)
 
   // Custom context hooks
@@ -22,45 +22,51 @@ const DollarRate = () => {
   const validator = new DecimalInputSanitizer()
 
   // Moneda principal del componente
-  const dollarCurrency = currencies.USD
+  const dollar = exchanger.quoteCurrency
 
   // Opciones para elegir la tasa en dólares
   const options = [
-    { text: 'Escribir manualmente' },
+    { text: 'Tasa manual' },
     { text: 'BCV' },
     { text: 'Paralelo' }
   ]
+
   const optionTexts = options.map(option => option.text)
   const optionManual = options[0].text
   const optionBCV = options[1].text
   const optionParalelo = options[2].text
 
-  // Consumo de API de dólares en tiempo real
+  // Consumo de API de dólares
   useEffect(() => {
     const fetchData = async () => {
+      // Opcion BCV
       if (option === optionBCV) {
         try {
           const newRate = await getBCV()
           updateRate(newRate)
-          selectDollarCurrency(newRate)
+          selectDollarAsCurrency(newRate)
         } catch (error) {
           console.error('Algo salió mal al obtener BCV:', error)
         }
+      // Opcion Paralelo
       } else if (option === optionParalelo) {
         try {
           const newRate = await getParalelo()
           updateRate(newRate)
-          selectDollarCurrency(newRate)
+          selectDollarAsCurrency(newRate)
         } catch (error) {
           console.error('Algo salió mal al obtener Paralelo:', error)
         }
-      }
+      } 
     }
-
-    if (option) {
+    // Si la opcion no es manual, se ejecuta la funcion fetchData
+    if (option !== optionManual) {
       fetchData()
+    } else {
+      // Opcion Manual
+      selectDollarAsCurrency(rate)
     }
-  }, [option])
+  }, [option, rate])
 
   //Metodos reutilizables
   const renderManualInputs = (bool) => {
@@ -70,19 +76,11 @@ const DollarRate = () => {
   const toggleOnChange = (bool) => {
     setIsChecked(bool)
   }
-
-  const selectDollarCurrency = (rate = 0) => {
-    if (option === optionManual) {
-      if (isApplied && manualValue >= 0.01) {
-        if (isChecked && currency.code !== dollarCurrency.code) {
-          selectCurrency(dollarCurrency)
-        }
-      }
-    } else {
-      if (rate >= 0.01) {
-        if (isChecked && currency.code !== dollarCurrency.code) {
-          selectCurrency(dollarCurrency)
-        }
+ 
+  const selectDollarAsCurrency = (dollarRate) => {
+    if (dollarRate >= 0.01) {
+      if (isChecked && !currency.isEqualTo(dollar)) {
+        selectCurrency(dollar)
       }
     }
   }
@@ -93,10 +91,11 @@ const DollarRate = () => {
     setManualValue(sanitizedValue)
   }
 
+
   useEffect(() => {
-    if(manualValue >= 0.01){
-      updateRate(manualValue)
-      selectDollarCurrency()
+    // Si la tasa manual es mayor a 0.01, se actualiza la tasa y se oculta el input
+    if(manualRate >= 0.01){
+      updateRate(manualRate)
       renderManualInputs(false)
     }
     setIsApplied(false)
@@ -149,7 +148,7 @@ const DollarRate = () => {
           <Input
             labelText="Tasa:"
             onChange={manualValueHandler}
-            value={manualValue}/>
+            value={manualRate}/>
           <Button text="Aplicar" type="submit" />
           <Button text="Cancelar" onClick={cancelHandler} />
         </>
@@ -168,6 +167,6 @@ const DollarRate = () => {
       )}
     </form>
   )
-};
+}
 
 export default DollarRate

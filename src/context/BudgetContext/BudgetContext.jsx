@@ -1,17 +1,18 @@
 import { createContext, useContext, useState } from "react";
+import { useCurrency } from "../CurrencyContext";
 import DecimalInputSanitizer from '../../utils/DecimalInputSanitizer'; // Asegúrate de la ruta correcta
 
 const BudgetContext = createContext();
 
 const BudgetContextProvider = ({ children }) => {
+  const {currency} = useCurrency()
   const [budget, setBudget] = useState(''); // Inicializa como cadena vacía
   const validator = new DecimalInputSanitizer();  
   
   const updateBudget = (newBudget) => {
     const sanitizedBudget = validator.getSanitizedOf(newBudget)
-    const parsedValue = parseFloat(sanitizedBudget)
-    
-    setBudget(parsedValue);
+    let parsedBudget = parseFloat(sanitizedBudget)
+    setBudget(parsedBudget);
   };
 
   return (

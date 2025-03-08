@@ -1,15 +1,18 @@
-import { createContext, useContext, useState } from "react";
-import { DecimalInputSanitizer } from "../../utils";
+import { createContext, useContext, useState } from "react"
+import { DecimalInputSanitizer } from "../../utils"
+import { exchangeVESforUSD as exchanger } from "../CurrencyContext/helpers/exchangeVESforUSD"
 
 const DollarRateContext = createContext()
 
 const DollarRateProvider = ({ children }) => {
-    const [rate, setRate] = useState('')
+    const [rate, setRate] = useState(1)
     const validator = new DecimalInputSanitizer()
 
     const updateRate = (newRate) => {
         const sanitizedRate = validator.getSanitizedOf(newRate)
         setRate(sanitizedRate)
+        console.log('sanitizedRate', sanitizedRate)
+        exchanger.setRate(sanitizedRate)
     }
 
     return (
