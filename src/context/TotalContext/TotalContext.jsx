@@ -1,28 +1,28 @@
-import { createContext, useContext, useState, useMemo } from "react"
-import { useCurrency, useDollarRate } from "../"
-import { DecimalInputSanitizer } from "../../utils"
-import { exchangeVESforUSD } from "../CurrencyContext/helpers/exchangeVESforUSD"
+import {createContext, useContext, useState, useMemo} from "react"
+import {useCurrency, useDollarRate} from "../"
+import {DecimalInputSanitizer} from "../../utils"
+import {exchangeVESforUSD as exchanger} from "../CurrencyContext/helpers/exchangeVESforUSD"
 
 const TotalContext = createContext()
 
-const TotalProvider = ({ children }) => {
+const TotalProvider = ({children}) => {
   const [total, setTotal] = useState(0)
   const validator = new DecimalInputSanitizer()
-  const { rate } = useDollarRate()
-  const { currency } = useCurrency()
+
+  // Custom context hooks
+  const {rate} = useDollarRate()
+  const {currency} = useCurrency()
 
   /**
-   * computed converted total:
    * Si la moneda es USD, convierte de VES a USD dividiendo entre la tasa.
    * Caso contrario, deja el total en VES u otra moneda.
    */
   const convertedTotal = useMemo(() => {
-    return currency.code === exchangeVESforUSD.quoteCurrency.code ? total / rate : total
+    return currency.isEqualTo(exchanger.quoteCurrency) ? Math.round((total / rate) * 100) / 100 : total
   }, [total, currency, rate])
 
   const updateTotal = (newTotal) => {
-    const sanitizedTotal = validator.getSanitizedOf(newTotal)
-    const parsedTotal = parseFloat(sanitizedTotal)
+    const parsedTotal = parseFloat(validator.getSanitizedOf(newTotal))
     if (!isNaN(parsedTotal)) {
       setTotal(prevTotal => prevTotal + parsedTotal)
     }

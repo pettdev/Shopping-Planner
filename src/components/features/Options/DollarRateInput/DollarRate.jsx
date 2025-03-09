@@ -1,34 +1,36 @@
 import './DollarRate.css'
 import { useEffect, useState } from 'react'
-import { useCurrency, useDollarRate } from '../../../../context'
+import { useCurrency, useDollarRate, useTotal } from '../../../../context'
 import { Button, Input, SelectOption, ToggleSwitch } from '../../../common'
 import { DecimalInputSanitizer } from '../../../../utils'
 import { getBCV, getParalelo } from '../../../../services/DollarRates/pyDolarVenezuelaAPI'
 import { exchangeVESforUSD as exchanger } from '../../../../context/CurrencyContext/helpers/exchangeVESforUSD'
 
+
 const DollarRate = () => {
   // React states
-  const [isChecked, setIsChecked] = useState(false)
+  const [isOn, setIsOn] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [option, setOption] = useState('')
   const [manualRate, setManualRate] = useState('')
   const [showInputs, setShowInputs] = useState(true)
 
   // Custom context hooks
-  const { rate, updateRate } = useDollarRate()
-  const { currency, selectCurrency } = useCurrency()
+  const {rate, updateRate} = useDollarRate()
+  const {currency, selectCurrency} = useCurrency()
+  const {covertedTotal} = useTotal()//###############################################
 
   // Validar strings enfocados a valores decimales
   const validator = new DecimalInputSanitizer()
 
   // Moneda principal del componente
-  const dollar = exchanger.quoteCurrency
+  const [bolivar, dollar] = exchanger.getPair()
 
   // Opciones para elegir la tasa en dólares
   const options = [
-    { text: 'Tasa manual' },
-    { text: 'BCV' },
-    { text: 'Paralelo' }
+    {text: 'Tasa manual'},
+    {text: 'BCV'},
+    {text: 'Paralelo'}
   ]
 
   const optionTexts = options.map(option => option.text)
@@ -68,20 +70,21 @@ const DollarRate = () => {
     }
   }, [option, rate])
 
-  //Metodos reutilizables
   const renderManualInputs = (bool) => {
     setShowInputs(bool)
-  }
-
-  const toggleOnChange = (bool) => {
-    setIsChecked(bool)
   }
  
   const selectDollarAsCurrency = (dollarRate) => {
     if (dollarRate > 1) {
-      if (isChecked && !currency.isEqualTo(dollar)) {
+      if (isOn && !currency.isEqualTo(dollar)) {
         selectCurrency(dollar);
       }
+    }
+  }
+
+  const selectBolivarAsCurrency = () => {
+    if (!isOn && currency.isEqualTo(dollar)) {
+      selectCurrency(bolivar);
     }
   }
 
@@ -90,6 +93,21 @@ const DollarRate = () => {
     setManualRate(validator.getSanitizedOf(value))
   }
 
+  useEffect(() => {
+    if (!isOn) {
+      exchanger.convertQuoteToBase();
+      console.log('exchanger.rate=',exchanger.rate)
+      // Cambiar a bolívares si la moneda actual es dólar
+      if (currency.isEqualTo(dollar)) {
+        selectCurrency(bolivar);
+      }
+    } else {
+      // Cambiar a dólares si la tasa es válida
+      if (rate > 1) {
+        selectCurrency(dollar);
+      }
+    }
+  }, [isOn, currency, dollar, bolivar, rate, selectCurrency]);
 
   useEffect(() => {
     // Si la tasa manual es mayor a 0.01, se actualiza la tasa y se oculta el input
@@ -105,9 +123,9 @@ const DollarRate = () => {
     setIsApplied(true)
   }
   
-  const toggleClickHandler = () => {
-    toggleOnChange(!isChecked)
-  }
+  // const toggleClickHandler = () => {
+  //   toggleStateOnChange(!isOn)
+  // }
 
   const onSelectedChange = (e) => {
     const value = e.target.value
@@ -127,22 +145,22 @@ const DollarRate = () => {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <ToggleSwitch
           label="Usar dólares"
-          onChange={toggleOnChange}
-          onClick={toggleClickHandler}
+          checked={isOn}
+          onChange={(checked) => setIsOn(checked)}
         />
-        {isChecked && showInputs && (
+        {isOn && showInputs && (
           <SelectOption
             value={option}
             options={optionTexts}
             onChange={e => onSelectedChange(e)}
           />
         )}
-        {!showInputs && (isChecked && rate > 0.01) && (
-          <Button text='Editar' onClick={editHandler} />
+        {!showInputs && (isOn && rate > 0.01) && (
+          <Button text='Editar' onClick={editHandler}/>
         )}
       </div>
 
-      {showInputs && (isChecked && option === optionManual) && (
+      {showInputs && (isOn && option === optionManual) && (
         <>
           <Input
             labelText="Tasa:"
@@ -153,15 +171,15 @@ const DollarRate = () => {
         </>
       )}
       {/* Si la tasa es manual, se muestra el input para editarla */}
-      {!showInputs && (isChecked && rate > 0.01) && (
+      {!showInputs && (isOn && rate > 0.01) && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa personalizada.</div>
       )}
       {/* Si la tasa es la del Banco Central de Venezuela, se muestra el mensaje */}
-      {isChecked && option === optionBCV && (
+      {isOn && option === optionBCV && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa Banco Central de Venezuela.</div>
       )}
       {/* Si la tasa es la del paralelo, se muestra el mensaje */}
-      {isChecked && option === optionParalelo && (
+      {isOn && option === optionParalelo && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa EnParaleloVzla.</div>
       )}
     </form>

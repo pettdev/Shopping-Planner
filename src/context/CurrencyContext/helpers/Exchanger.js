@@ -54,14 +54,19 @@ class Exchanger {
    * @returns {void}
    */
   convertQuoteToBase() {
-    console.log('this.rate: ', this.rate)
     if (this.rate > 1) {
-      console.log('pasó por this.convertBaseToQuote()')
-      this.baseCurrency.setAmount(this.quoteCurrency.amount * this.rate)
-      this.quoteCurrency.setAmount(0)
+      // 1. Calcular el valor en la moneda base
+      const rawBase = this.quoteCurrency.amount * this.rate;
+      
+      // 2. Redondear al centavo más cercano
+      const roundedBase = Math.round(rawBase * 100) / 100; // <- Clave aquí
+      
+      // 3. Asignar el valor redondeado
+      this.baseCurrency.setAmount(roundedBase);
+      this.quoteCurrency.setAmount(0);
     }
   }
-
+  
   /**
    * Converts the base currency amount to the quote currency amount completely.
    *

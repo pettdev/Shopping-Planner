@@ -1,13 +1,20 @@
 import './Item.css'
-
+import { exchangeVESforUSD as exchanger } from '../../../../../context/CurrencyContext/helpers/exchangeVESforUSD'
 
 function Item({ item, currency }) {
   const name = `${item.name}`
   const weight = `${item.netWeight} ${item.weightUnit}`
+  const [bolivar, dollar] = exchanger.getPair()
+  
+  // Función de conversión optimizada
   const convert = (value) => {
-    // Si la moneda es USD, convierte usando la tasa
-    const rate = currency.rate || 1
-    return (value / rate).toFixed(2)
+    if (currency.isEqualTo(dollar)) {
+      // Convertir a USD usando la tasa actual
+      return dollar.convertToOwnCurrency(value).toFixed(2)
+    } else if (currency.isEqualTo(bolivar)) {
+      // Convertir a VES usando la tasa actual
+      return value
+    }
   }
 
   return (

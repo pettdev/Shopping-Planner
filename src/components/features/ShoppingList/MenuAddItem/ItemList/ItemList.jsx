@@ -1,6 +1,6 @@
 import './ItemList.css'
 import Item from '../Item'
-import { useCurrency, useItemsList, useTotal } from '../../../../../context'
+import {useCurrency, useItemsList, useTotal} from '../../../../../context'
 
 const ItemList = () => {
   const {convertedTotal, total} = useTotal()
@@ -13,13 +13,12 @@ const ItemList = () => {
         <Item 
           key={item.id} 
           item={item} 
-          currency={currency}
-        />
+          currency={currency}/>
       )}
       {total > 0 && (
         <div className='grid_item total'>
           Total: {convertedTotal.toFixed(2)} {currency.symbol}
-        </div>  
+        </div>
       )}
     </div>
   )

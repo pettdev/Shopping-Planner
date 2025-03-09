@@ -8,13 +8,15 @@ import { BudgetVisualizer } from './BudgetVisualizer'
 const Budget = () => {
   const [budgetListener, setBudgetListener] = useState('')
   const [apply, setApply] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
+  const [isOn, setIsOn] = useState(false)
   const [showBudgetInputs, setShowBudgetInputs] = useState(true)
-  const { budget, updateBudget } = useBudget()
-  const { currency } = useCurrency()
 
-  const checkedOnChange = (value) => {
-    setIsChecked(value)
+  // Custom context hooks
+  const {budget, updateBudget} = useBudget()
+  const {currency} = useCurrency()
+
+  const toggleStateOnChange = (value) => {
+    setIsOn(value)
   }
 
   const showBudgetInputsSwitch = () => setShowBudgetInputs(prev => !prev)
@@ -42,20 +44,21 @@ const Budget = () => {
   }
 
   const cancelHandler = () => {
-    // Si no hay un presupuesto válido (caso 1), apagamos el toggle
+    // Si no hay un presupuesto válido, apagamos el toggle
     if (!budget || budget === '') {
-      setIsChecked(false)
+      setIsOn(false)
     }
     resetAllStates()
     setShowBudgetInputs(false)
   }
 
+  // Si el usuario apaga el toggle, reseteamos el presupuesto
   useEffect(() => {
-    if(!isChecked) {
+    if(!isOn) {
       resetAllStates()
-      updateBudget(null) // resetear presupuesto en contexto
+      updateBudget(null)
     }
-  }, [isChecked])
+  }, [isOn])
 
   useEffect(() => {
     if(apply) {
@@ -63,7 +66,6 @@ const Budget = () => {
       setApply(false)
     }
   }, [apply])
-  
 
   const onSubmitHandler = (e) => {
     e.preventDefault()
@@ -75,15 +77,15 @@ const Budget = () => {
       <div style={{ display: 'flex', alignItems: 'center'}}>
       <ToggleSwitch 
         label={'Usar presupuesto'}
-        onChange={checkedOnChange}
-        checked={isChecked}/>
+        onChange={toggleStateOnChange}
+        checked={isOn}/>
 
-        {((isChecked && !showBudgetInputs) && (budget > 0)) && (
+        {((isOn && !showBudgetInputs) && (budget > 0)) && (
           <Button text='Editar' onClick={showBudgetInputsSwitch}/>
         )}
       </div>
 
-      {(isChecked && showBudgetInputs) && (
+      {(isOn && showBudgetInputs) && (
         <form onSubmit={onSubmitHandler}>
           <Input
             placeholder={`1000 ${currency.symbol}`}
@@ -93,7 +95,7 @@ const Budget = () => {
           <Button text="Cancelar" onClick={cancelHandler} type="button"/>
         </form>
       )}
-      {isChecked && budget > 0 && (
+      {isOn && budget > 0 && (
         <BudgetVisualizer budget={budget}/>)}
     </>
   )

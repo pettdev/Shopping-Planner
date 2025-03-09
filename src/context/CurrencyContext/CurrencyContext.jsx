@@ -1,19 +1,18 @@
-import { createContext, useContext, useState } from "react"
-import { exchangeVESforUSD as exchangeVESforUSD } from "./helpers/exchangeVESforUSD"
+import {createContext, useContext, useState} from "react"
+import {exchangeVESforUSD as exchanger} from "./helpers/exchangeVESforUSD"
 import {currencies} from "./helpers"
 
 const CurrencyContext = createContext()
 
 const CurrencyProvider = ({children}) => {
-  const DEFAULT_CURRENCY = exchangeVESforUSD.baseCurrency
+  const DEFAULT_CURRENCY = exchanger.baseCurrency
   const availableCurrencies = currencies.all
-  
   const [currency, setCurrency] = useState(DEFAULT_CURRENCY)
 
   const selectCurrency = (selectedCurrency) => {
     try {
       // Comprobamos que la moneda seleccionada existe
-      const exist = availableCurrencies.find(currency => currency.code === selectedCurrency.code)
+      const exist = availableCurrencies.find(currency => currency.isEqualTo(selectedCurrency))
       // Si existe, la seleccionamos
       exist && setCurrency(selectedCurrency)
     } catch (error) {

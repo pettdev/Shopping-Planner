@@ -58,7 +58,7 @@ class BaseCurrency extends Currency {
    * @returns {number} The converted amount in the base currency.
    */
   convertToOwnCurrency(quoteAmount) {
-    return quoteAmount * this.rate
+    return Number(quoteAmount * this.rate).toFixed(2)
   }
 
   /**
