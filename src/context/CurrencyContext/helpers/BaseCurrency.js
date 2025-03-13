@@ -34,7 +34,7 @@ class BaseCurrency extends Currency {
    * @returns {void}
    */
   setAmount(quantity) {
-    this.amount = quantity
+    this.amount = Number(quantity)
   }
     
   /**
@@ -58,7 +58,7 @@ class BaseCurrency extends Currency {
    * @returns {number} The converted amount in the base currency.
    */
   convertToOwnCurrency(quoteAmount) {
-    return Number(quoteAmount * this.rate).toFixed(2)
+    return Number(quoteAmount * this.rate)
   }
 
   /**

@@ -34,7 +34,7 @@ class QuoteCurrency extends Currency {
    * @returns {void}
    */
   setAmount(quantity) {
-    this.amount = quantity
+    this.amount = Number(quantity)
   }
     
   /**
@@ -50,7 +50,7 @@ class QuoteCurrency extends Currency {
    * @returns {number} The converted amount in the base currency.
    */
   convertToCounterCurrency(quoteAmount) {
-    return quoteAmount * this.rate 
+    return Number(quoteAmount * this.rate)
   }
   
   /**
@@ -58,7 +58,21 @@ class QuoteCurrency extends Currency {
    * @returns {number} The converted amount in the quote currency.
    */
   convertToOwnCurrency(baseAmount) {
-    return baseAmount / this.rate
+    return Number(baseAmount / this.rate)
+  }
+  
+  /**
+   * Recalculates the amount when the exchange rate changes.
+   * This ensures the amount is updated based on the new rate.
+   * @returns {void}
+   */
+  recalculateAmountOnRateChange(oldRate) {
+    if (this.amount > 0 && oldRate > 0) {
+      // Convert current amount back to base currency using old rate
+      const baseAmount = this.amount * oldRate
+      // Then convert to quote currency using new rate
+      this.amount = Number((baseAmount / this.rate).toFixed(2))
+    }
   }
 
   /**

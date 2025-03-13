@@ -3,20 +3,24 @@ import { useBudget, useCurrency } from "../../../../context"
 import { DecimalInputSanitizer } from "../../../../utils"
 import { Button, Input, ToggleSwitch } from "../../../common"
 import { BudgetVisualizer } from './BudgetVisualizer'
+import { exchangeVESforUSD as exchange } from "../../../../context/CurrencyContext/helpers/exchangeVESforUSD"
 
 
 const Budget = () => {
   const [budgetListener, setBudgetListener] = useState('')
   const [apply, setApply] = useState(false)
-  const [isOn, setIsOn] = useState(false)
+  const [isToggleON, setIsToggleON] = useState(false)
   const [showBudgetInputs, setShowBudgetInputs] = useState(true)
 
   // Custom context hooks
   const {budget, updateBudget} = useBudget()
   const {currency} = useCurrency()
 
+  // Obtener las monedas
+  const [bolivar, dollar] = exchange.getPair()
+
   const toggleStateOnChange = (value) => {
-    setIsOn(value)
+    setIsToggleON(value)
   }
 
   const showBudgetInputsSwitch = () => setShowBudgetInputs(prev => !prev)
@@ -37,7 +41,13 @@ const Budget = () => {
 
   const budgetHandler = () => {
     if(apply && budgetListener >= 0.01 ) {
-      updateBudget(budgetListener)
+      if (currency.isEqualTo(bolivar)) {
+        bolivar.setAmount(budgetListener)
+      }
+      if (currency.isEqualTo(dollar)) {
+        dollar.setAmount(budgetListener)
+      }
+      updateBudget(budgetListener) // Revisar si es necesario
       resetAllStates()
       showBudgetInputsSwitch()
     }
@@ -46,7 +56,7 @@ const Budget = () => {
   const cancelHandler = () => {
     // Si no hay un presupuesto válido, apagamos el toggle
     if (!budget || budget === '') {
-      setIsOn(false)
+      setIsToggleON(false)
     }
     resetAllStates()
     setShowBudgetInputs(false)
@@ -54,11 +64,11 @@ const Budget = () => {
 
   // Si el usuario apaga el toggle, reseteamos el presupuesto
   useEffect(() => {
-    if(!isOn) {
+    if(!isToggleON) {
       resetAllStates()
-      updateBudget(null)
+      updateBudget(null) // Revisar si es necesario
     }
-  }, [isOn])
+  }, [isToggleON])
 
   useEffect(() => {
     if(apply) {
@@ -78,14 +88,14 @@ const Budget = () => {
       <ToggleSwitch 
         label={'Usar presupuesto'}
         onChange={toggleStateOnChange}
-        checked={isOn}/>
+        checked={isToggleON}/>
 
-        {((isOn && !showBudgetInputs) && (budget > 0)) && (
+        {((isToggleON && !showBudgetInputs) && (budget > 0)) && (
           <Button text='Editar' onClick={showBudgetInputsSwitch}/>
         )}
       </div>
 
-      {(isOn && showBudgetInputs) && (
+      {(isToggleON && showBudgetInputs) && (
         <form onSubmit={onSubmitHandler}>
           <Input
             placeholder={`1000 ${currency.symbol}`}
@@ -95,7 +105,7 @@ const Budget = () => {
           <Button text="Cancelar" onClick={cancelHandler} type="button"/>
         </form>
       )}
-      {isOn && budget > 0 && (
+      {isToggleON && budget > 0 && (
         <BudgetVisualizer budget={budget}/>)}
     </>
   )

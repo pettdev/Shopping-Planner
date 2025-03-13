@@ -16,6 +16,7 @@ class Exchanger {
     this.baseCurrency = baseCurrency
     this.quoteCurrency = quoteCurrency
     this.rate = 1
+    this.lastActiveCurrency = null // Track which currency was last active
   }
 
   /**
@@ -25,7 +26,7 @@ class Exchanger {
    * @returns {void}
    */
   setRate(rate) {
-    const validRate = rate || 1
+    const validRate = Number(rate) || 1
   
     // Verificar si baseCurrency y quoteCurrency están definidos antes de asignar
     if (!this.baseCurrency || !this.quoteCurrency) {
@@ -54,16 +55,24 @@ class Exchanger {
    * @returns {void}
    */
   convertQuoteToBase() {
-    if (this.rate > 1) {
+    const baseCurrency = this.baseCurrency
+    const quoteCurrency = this.quoteCurrency
+
+    if (this.rate > 1 && quoteCurrency.amount > 0) {
       // 1. Calcular el valor en la moneda base
-      const rawBase = this.quoteCurrency.amount * this.rate;
+      const rawBase = quoteCurrency.amount * this.rate
       
       // 2. Redondear al centavo más cercano
-      const roundedBase = Math.round(rawBase * 100) / 100; // <- Clave aquí
+      const roundedBase = Math.round(rawBase * 100) / 100
       
       // 3. Asignar el valor redondeado
-      this.baseCurrency.setAmount(roundedBase);
-      this.quoteCurrency.setAmount(0);
+      baseCurrency.setAmount(roundedBase)
+      quoteCurrency.setAmount(0)
+      
+      // 4. Track that base currency is now active
+      this.lastActiveCurrency = 'base'
+    } else {
+      console.log(`No se convirtió a VES. exchange.rate: ${this.rate}, quoteCurrency.amount: ${quoteCurrency.amount}`)
     }
   }
   
@@ -73,16 +82,24 @@ class Exchanger {
    * @returns {void}
    */
   convertBaseToQuote() {
-    if (this.rate > 1) {
+    const baseCurrency = this.baseCurrency
+    const quoteCurrency = this.quoteCurrency
+    
+    if (this.rate > 1 && baseCurrency.amount > 0) {
       // 1. Calcular el valor en USD
-      const rawUSD = this.baseCurrency.amount / this.rate;
+      const rawUSD = baseCurrency.amount / this.rate
       
       // 2. Redondear al centavo más cercano
-      const roundedUSD = Math.round(rawUSD * 100) / 100; // <- Clave aquí
+      const roundedUSD = Math.round(rawUSD * 100) / 100
       
       // 3. Asignar el valor redondeado
-      this.quoteCurrency.setAmount(roundedUSD);
-      this.baseCurrency.setAmount(0);
+      quoteCurrency.setAmount(roundedUSD)
+      baseCurrency.setAmount(0)
+      
+      // 4. Track that quote currency is now active
+      this.lastActiveCurrency = 'quote'
+    } else {
+      console.log(`No se convirtió a USD. exchange.rate: ${this.rate}, baseCurrency.amount: ${baseCurrency.amount}`)
     }
   }
 

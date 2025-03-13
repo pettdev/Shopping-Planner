@@ -10,30 +10,44 @@ export const BudgetVisualizer = ({ budget }) => {
   const [convertedBudget, setConvertedBudget] = useState(0)
   const [bolivar, dollar] = exchanger.getPair()
 
+  /* WHAT HAPPENS HERE?
+
+  1. By default, Bolivar (VES) is selected as current currency (in Budget.jsx's 
+  budgetHandler) after an amount is entered in the Budget.jsx's Input component
+  by using bolivar.setAmount().
+
+  2. Setting an amount of a currency will trigger this useEffect, as 'currency'
+  is one if its dependencies. This means that the logic involved here will be
+  invoked accordingly.
+
+  3. 
+  */
   useEffect(() => {
-    if (currency.isEqualTo(dollar)) {
-      if (dollar.amount > 0) {
-        setConvertedBudget(budget)
-      } else {
-        exchanger.convertBaseToQuote()
-        setConvertedBudget(dollar.amount)
-      }
-    } else {
-      bolivar.setAmount(budget)
-      setConvertedBudget(bolivar.amount)
+    let newBudget = 0
+    
+    // If we're using the base currency (VES)
+    if (currency.isBaseCurrency()) {
+      newBudget = currency.amount.toFixed(2)
+    } 
+    // If we're using the quote currency (USD)
+    else if (currency.isQuoteCurrency()) {
+      newBudget = currency.amount.toFixed(2)
     }
-  }, [currency, rate, budget])
+
+    setConvertedBudget(newBudget)
+  
+  }, [currency, rate, budget, dollar, exchanger.rate])
 
   let spendingPercentage
   if (convertedBudget > 0) {
-    const total = Number(convertedTotal.toFixed(2))
-    const budgetAmount = Number(convertedBudget.toFixed(2))
-    spendingPercentage = Math.min((total / budgetAmount) * 100, 100).toFixed(2)
+    console.log('convertedBudget =', convertedBudget, 'currency =', currency.code, 'currency.amount =', currency.amount ,'exchanger.rate =', exchanger.rate, 'currency.type =', currency.type)
+
+    spendingPercentage = Math.min((convertedTotal / convertedBudget) * 100, 100)
   } else {
-    spendingPercentage = (0).toFixed(2)
+    spendingPercentage = 0.00
   }
 
-  const available = parseFloat(convertedBudget - convertedTotal).toFixed(2)
+  const available = Math.abs(Number(convertedBudget - convertedTotal)).toFixed(2)
   const colorStatus = getColorStatus(spendingPercentage)
   const availableText = available >= 0 ? 'Restante' : 'Faltante'
 
@@ -51,11 +65,11 @@ export const BudgetVisualizer = ({ budget }) => {
 
       <div className="info-container">
         <span className="bold-text">
-          {convertedBudget.toFixed(2)} {currency.code}
+          {convertedBudget} {currency.code}
         </span>
         <span>{`${spendingPercentage}%`}</span>
         <span className={available < 0 ? 'exceeded-text' : ''}>
-          {Math.abs(available).toFixed(2)} {currency.code} {availableText}
+          {available} {currency.code} {availableText}
         </span>
       </div>
     </div>
@@ -63,7 +77,7 @@ export const BudgetVisualizer = ({ budget }) => {
 }
 
 const getColorStatus = (percentage) => {
-  const p = parseFloat(percentage)
+  const p = parseFloat(percentage).toFixed(2)
   
   if (p <= 10) return { divColor: '#5ef05c', text: 'Óptimo' }
   if (p <= 20) return { divColor: '#9ef05c', text: 'Muy favorable' }
