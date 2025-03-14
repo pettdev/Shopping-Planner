@@ -6,7 +6,7 @@ import {
   ItemsListProvider, 
   BudgetContextProvider, 
   DollarRateProvider, 
-  TotalProvider
+  TotalProvider,
 } from "./index"
 
 const providers = [

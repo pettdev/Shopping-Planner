@@ -4,9 +4,9 @@ import {useCurrency, useItemsList, useTotal} from '../../../../../context'
 
 const ItemList = () => {
   const {convertedTotal, total} = useTotal()
-  const {list} = useItemsList()
+  const {list, updateList} = useItemsList()
   const {currency} = useCurrency()
-  
+  console.log(list)
   return (
     <div className='listContainer'>
       {list.map(item => 
@@ -16,7 +16,7 @@ const ItemList = () => {
           currency={currency}/>
       )}
       {total > 0 && (
-        <div className='grid_item total'>
+        <div className=''>
           Total: {convertedTotal.toFixed(2)} {currency.symbol}
         </div>
       )}

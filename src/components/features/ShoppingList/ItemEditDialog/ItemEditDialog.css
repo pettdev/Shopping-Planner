@@ -1,0 +1,22 @@
+.edit-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background-color: rgb(82, 104, 126);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.edit-dialog > form {
+  display: grid;
+  grid-template-rows: auto auto auto;
+}
+
+.edit-dialog .input-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}

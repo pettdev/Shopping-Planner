@@ -16,7 +16,7 @@ class Exchanger {
     this.baseCurrency = baseCurrency
     this.quoteCurrency = quoteCurrency
     this.rate = 1
-    this.lastActiveCurrency = null // Track which currency was last active
+    this.quoteAmountConverted = null
   }
 
   /**
@@ -69,8 +69,6 @@ class Exchanger {
       baseCurrency.setAmount(roundedBase)
       quoteCurrency.setAmount(0)
       
-      // 4. Track that base currency is now active
-      this.lastActiveCurrency = 'base'
     } else {
       console.log(`No se convirtió a VES. exchange.rate: ${this.rate}, quoteCurrency.amount: ${quoteCurrency.amount}`)
     }
@@ -86,18 +84,17 @@ class Exchanger {
     const quoteCurrency = this.quoteCurrency
     
     if (this.rate > 1 && baseCurrency.amount > 0) {
-      // 1. Calcular el valor en USD
-      const rawUSD = baseCurrency.amount / this.rate
+      // 1. Calcular el valor en moneda de referencia (quote)
+      const rawQuote = baseCurrency.amount / this.rate
+      quoteCurrency.lastAmountConverted = rawQuote
       
       // 2. Redondear al centavo más cercano
-      const roundedUSD = Math.round(rawUSD * 100) / 100
+      const roundedQuote = Math.round(rawQuote * 100) / 100
       
       // 3. Asignar el valor redondeado
-      quoteCurrency.setAmount(roundedUSD)
+      quoteCurrency.setAmount(roundedQuote)
       baseCurrency.setAmount(0)
-      
-      // 4. Track that quote currency is now active
-      this.lastActiveCurrency = 'quote'
+
     } else {
       console.log(`No se convirtió a USD. exchange.rate: ${this.rate}, baseCurrency.amount: ${baseCurrency.amount}`)
     }

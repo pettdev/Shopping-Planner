@@ -1,6 +1,6 @@
 .grid_container {
   display: grid;
-  grid-template-columns: minmax(250px, 1fr) minmax(50px,0.25fr) minmax(50px,0.25fr);
+  grid-template-columns: minmax(250px, 1fr) minmax(50px,0.25fr) minmax(50px,0.25fr) minmax(1em, 0.1fr) minmax(1em, 0.1fr);
   transition: all 0.5s ease-out;
 }
 
@@ -40,3 +40,7 @@
   text-align: right;
 }
 
+.edit-icon, .delete-icon {
+  width: 1.5em;
+  
+}

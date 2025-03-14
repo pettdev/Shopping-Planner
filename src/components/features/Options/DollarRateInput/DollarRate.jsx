@@ -86,17 +86,12 @@ const DollarRate = () => {
   useEffect(() => {
     // Toggle OFF
     if (!isToggleON) {
-      
       exchanger.convertQuoteToBase()
-      console.log('Toggle apagado'.toUpperCase())
-      // Cambiar a bolívares si la moneda actual es dólar
       if (currency.isEqualTo(dollar)) {
         selectCurrency(bolivar)
       }
     // Toggle ON
     } else {
-      console.log('Toggle encendido'.toUpperCase())
-      // Cambiar a dólares si la tasa es válida
       if (rate > 1) {
         exchanger.convertBaseToQuote()
         selectCurrency(dollar)

@@ -19,8 +19,6 @@ export const BudgetVisualizer = ({ budget }) => {
   2. Setting an amount of a currency will trigger this useEffect, as 'currency'
   is one if its dependencies. This means that the logic involved here will be
   invoked accordingly.
-
-  3. 
   */
   useEffect(() => {
     let newBudget = 0
@@ -42,7 +40,7 @@ export const BudgetVisualizer = ({ budget }) => {
   if (convertedBudget > 0) {
     console.log('convertedBudget =', convertedBudget, 'currency =', currency.code, 'currency.amount =', currency.amount ,'exchanger.rate =', exchanger.rate, 'currency.type =', currency.type)
 
-    spendingPercentage = Math.min((convertedTotal / convertedBudget) * 100, 100)
+    spendingPercentage = Math.min((convertedTotal / convertedBudget) * 100, 100).toFixed(2)
   } else {
     spendingPercentage = 0.00
   }
