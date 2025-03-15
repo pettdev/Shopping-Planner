@@ -45,7 +45,7 @@ export const BudgetVisualizer = ({ budget }) => {
     spendingPercentage = 0.00
   }
 
-  const available = Math.abs(Number(convertedBudget - convertedTotal)).toFixed(2)
+  const available = Number(convertedBudget - convertedTotal).toFixed(2)
   const colorStatus = getColorStatus(spendingPercentage)
   const availableText = available >= 0 ? 'Restante' : 'Faltante'
 
@@ -67,7 +67,7 @@ export const BudgetVisualizer = ({ budget }) => {
         </span>
         <span>{`${spendingPercentage}%`}</span>
         <span className={available < 0 ? 'exceeded-text' : ''}>
-          {available} {currency.code} {availableText}
+          {Math.abs(available)} {currency.code} {availableText}
         </span>
       </div>
     </div>
