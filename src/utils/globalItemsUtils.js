@@ -1,35 +1,35 @@
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { db } from "../firebase/config";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore"
+import { db } from "../firebase/config"
 
 const generateId = (name, brand, netWeight, weightUnit) => {
   // Permitir letras acentuadas y caracteres especiales del español
   const cleanName = name
-    .normalize("NFD")  // Normalizar caracteres (opcional, ver explicación)
+    .normalize("NFD")  // Normalizar caracteres
     .replace(/\s+/g, '_')
-    .replace(/[^a-zA-Z0-9_áéíóúÁÉÍÓÚüÜñÑëË]/g, '');
+    .replace(/[^a-zA-Z0-9_áéíóúÁÉÍÓÚüÜñÑëË]/g, '')
 
-  const cleanUnit = weightUnit.split(',')[0].trim();
+  const cleanUnit = weightUnit.split(',')[0].trim()
 
   const cleanBrand = brand
-    ?.normalize("NFD")  // Normalizar caracteres (opcional)
+    ?.normalize("NFD")  // Normalizar caracteres
     .replace(/\s+/g, '_')
-    .replace(/[^a-zA-Z0-9_áéíóúÁÉÍÓÚüÜñÑëË]/g, '') || null;
+    .replace(/[^a-zA-Z0-9_áéíóúÁÉÍÓÚüÜñÑëË]/g, '') || null
   
-  const numericWeight = parseFloat(netWeight);
+  const numericWeight = parseFloat(netWeight)
 
   const cleanWeight = numericWeight % 1 === 0 
     ? numericWeight.toString() 
-    : numericWeight.toFixed(2).replace(/\.?0+$/, '');
+    : numericWeight.toFixed(2).replace(/\.?0+$/, '')
 
   return cleanBrand 
     ? `${cleanWeight}_${cleanUnit}_${cleanName}_${cleanBrand}`
-    : `${cleanWeight}_${cleanUnit}_${cleanName}`;
-};
+    : `${cleanWeight}_${cleanUnit}_${cleanName}`
+}
 
 export const addGlobalItem = async (globalItem) => {
   try {
     if (!globalItem?.name || !globalItem?.netWeight || !globalItem?.category || !globalItem?.weightUnit) {
-      throw new Error('Item inválido');
+      throw new Error('Item inválido')
     }
 
     // Generación avanzada de tokens
@@ -54,26 +54,26 @@ export const addGlobalItem = async (globalItem) => {
       // Tokens completos para prioridad
       globalItem.name.toLowerCase(),
       ...(globalItem.brand ? [globalItem.brand.toLowerCase()] : [])
-    ].filter((t, i, arr) => t && arr.indexOf(t) === i);
+    ].filter((t, i, arr) => t && arr.indexOf(t) === i)
 
     const id = generateId(
       globalItem.name,
       globalItem.brand,
       globalItem.netWeight,
       globalItem.weightUnit
-    );
+    )
 
-    const globalItemRef = doc(db, 'globalItems', id);
+    const globalItemRef = doc(db, 'globalItems', id)
     await setDoc(globalItemRef, {
       ...globalItem,
       searchTokens,
       createdAt: serverTimestamp(),
       lastUpdate: serverTimestamp()
-    });
+    })
 
     console.log('Agregado exitoso. Item:', globalItem)
 
   } catch (error) {
-    console.error('Error agregando item:', error);
+    console.error('Error agregando item:', error)
   }
-};
+}

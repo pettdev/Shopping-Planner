@@ -1,17 +1,16 @@
-import { db } from "../firebase/config"
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc, addDoc, collection, deleteDoc, getDocs } from "firebase/firestore";
+import { db } from '../firebase/config'
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc, addDoc, collection, deleteDoc, getDocs } from 'firebase/firestore';
 
-// INICIALIZAR LA ESTRUCTURA (defaultPlanner Y currentList)
-
-export const initializePlanner = async () => {
+// INICIALIZAR LA ESTRUCTURA (defaultList Y currentList)
+export const initializeShoppingPlanner = async () => {
   try {
-    // Guardar defaultPlanner en una colección llamada planners
-    // 'doc' crea una referencia a un documento (defaultPlannerRef) en la colección 'planners'
+    // Guardar defaultList en una colección llamada shoppingLists
+    // 'doc' crea una referencia a un documento (defaultListRef) en la colección 'shoppingLists'
     // 'ref' es una convención para referirse a referencias de documentos
     // 'snap' es una convención para referirse a instantáneas de documentos
-    const defaultPlannerRef = doc(db, "planners", "defaultPlanner")
+    const defaultListRef = doc(db, 'shoppingLists', 'defaultList')
 
-    // 'getDoc' obtiene el documento referenciado por 'defaultPlannerRef'
+    // 'getDoc' obtiene el documento referenciado por 'defaultListRef'
     // 'await' espera a que la promesa de 'getDoc' se resuelva
 
     /**
@@ -19,10 +18,10 @@ export const initializePlanner = async () => {
      * Reads the document referred to by this `DocumentReference` from cache.
      *
     */
-    const plannerSnap = await getDoc(defaultPlannerRef)
+    const defaultListSnap = await getDoc(defaultListRef)
 
-    // 'exists' devuelve true si el documento plannerSnap existe
-    if (!plannerSnap.exists()) {
+    // 'exists' devuelve true si el documento defaultList existe
+    if (!defaultListSnap.exists()) {
       // 'setDoc' escribe/crea el documento referenciado en el primer parámetro si no existe
       // el segundo parámetro de 'setDoc' son los datos a escribir, en forma de mapa u objeto
 
@@ -35,10 +34,10 @@ export const initializePlanner = async () => {
      * @param reference - A reference to the document to write.
      * @param data - A map of the fields and values for the document.
     */
-      await setDoc(defaultPlannerRef, {
+      await setDoc(defaultListRef, {
         createdAt: serverTimestamp()
       })
-      console.log("defaultPlanner creado")
+      console.log('defaultList creado')
     }
 
     // Crear una referencia de ubicación para el documento 'current'
@@ -49,8 +48,8 @@ export const initializePlanner = async () => {
     // Al usar setDoc(), todas las rutas especificadas, o referencia de 'current'
     // se crearán si no existen.
     
-    // colección (planner), documento (defaultPlanner), subcolección (currentList), documento (current)
-    const currentListRef = doc(db, "planners", "defaultPlanner", "currentList", "current")
+    // colección (shoppingLists), documento (defaultList), subcolección (currentList), documento (current)
+    const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
 
     // Usando getDoc() para obtener los datos/leer el documento (current) indicado o referenciado con doc()
     const currentListSnap = await getDoc(currentListRef)
@@ -82,7 +81,6 @@ export const initializePlanner = async () => {
 }
 
 // ACTUALIZAR LA LISTA ACTUAL
-
 export const updateList = async (newData) => {
   try {
     /**
@@ -102,7 +100,7 @@ export const updateList = async (newData) => {
     */
 
     //'updateDoc' actualiza los campos en el documento ('current') referenciado con doc()
-    const currentListRef = doc(db, 'planners', 'defaultPlanner', 'currentList', 'current')
+    const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
     await updateDoc(currentListRef, {
       ...newData,
       lastUpdate: serverTimestamp()
@@ -115,10 +113,9 @@ export const updateList = async (newData) => {
 }
 
 // GUARDAR LA LISTA ACTUAL EN savedLists
-
 export const saveList = async () => {
   try {
-    const currentListRef = doc(db, 'planners', 'defaultPlanner', 'currentList', 'current')
+    const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
     const currentListSnap = await getDoc(currentListRef)
     
     if(currentListSnap.exists()) {
@@ -126,7 +123,7 @@ export const saveList = async () => {
       const currentListData = currentListSnap.data()
 
       // Gets a CollectionReference instance that refers to the collection at the specified absolute path.
-      const savedListsRef = collection(db, 'planners', 'defaultPlanner', 'savedLists')
+      const savedListsRef = collection(db, 'shoppingLists', 'defaultList', 'savedLists')
       
       // Marcar como no actual, y obtener el resto de los datos antes de guardarla
       const newSavedListData = {...currentListData, isCurrent: false}
@@ -149,14 +146,13 @@ export const saveList = async () => {
 }
 
 // CREAR UNA NUEVA LISTA
-
 export const createNewList = async () => {
   try {
     // Primero guardar la lista actual
     await saveList()
 
     // Luego, resetear todos los campos con valores por defecto
-    const currentListRef = doc(db, 'planners', 'defaultPlanner', 'currentList', 'current')
+    const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
     await updateDoc(currentListRef, {
       name: 'Mi Lista',
       createdAt: serverTimestamp(),
@@ -178,15 +174,14 @@ export const createNewList = async () => {
 }
 
 // CAMBIAR DE LA LISTA ACTUAL A LA LISTA GUARDADA
-
 export const switchToSavedList = async(savedListId) => {
   try {
-    const savedListRef = doc(db, 'planners', 'defaultPlanner', 'savedLists', savedListId)
+    const savedListRef = doc(db, 'shoppingLists', 'defaultList', 'savedLists', savedListId)
     const savedListSnap = await getDoc(savedListRef)
 
     if (savedListSnap.exists()) {
       const savedListData = savedListSnap.data()
-      const currentListRef = doc(db, 'planners', 'defaultPlanner', 'currentList', 'current')
+      const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
 
       await updateDoc(currentListRef, {
         ...savedListData,
@@ -204,10 +199,9 @@ export const switchToSavedList = async(savedListId) => {
 }
 
 // ELIMINAR UNA LISTA GUARDADA
-
 export const deletedSavedList = async (savedListId) => {
   try {
-    const savedListRef = doc(db, 'planners', 'defaultPlanner', 'savedLists', savedListId)
+    const savedListRef = doc(db, 'shoppingLists', 'defaultList', 'savedLists', savedListId)
 
     // 'deleteDoc()', 'Deletes the document referred to by the specified DocumentReference'
     await deleteDoc(savedListRef)
@@ -219,10 +213,9 @@ export const deletedSavedList = async (savedListId) => {
 }
 
 // OBTENER LISTAS GUARDADAS
-
 export const getSavedLists = async () => {
   try {
-    const savedListsRef = collection(db, 'planners', 'defaultPlanner', 'savedLists')
+    const savedListsRef = collection(db, 'shoppingLists', 'defaultList', 'savedLists')
     const savedListsSnap = await getDocs(savedListsRef)
 
     if (!savedListsSnap.empty) {
@@ -234,9 +227,7 @@ export const getSavedLists = async () => {
     console.warn('Listas no encontradas')
     return []
     
-    
   } catch (error) {
     console.error('Error al recopilar listas guardadas:', error)
-    
   }
 }

@@ -3,7 +3,7 @@ export { highlightMatch } from './highlightMatch';
 export { default as DecimalInputSanitizer } from './DecimalInputSanitizer';
 export { addGlobalItem } from './globalItemsUtils';
 export { 
-  initializePlanner, 
+  initializeShoppingPlanner as initializePlanner, 
   updateList, 
   saveList, 
   createNewList, 
