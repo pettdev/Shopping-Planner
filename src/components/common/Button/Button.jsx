@@ -7,14 +7,14 @@
  * @param {Object} [props.props] - Additional properties to pass to the button element.
  * @returns {JSX.Element} The rendered button element.
  */
-import React from 'react';
+import React from 'react'
 
 const Button = ({ text, type = "button", ...props }) => {
   return (
     <button type={type} {...props}>
       {text}
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

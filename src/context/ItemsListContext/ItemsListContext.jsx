@@ -1,26 +1,26 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useState} from "react"
 
-const ItemsListContext = createContext();
+const ItemsListContext = createContext()
 
 const ItemsListProvider = ({ children }) => {
-  const ERROR_ITEM_EXISTE = "Item ya existe en la lista";
+  const WARN_ITEM_EXISTE = "Item ya existe en la lista"
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState([])
 
   const updateList = (newItem) => {
     if (list.some(item => item.id === newItem.id)) { // Verifica *antes* de actualizar el estado
-      throw new Error(ERROR_ITEM_EXISTE);
+      alert(WARN_ITEM_EXISTE)
+      return
     }
-
-    setList((prevList) => [...prevList, newItem]); // Actualiza el estado *solo* si no existe
-  };
+    setList((prevList) => [...prevList, newItem]) // Actualiza el estado *solo* si no existe
+  }
 
   return (
     <ItemsListContext.Provider value={{ list, updateList }}>
       {children}
     </ItemsListContext.Provider>
-  );
-};
+  )
+}
 
 export const useItemsList = () => {
     const context = useContext(ItemsListContext)

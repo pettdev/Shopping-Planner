@@ -1,17 +1,14 @@
 import { useState } from "react"
-import { useItemsList, useSelectedItem, useTotal, useCurrency } from "../../../../../context"
+import { useItemsList, useSelectedItem, useTotal } from "../../../../../context"
 import { Input, Button } from "../../../../common"
 import DecimalInputSanitizer from "../../../../../utils/DecimalInputSanitizer"
 import PreviewTotal from "./helpers/PreviewTotal"
 import InputSearcher from "../InputSearcher/InputSearcher"
-import { exchangeVESforUSD as exchanger } from "../../../../../context/CurrencyContext/helpers/exchangeVESforUSD"
-
 
 const MenuAddItem = () => {
   const [showMenu, setShowMenu] = useState(false)
   const [quantity, setQuantity] = useState("")
   const [price, setPrice] = useState("")
-  const { currency } = useCurrency()
 
   // Item seleccionado del buscador
   const { item, updateItem } = useSelectedItem()
@@ -21,35 +18,33 @@ const MenuAddItem = () => {
   const { updateTotal } = useTotal()
   // Validador de campos numericos con estado
   const validator = new DecimalInputSanitizer()
-  const [bolivar, dollar] = exchanger.getPair()
 
   const toggleShowForm = () => setShowMenu(!showMenu)
 
-  const reset = () => {
+  const resetFields = () => {
     setQuantity('')
     setPrice('')
     updateItem({})
   }
 
   const handleNumberChange = (e, setStateFn) => {
-    // Permitir decimales y borrado completo
     e.preventDefault
     const value = e.target.value
-    const getSanitizedOfdValue = validator.getSanitizedOf(value)
-    setStateFn(getSanitizedOfdValue)
+    const sanitizedValue = validator.getSanitizedOf(value)
+    setStateFn(sanitizedValue)
   }
 
   const handleOperation = (mode) => {
     const num = parseFloat(quantity) || 0
-    const getSanitizedOfdNum = parseFloat(validator.getSanitizedOf(num) || '0')
+    const sanitizedQuantity = parseFloat(validator.getSanitizedOf(num) || '0')
     let newValue
   
     switch (mode) {
       case '+':
-        newValue = getSanitizedOfdNum + 1
+        newValue = sanitizedQuantity + 1
         break
       case '-':
-        newValue = Math.max(0, getSanitizedOfdNum - 1) // Asegura que no sea negativo
+        newValue = Math.max(0, sanitizedQuantity - 1) // Asegura que no sea negativo
         break
       default:
         console.warn(`handleOperation llamada con modo inválido: ${mode}`)
@@ -67,9 +62,9 @@ const MenuAddItem = () => {
       updateList({...item, quantity, price, subtotal})
       updateTotal(subtotal)
       toggleShowForm()
-      reset()
+      resetFields()
     } catch (error) {
-      // Manejar error
+      console.error(error)
     }
   }
   return (
@@ -130,7 +125,7 @@ const MenuAddItem = () => {
             text={'X'}
             onClick={()=>{
               toggleShowForm()
-              reset()}}/>
+              resetFields()}}/>
               
               </form>
       ) : (

@@ -19,7 +19,7 @@ const Input = ({ type, id, labelText, ...props }) => {
         <>
             {labelText 
                 ? (<Label id={id} labelText={labelText}>
-                    <input type={type} id={id} {...props}/>
+                    <input type={type} id={id} {...props} />
                     </Label>)
                 : (<input type={type} id={id} {...props} />)}
         </>

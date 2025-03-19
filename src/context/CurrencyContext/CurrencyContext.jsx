@@ -29,7 +29,7 @@ const CurrencyProvider = ({children}) => {
 
 export const useCurrency = () => {
   const context = useContext(CurrencyContext)
-  if(!context) throw new Error('useCurrency must be used enclosed by the CurrencyProvider')
+  if(!context) throw new Error('useCurrency must be enclosed by the CurrencyProvider')
   return context
 }
 

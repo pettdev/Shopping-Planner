@@ -4,7 +4,7 @@ import {useCurrency, useItemsList, useTotal} from '../../../../../context'
 
 const ItemList = () => {
   const {convertedTotal, total} = useTotal()
-  const {list, updateList} = useItemsList()
+  const {list} = useItemsList()
   const {currency} = useCurrency()
   console.log(list)
   return (
