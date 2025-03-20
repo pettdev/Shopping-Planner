@@ -1,4 +1,6 @@
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useState, useEffect} from "react"
+import { initializeShoppingPlanner } from "../../utils"
+import { useTotal } from "../"
 
 const ItemsListContext = createContext()
 
@@ -6,6 +8,32 @@ const ItemsListProvider = ({ children }) => {
   const WARN_ITEM_EXISTE = "Item ya existe en la lista"
 
   const [list, setList] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  const { initializeTotal } = useTotal()
+
+  console.log(list)
+
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        const initialData = await initializeShoppingPlanner()
+        if (initialData) {
+          console.log('Initial data loaded:', initialData)
+          setList(initialData.list || [])
+          
+          // Initialize total from loaded list
+          if (initialData.list) {
+            initializeTotal(initialData.list)
+          }
+        }
+      } catch (error) {
+        console.error('Error loading initial data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadInitialData()
+  }, [initializeTotal])
 
   const updateList = (newItem) => {
     if (list.some(item => item.id === newItem.id)) { // Verifica *antes* de actualizar el estado
@@ -16,8 +44,8 @@ const ItemsListProvider = ({ children }) => {
   }
 
   return (
-    <ItemsListContext.Provider value={{ list, updateList }}>
-      {children}
+    <ItemsListContext.Provider value={{ list, setList, updateList, isLoading }}>
+      {isLoading ? <div>Cargando...</div> : children}
     </ItemsListContext.Provider>
   )
 }

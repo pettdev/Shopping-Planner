@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import {Button, Dialog, Input} from "../../../../common"
 import { DecimalInputSanitizer } from "../../../../../utils"
-import { useItemsList } from '../../../../../context'
+import { useItemsList, useTotal } from '../../../../../context'
 
 const EditDialog = ({item, openState}) => {
+  const {list, setList} = useItemsList()
+  const {updateTotal} = useTotal()
   const [formData, setFormData] = useState({
+    id: item.id,
     name: item.name,
     quantity: item.quantity,
     price: item.price,
@@ -16,24 +19,28 @@ const EditDialog = ({item, openState}) => {
   
   const handleChange = (e, field) => {
     let value = e.target.value
-    
     if (field === 'quantity' || field === 'price') {
       value = sanitizer.getSanitizedOf(value)
     }
-    
     setFormData(prev => ({...prev, [field]: value}))
   }
 
-  const { updateList } = useItemsList()
-
   const onSubmitHandler = (e) => {
     e.preventDefault()
-    updateList({
-      ...item,
+    const oldSubtotal = item.subtotal
+    const newQuantity = parseFloat(formData.quantity)
+    const newPrice = parseFloat(formData.price)
+    const newSubtotal = newQuantity * newPrice
+    const updatedItem = {
       ...formData,
-      quantity: parseFloat(formData.quantity),
-      price: parseFloat(formData.price)
-    })
+      quantity: newQuantity,
+      price: newPrice,
+      subtotal: newSubtotal
+    }
+    setList(prevList => prevList.map(listItem => 
+      listItem.id === updatedItem.id ? updatedItem : listItem
+    ))
+    updateTotal(newSubtotal - oldSubtotal)
     openState(false)
   }
 
@@ -43,12 +50,14 @@ const EditDialog = ({item, openState}) => {
         <p><b>Editar producto</b></p>
         <p>{formData.name}, {formData.netWeight} {formData.weightUnit}</p>
         <p>Modifica la cantidad y el precio aquí. Pulsa "Guardar cambios" al finalizar.</p>
-        <Input 
+        <Input
+          required
           labelText="Cantidad:" 
           value={formData.quantity}
           onChange={(e) => handleChange(e, 'quantity')}
           />
-        <Input 
+        <Input
+          required
           labelText="Precio:" 
           value={formData.price}
           onChange={(e) => handleChange(e, 'price')}

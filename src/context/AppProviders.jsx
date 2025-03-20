@@ -11,12 +11,12 @@ import {
 
 const providers = [
   CurrencyProvider,
-  SelectedItemProvider,
-  SearchResultsProvider,
-  ItemsListProvider,
-  BudgetContextProvider,
   DollarRateProvider,
   TotalProvider,
+  ItemsListProvider,
+  SelectedItemProvider,
+  SearchResultsProvider,
+  BudgetContextProvider
 ]
 
 export const AppProviders = ({ children }) => {

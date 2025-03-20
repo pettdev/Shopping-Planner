@@ -69,8 +69,6 @@ class Exchanger {
       baseCurrency.setAmount(roundedBase)
       quoteCurrency.setAmount(0)
       
-    } else {
-      console.log(`No se convirtió a VES. exchange.rate: ${this.rate}, quoteCurrency.amount: ${quoteCurrency.amount}`)
     }
   }
   
@@ -94,9 +92,6 @@ class Exchanger {
       // 3. Asignar el valor redondeado
       quoteCurrency.setAmount(roundedQuote)
       baseCurrency.setAmount(0)
-
-    } else {
-      console.log(`No se convirtió a USD. exchange.rate: ${this.rate}, baseCurrency.amount: ${baseCurrency.amount}`)
     }
   }
 

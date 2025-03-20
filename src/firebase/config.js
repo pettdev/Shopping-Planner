@@ -33,4 +33,4 @@ initializeFirestore(app, settings)
 // Firestore database
 const db = getFirestore(app);
 
-export { db };
+export { db, app };

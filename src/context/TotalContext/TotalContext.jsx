@@ -1,4 +1,4 @@
-import {createContext, useContext, useState, useMemo} from "react"
+import {createContext, useContext, useState, useMemo, useEffect} from "react"
 import {useCurrency, useDollarRate} from "../"
 import {DecimalInputSanitizer} from "../../utils"
 import {exchangeVESforUSD as exchanger} from "../CurrencyContext/helpers/exchangeVESforUSD"
@@ -27,9 +27,19 @@ const TotalProvider = ({children}) => {
       setTotal(prevTotal => prevTotal + parsedTotal)
     }
   }
+  
+  // Inicializa el total a partir de una lista cargada
+  const initializeTotal = (list) => {
+    if (list && Array.isArray(list)) {
+      const calculatedTotal = list.reduce((sum, item) => {
+        return sum + (item.subtotal || 0)
+      }, 0)
+      setTotal(calculatedTotal)
+    }
+  }
 
   return (
-    <TotalContext.Provider value={{ total, updateTotal, setTotal, convertedTotal }}>
+    <TotalContext.Provider value={{ total, updateTotal, setTotal, convertedTotal, initializeTotal }}>
       {children}
     </TotalContext.Provider>
   )

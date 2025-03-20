@@ -1,61 +1,21 @@
 import { db } from '../firebase/config'
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc, addDoc, collection, deleteDoc, getDocs } from 'firebase/firestore';
 
-// INICIALIZAR LA ESTRUCTURA (defaultList Y currentList)
+// INICIALIZAR LA ESTRUCTURA (defaultList y currentList)
 export const initializeShoppingPlanner = async () => {
   try {
-    // Guardar defaultList en una colección llamada shoppingLists
-    // 'doc' crea una referencia a un documento (defaultListRef) en la colección 'shoppingLists'
-    // 'ref' es una convención para referirse a referencias de documentos
-    // 'snap' es una convención para referirse a instantáneas de documentos
     const defaultListRef = doc(db, 'shoppingLists', 'defaultList')
-
-    // 'getDoc' obtiene el documento referenciado por 'defaultListRef'
-    // 'await' espera a que la promesa de 'getDoc' se resuelva
-
-    /**
-     * getDoc() JSDoc
-     * Reads the document referred to by this `DocumentReference` from cache.
-     *
-    */
     const defaultListSnap = await getDoc(defaultListRef)
 
-    // 'exists' devuelve true si el documento defaultList existe
     if (!defaultListSnap.exists()) {
-      // 'setDoc' escribe/crea el documento referenciado en el primer parámetro si no existe
-      // el segundo parámetro de 'setDoc' son los datos a escribir, en forma de mapa u objeto
-
-    /*
-     * setDoc() JSDoc
-     * Writes to the document referred to by the specified `DocumentReference`. If
-     * the document does not yet exist, it will be created. If you provide `merge`
-     * or `mergeFields`, the provided data can be merged into an existing document.
-     *
-     * @param reference - A reference to the document to write.
-     * @param data - A map of the fields and values for the document.
-    */
       await setDoc(defaultListRef, {
         createdAt: serverTimestamp()
       })
-      console.log('defaultList creado')
+      console.log('Documento de la lista por defecto creada en Firebase')
     }
-
-    // Crear una referencia de ubicación para el documento 'current'
-    // 'current' estará dentro de una subcolección 'currentList'
-    // También se puede decir que doc() declara o describe la ruta donde 'current' estará
-    // Esta ruta son pathSegments (un array de strings), y la cantidad de segmentos 
-    // deben ser pares y llegar hasta [referir] un documento ('current')
-    // Al usar setDoc(), todas las rutas especificadas, o referencia de 'current'
-    // se crearán si no existen.
-    
-    // colección (shoppingLists), documento (defaultList), subcolección (currentList), documento (current)
     const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
-
-    // Usando getDoc() para obtener los datos/leer el documento (current) indicado o referenciado con doc()
     const currentListSnap = await getDoc(currentListRef)
 
-    // Si aún no existe el documento 'current', créalo con setDoc(), usando la referencia de 'current'
-    // 'current' debe tener características
     if(!currentListSnap.exists()) {
       await setDoc(currentListRef, {
         name: 'Mi lista',
@@ -63,16 +23,17 @@ export const initializeShoppingPlanner = async () => {
         lastUpdate: serverTimestamp(),
 
         options: {
-          useBudget: true,
+          useBudget: false,
           useDollarRate: false,
           budget: 0,
           dollarRate: 0
         },
 
         isCurrent: true
-      })
-
-      console.log('lista actual creada')
+        })
+        console.log('Colección de lista por defecto creada en Firebase')
+    } else {
+      return currentListSnap.data()
     }
     
   } catch (error) {
@@ -83,23 +44,6 @@ export const initializeShoppingPlanner = async () => {
 // ACTUALIZAR LA LISTA ACTUAL
 export const updateList = async (newData) => {
   try {
-    /**
-     * Updates fields in the document referred to by the specified
-     * `DocumentReference` The update will fail if applied to a document that does
-     * not exist.
-     *
-     * Nested fields can be updated by providing dot-separated field path
-     * strings or by providing `FieldPath` objects.
-     *
-     * @param reference - A reference to the document to update.
-     * @param field - The first field to update.
-     * @param value - The first value.
-     * @param moreFieldsAndValues - Additional key value pairs.
-     * @returns A `Promise` resolved once the data has been successfully written
-     * to the backend (note that it won't resolve while you're offline).
-    */
-
-    //'updateDoc' actualiza los campos en el documento ('current') referenciado con doc()
     const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
     await updateDoc(currentListRef, {
       ...newData,
@@ -113,7 +57,7 @@ export const updateList = async (newData) => {
 }
 
 // GUARDAR LA LISTA ACTUAL EN savedLists
-export const saveList = async () => {
+export const saveList = async (total = null) => {
   try {
     const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
     const currentListSnap = await getDoc(currentListRef)
@@ -126,7 +70,12 @@ export const saveList = async () => {
       const savedListsRef = collection(db, 'shoppingLists', 'defaultList', 'savedLists')
       
       // Marcar como no actual, y obtener el resto de los datos antes de guardarla
-      const newSavedListData = {...currentListData, isCurrent: false}
+      const newSavedListData = {
+        ...currentListData, 
+        isCurrent: false,
+        // Guardar el total si se proporciona, o usar el que ya existe en los datos
+        total: total !== null ? total : (currentListData.total || 0)
+      }
       
       // 'addDoc()': 'Add a new document to specified CollectionReference with the given data, 
       // assigning it a document ID automatically'
@@ -134,7 +83,7 @@ export const saveList = async () => {
       // Guardar la lista (newSavedListData) en la ubicación de la colección de listas (savedListsRef)
       await addDoc(savedListsRef, newSavedListData)
 
-      console.log(`Lista '${newSavedListData.name}' guardada con éxito`)
+      console.log(`Lista '${newSavedListData.name}' guardada con éxito (total: ${newSavedListData.total})`)
       
     } else {
       console.warn('No se encontró currentListRef para guardar')
@@ -146,10 +95,10 @@ export const saveList = async () => {
 }
 
 // CREAR UNA NUEVA LISTA
-export const createNewList = async () => {
+export const createNewList = async (total = null) => {
   try {
-    // Primero guardar la lista actual
-    await saveList()
+    // Primero guardar la lista actual con el total actual
+    await saveList(total)
 
     // Luego, resetear todos los campos con valores por defecto
     const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
@@ -183,12 +132,15 @@ export const switchToSavedList = async(savedListId) => {
       const savedListData = savedListSnap.data()
       const currentListRef = doc(db, 'shoppingLists', 'defaultList', 'currentList', 'current')
 
+      // Asegurarse de que el total se mantenga cuando se cambia a una lista guardada
       await updateDoc(currentListRef, {
         ...savedListData,
         isCurrent: true,
-        lastUpdate: serverTimestamp()
+        lastUpdate: serverTimestamp(),
+        // Mantener el total guardado o usar 0 si no existe
+        total: savedListData.total || 0
       })
-      console.log('Lista actual cambiada por la lista guardada:', savedListId)
+      console.log('Lista actual cambiada por la lista guardada:', savedListId, 'con total:', savedListData.total || 0)
     } else {
       console.warn('No se encontró la lista guardada con id:', savedListId)
     }
