@@ -24,6 +24,8 @@ const TotalProvider = ({children}) => {
   const updateTotal = (newTotal) => {
     const parsedTotal = parseFloat(validator.getSanitizedOf(newTotal))
     if (!isNaN(parsedTotal)) {
+      // Si parsedTotal es positivo, se suma al total
+      // Si parsedTotal es negativo, se resta del total
       setTotal(prevTotal => prevTotal + parsedTotal)
     }
   }
@@ -37,6 +39,10 @@ const TotalProvider = ({children}) => {
       setTotal(calculatedTotal)
     }
   }
+
+  // Ya no usamos useItemsList directamente para evitar dependencias circulares
+  // En su lugar, exponemos initializeTotal para que pueda ser llamado desde fuera
+  // cuando la lista cambie
 
   return (
     <TotalContext.Provider value={{ total, updateTotal, setTotal, convertedTotal, initializeTotal }}>

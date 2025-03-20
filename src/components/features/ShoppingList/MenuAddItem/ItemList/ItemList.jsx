@@ -10,8 +10,8 @@ const ItemList = () => {
   const {currency} = useCurrency()
 
   useEffect(() => {
-    updateList({list, total})
-  }, [list, total])
+    updateList({list})
+  }, [list])
 
   return (
     <div className='listContainer'>

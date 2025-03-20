@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import {Button, Dialog, Input} from "../../../../common"
-import { DecimalInputSanitizer } from "../../../../../utils"
-import { useItemsList, useTotal } from '../../../../../context'
+import {DecimalInputSanitizer} from "../../../../../utils"
+import {useItemsList, useTotal} from '../../../../../context'
 
 const EditDialog = ({item, openState}) => {
-  const {list, setList} = useItemsList()
+  const {setList} = useItemsList()
   const {updateTotal} = useTotal()
   const [formData, setFormData] = useState({
     id: item.id,
@@ -13,6 +13,7 @@ const EditDialog = ({item, openState}) => {
     price: item.price,
     netWeight: item.netWeight,
     weightUnit: item.weightUnit,
+    ...item
   })
 
   const sanitizer = new DecimalInputSanitizer()
@@ -27,20 +28,25 @@ const EditDialog = ({item, openState}) => {
 
   const onSubmitHandler = (e) => {
     e.preventDefault()
-    const oldSubtotal = item.subtotal
+    const oldSubtotal = parseFloat((item.subtotal || 0).toFixed(2))
     const newQuantity = parseFloat(formData.quantity)
     const newPrice = parseFloat(formData.price)
-    const newSubtotal = newQuantity * newPrice
+    const newSubtotal = parseFloat((newQuantity * newPrice).toFixed(2))
     const updatedItem = {
       ...formData,
       quantity: newQuantity,
       price: newPrice,
       subtotal: newSubtotal
     }
-    setList(prevList => prevList.map(listItem => 
-      listItem.id === updatedItem.id ? updatedItem : listItem
-    ))
-    updateTotal(newSubtotal - oldSubtotal)
+    
+    // Actualización atómica de lista y total
+    setList(prevList => {
+      const updatedList = prevList.map(listItem => 
+        listItem.id === updatedItem.id ? updatedItem : listItem
+      )
+      updateTotal(parseFloat((newSubtotal - oldSubtotal).toFixed(2)))
+      return updatedList
+    })
     openState(false)
   }
 

@@ -42,6 +42,13 @@ const ItemsListProvider = ({ children }) => {
     }
     setList((prevList) => [...prevList, newItem]) // Actualiza el estado *solo* si no existe
   }
+  
+  // Effect to update total whenever list changes
+  useEffect(() => {
+    if (list && list.length > 0) {
+      initializeTotal(list)
+    }
+  }, [list, initializeTotal])
 
   return (
     <ItemsListContext.Provider value={{ list, setList, updateList, isLoading }}>
