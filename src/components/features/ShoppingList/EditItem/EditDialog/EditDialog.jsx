@@ -54,8 +54,8 @@ const EditDialog = ({item, openState}) => {
     <Dialog openState={openState}>
       <form onSubmit={(e) => onSubmitHandler(e)}>
         <p><b>Editar producto</b></p>
-        <p>{formData.name}, {formData.netWeight} {formData.weightUnit}</p>
         <p>Modifica la cantidad y el precio aquí. Pulsa "Guardar cambios" al finalizar.</p>
+        <p>{formData.name}, {formData.netWeight} {formData.weightUnit}</p>
         <Input
           required
           labelText="Cantidad:" 

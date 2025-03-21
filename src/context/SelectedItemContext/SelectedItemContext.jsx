@@ -1,4 +1,3 @@
-import { useItemsList } from "../ItemsListContext";
 import {createContext, useContext, useState} from "react";
 
 const SelectedItemContext = createContext()

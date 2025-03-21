@@ -3,7 +3,6 @@ import EditDialog from './EditDialog'
 
 
 const EditItem = ({item}) => {
-
   const [open, setOpen] = useState(false)
 
   return (
