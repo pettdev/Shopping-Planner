@@ -1,16 +1,16 @@
 import './InputSearcher.css'
-import { useState, useEffect } from 'react';
-import { useSearchResults } from '../../../../../context/SearchResultsContext';
-import { useSelectedItem } from '../../../../../context/SelectedItemContext';
-import performSearch from './helpers/performSearch';
-import { Input } from '../../../../common';
-import { highlightMatch } from '../../../../../utils';
+import { useState, useEffect } from 'react'
+import { useSearchResults } from '../../../../../context/SearchResultsContext'
+import { useSelectedItem } from '../../../../../context/SelectedItemContext'
+import performSearch from './helpers/performSearch'
+import { Input } from '../../../../common'
+import { highlightMatch } from '../../../../../utils'
 
 const InputSearcher = () => {
-  const [inputValue, setInputValue] = useState('');
-  const { searchState, resultsState } = useSearchResults();
-  const { searchTerm, updateSearchTerm } = searchState;
-  const { results, updateResults } = resultsState;
+  const [inputValue, setInputValue] = useState('')
+  const { searchState, resultsState } = useSearchResults()
+  const { searchTerm, updateSearchTerm } = searchState
+  const { results, updateResults } = resultsState
   const { updateItem } = useSelectedItem()
 
   useEffect(() => {
@@ -19,22 +19,23 @@ const InputSearcher = () => {
         const searchResults = await performSearch(searchTerm)
         updateResults(searchResults)
       })()
-    }, 150)
+    }, 100)
 
-    return () => clearTimeout(handler);
-  }, [searchTerm, updateResults]);
+    return () => clearTimeout(handler)
+  }, [searchTerm, updateResults])
 
   return (
     <div className="searchBox">
       <Input
-        labelText="Producto:"
+        labelText="Producto"
+        className="searcher"
         id="searcher"
         type="text"
         value={inputValue}
         placeholder="Escribe un producto"
         onChange={(e) => {
-          setInputValue(e.target.value);
-          updateSearchTerm(e.target.value);
+          setInputValue(e.target.value)
+          updateSearchTerm(e.target.value)
         }}
       />
 
@@ -46,8 +47,8 @@ const InputSearcher = () => {
               key={index}
               onClick={() => {
                 updateItem(result) // GUARDAR ITEM EN EL CONTEXTO
-                setInputValue(result.name); // Se introduce la selección en el input
-                updateResults([]);
+                setInputValue(result.name)
+                updateResults([])
               }}
             >
               <div className="itemName">
@@ -63,7 +64,7 @@ const InputSearcher = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default InputSearcher;
+export default InputSearcher

@@ -1,0 +1,81 @@
+.select-option-container {
+  position: relative;
+  width: 100%;
+  font-size: 1rem;
+  outline: none;
+}
+
+.select-option {
+  background-color: transparent;
+  padding: 8px;
+  border: 1px solid rgba(133, 133, 133, 0.15);
+  border-radius: 4px;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.select-option:hover {
+  border: 1px solid rgba(133, 133, 133, 0.25);
+}
+
+.select-option-container:focus .select-option {
+  outline: 1px solid rgba(133, 133, 133, 0.1);
+}
+
+.dropdown-arrow {
+  margin-left: 8px;
+  font-size: 0.8rem;
+}
+
+/* Definición de la clase size-6 para los SVG */
+.size-6 {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #fff;
+  border: 1px solid rgba(133, 133, 133, 0.15);
+  border-radius: 4px;
+  margin-top: 4px;
+  padding: 0;
+  list-style: none;
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.option {
+  background-color: #fff;
+  color: #333;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: #f0f0f0;
+}
+
+.option[data-disabled] {
+  color: #999;
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.option.selected {
+  background-color: rgba(133, 133, 133, 0.1);
+}
+
+.option.highlighted {
+  background-color: rgba(133, 133, 133, 0.2);
+}

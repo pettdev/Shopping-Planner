@@ -7,6 +7,7 @@
  * @param {Object} [props.props] - Additional properties to pass to the button element.
  * @returns {JSX.Element} The rendered button element.
  */
+import './Button.css'
 import React from 'react'
 
 const Button = ({ text, type = "button", ...props }) => {

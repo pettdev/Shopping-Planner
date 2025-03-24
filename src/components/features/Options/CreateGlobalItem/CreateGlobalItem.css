@@ -1,0 +1,9 @@
+.globalButton {
+  background-color: rgba(137, 43, 226, 0.4);
+  color: rgb(195, 131, 255);
+}
+
+.globalButton:hover {
+  background-color: rgba(168, 43, 226, 0.4);
+  color: rgb(216, 131, 255);
+}

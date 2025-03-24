@@ -1,8 +1,8 @@
 import './ItemList.css'
 import Item from '../Item'
 import {useCurrency, useItemsList, useTotal} from '../../../../../context'
-import { saveList, updateList } from '../../../../../utils'
-import { useEffect } from 'react'
+import {updateList} from '../../../../../utils'
+import {useEffect} from 'react'
 
 const ItemList = () => {
   const {convertedTotal, total} = useTotal()
@@ -22,11 +22,9 @@ const ItemList = () => {
           currency={currency}/>
       )}
       {total > 0 && (
-        <>
         <div className=''>
           Total: {convertedTotal.toFixed(2)} {currency.symbol}
         </div>
-        </>
       )}
     </div>
   )

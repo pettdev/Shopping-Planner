@@ -1,9 +1,10 @@
-import {useRef, useState} from "react"
+import {useRef, useEffect} from "react"
 import {Button, Dialog} from "../../../../common"
-import {useItemsList} from "../../../../../context"
+import {useItemsList, useTotal} from "../../../../../context"
 
 const DeleteDialog = ({item, openState}) => {
   const {list, setList} = useItemsList()
+  const {total, setTotal} = useTotal()
   const lastDeletedItemId = useRef(null)
 
   const filteredList = () => {
@@ -17,6 +18,11 @@ const DeleteDialog = ({item, openState}) => {
     }, [])
     return newList
   }
+  
+  useEffect(() => {
+    console.log("list.length", list.length, 'list typeof', typeof list, 'list', list)
+    list.length < 1 || list === undefined && setTotal(0)
+  }, [total, list])
   
   const onSubmitHandler = (e) => {
     e.preventDefault()

@@ -24,8 +24,6 @@ const TotalProvider = ({children}) => {
   const updateTotal = (newTotal) => {
     const parsedTotal = parseFloat(validator.getSanitizedOf(newTotal))
     if (!isNaN(parsedTotal)) {
-      // Si parsedTotal es positivo, se suma al total
-      // Si parsedTotal es negativo, se resta del total
       setTotal(prevTotal => prevTotal + parsedTotal)
     }
   }

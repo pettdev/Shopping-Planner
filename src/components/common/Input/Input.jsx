@@ -1,4 +1,5 @@
 import Label from "../Label"
+import './Input.css'
 
 /**
  * Input component with optional label.
@@ -18,9 +19,12 @@ const Input = ({ type, id, labelText, ...props }) => {
     return (
         <>
             {labelText 
-                ? (<Label id={id} labelText={labelText}>
-                    <input type={type} id={id} {...props} />
-                    </Label>)
+                ? (
+                    <div className="input-container">
+                      <input type={type} id={id} {...props} />
+                      <span className="floating-label">{labelText}</span>
+                    </div>
+                  )
                 : (<input type={type} id={id} {...props} />)}
         </>
     )

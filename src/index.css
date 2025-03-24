@@ -1,47 +1,52 @@
-/* 1. Use a more-intuitive box-sizing model */
+/* Usar un modelo de box-sizing más intuitivo */
 *, *::before, *::after {
     box-sizing: border-box;
   }
   
-  /* 2. Remove default margin */
+  /* Eliminar el margen predeterminado */
   * {
     margin: 0;
   }
   
   body {
-    /* 3. Add accessible line-height */
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
+    /* Agregar una altura de línea accesible */
     line-height: 1.5;
-    /* 4. Improve text rendering */
+    /* Mejorar el renderizado del texto */
     -webkit-font-smoothing: antialiased;
+    background-color: rgb(20, 20, 20);
+    max-width: 480px;
+    margin: 0 auto;
+    color: gray;
+    font-size: 0.9em;
   }
   
-  /* 5. Improve media defaults */
+  /* Mejorar los valores predeterminados de los medios */
   img, picture, video, canvas, svg {
     display: block;
     max-width: 100%;
   }
   
-  /* 6. Inherit fonts for form controls */
+  /* Heredar fuentes para controles de formulario */
   input, button, textarea, select {
     font: inherit;
   }
   
-  /* 7. Avoid text overflows */
+  /* Evitar desbordamiento de texto */
   p, h1, h2, h3, h4, h5, h6 {
     overflow-wrap: break-word;
   }
   
-  /* 8. Improve line wrapping */
+  /* Mejorar el ajuste de línea */
   p {
     text-wrap: pretty;
   }
+
   h1, h2, h3, h4, h5, h6 {
     text-wrap: balance;
   }
   
-  /*
-    9. Create a root stacking context
-  */
+  /* Crear un contexto de apilamiento raíz */
   #root, #__next {
     isolation: isolate;
   }

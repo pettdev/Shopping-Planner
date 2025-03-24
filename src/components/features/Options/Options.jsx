@@ -1,15 +1,13 @@
 import React from 'react'
-import { CreateItemForm } from "./CreateItemForm"
 import { Budget } from './Budget'
 import DollarRate from './DollarRateInput/DollarRate'
 
 function Options() {
   return (
-    <>
+    <div className='options'>
       <DollarRate/>
       <Budget />
-      <CreateItemForm />
-    </>
+    </div>
   )
 }
 

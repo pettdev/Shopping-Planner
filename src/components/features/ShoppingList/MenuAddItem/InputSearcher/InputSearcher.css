@@ -1,31 +1,39 @@
 .searchBox {
   position: relative;
-  display: inline-block; /* Necesario para contener el ancho del input */
 }
 
 .results {
   position: absolute;
-  width: 100%; /* Hereda el ancho del .divRelative */
+  width: 100%;
   top: 100%;
   left: 0;
-  background: white;
-  border: 1px solid #ccc;
+  border-radius: 0 0 20px 20px;
   box-sizing: border-box;
+  z-index: 1;
+  background-color: rgb(29, 29, 29);
 }
 
 .selection {
   display: flex;
   justify-content: space-between;
   padding: 0 5px 0 5px;
+
 }
 
 .selection:hover {
   cursor: pointer;
-  font-weight: 700; /* Más semántico que 'bolder' */
+  font-weight: 700;
   background: #f3f3f3;
 }
 
 .itemProps {
-  color: gray;
   font-size: smaller;
+}
+
+.itemSearched {
+  color: red;
+}
+
+.itemCoincidentialCharacter {
+  color: yellow;
 }

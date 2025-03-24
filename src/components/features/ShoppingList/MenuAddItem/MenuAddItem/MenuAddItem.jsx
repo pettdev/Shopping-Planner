@@ -1,3 +1,4 @@
+import './MenuAddItem.css'
 import { useState } from "react"
 import { useItemsList, useSelectedItem, useTotal } from "../../../../../context"
 import { Input, Button } from "../../../../common"
@@ -77,11 +78,11 @@ const MenuAddItem = () => {
 
           <Input
             required
+            labelText='Cantidad'
             type={'text'}
             inputMode={'decimal'}
             id='quantity'
-            labelText='Cantidad:'
-            placeholder='Ej: 1.5'
+            placeholder='Ej.: 1.50'
             value={quantity}
             onChange={e => handleNumberChange(e, setQuantity)}/>
 
@@ -100,10 +101,10 @@ const MenuAddItem = () => {
           {/* PRECIO */}
           <Input
             required
+            labelText='Precio'
             type={'text'}
             inputMode={'decimal'}
             id='price'
-            labelText='Precio:'
             placeholder='Ej: 3.99'
             value={price}
             onChange={e => handleNumberChange(e, setPrice)}/>
@@ -122,14 +123,13 @@ const MenuAddItem = () => {
 
           {/* CERRAR */}
           <Button
-            text={'X'}
+            text={'Cancelar'}
             onClick={()=>{
               toggleShowForm()
               resetFields()}}/>
-              
               </form>
       ) : (
-        <Button text={'+'} onClick={toggleShowForm}/>
+        <Button text={'Agregar a la lista'} onClick={toggleShowForm} className='addButton'/>
       )}
     </>
   )

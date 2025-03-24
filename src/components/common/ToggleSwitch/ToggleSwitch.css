@@ -1,81 +1,59 @@
+:root {
+  --base-off-bg: rgb(27, 27, 27);
+  --base-on-bg: #84e1f8;
+  --base-off-bg-hover: rgb(37, 37, 37);
+  --base-on-bg-hover: #6ebfd3;
+  --base-width: 45px;
+  --base-height: 25px;
+  --lever-bg-off: rgb(75, 75, 75);
+  --lever-bg-on: rgb(54, 163, 190);
+}
+
 .base, .baseOn {
   cursor: pointer;
   display: flex;
-  width: 50px; /* Puedes cambiar este valor a cualquier ancho */
-  height: 25px;
-  border-radius: 8px;
+  width: var(--base-width);
+  height: var(--base-height);
+  border-radius: 20px;
   align-items: center;
-  padding: 4px;
   transition: background-color 0.2s ease;
-  position: relative; /* Añadido */
+  position: relative;
 }
 
 .base {
-  background-color: #e15750;
+  background-color: var(--base-off-bg);
+  border: 2px solid rgba(128, 128, 128, 0.308);
 }
+
 .base:hover {
-  background-color: #b94842;
+  background-color: var(--base-off-bg-hover);
 }
 
 .baseOn {
-  background-color: #86f884;
+  background-color: var(--base-on-bg);
 }
+
 .baseOn:hover {
-  background-color: rgb(118, 218, 117);
+  background-color: var(--base-on-bg-hover);
 }
 
 .lever {
-  position: absolute; /* Cambiado a absoluto */
-  background-color: white;
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  box-shadow: 0 2px 2px 0.1px rgba(49, 2, 2, 0.226);
-  left: 4px; /* Posición inicial basada en padding */
+  position: absolute;
+  background-color: var(--lever-bg-off);
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
 }
 
 .leverOn {
-  animation: leverOnAnimation 0.5s forwards;
+  left: calc(100% - 21px);
+  background-color: var(--lever-bg-on);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .leverOff {
-  animation: leverOffAnimation 0.5s forwards;
-}
-
-@keyframes leverOnAnimation {
-  0% {
-    left: 4px;
-  }
-  40% {
-    left: calc(100% - 18px - 4px + 2px); /* Overshoot dinámico */
-  }
-  60% {
-    left: calc(100% - 18px - 4px - 4px); /* Retroceso */
-  }
-  80% {
-    left: calc(100% - 18px - 4px + 1px); /* Ajuste fino */
-  }
-  100% {
-    left: calc(100% - 18px - 4px); /* Posición final */
-  }
-}
-
-@keyframes leverOffAnimation {
-  0% {
-    left: calc(100% - 18px - 4px);
-  }
-  40% {
-    left: 2px; /* Overshoot hacia la izquierda */
-  }
-  60% {
-    left: 8px; /* Retroceso */
-  }
-  80% {
-    left: 3px; /* Ajuste fino */
-  }
-  100% {
-    left: 4px; /* Posición final */
-  }
+  left: 3px;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .toggleSwitch {

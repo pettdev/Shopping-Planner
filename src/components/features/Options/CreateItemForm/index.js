@@ -1,1 +1,1 @@
-export {default as CreateItemForm} from './CreateItemForm';
+export {default} from './CreateItemForm';
