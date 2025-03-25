@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react"
+import { useCurrency } from "../../../../../../context"
 
-/**
- * Component to calculate and display the total price of a product based on its quantity and unit price.
- *
- * @param {string|number} props.quantity - The quantity of the product.
- * @param {string|number} props.price - The unit price of the product.
- * @returns {JSX.Element} The JSX element displaying the total price.
- */
 const PreviewTotal = ({quantity, price}) => {
   // Estado para almacenar el precio total
   const [total, setTotal] = useState('0')
+  const { currency } = useCurrency()
 
   useEffect(()=>{
     // Función para calcular el precio total
@@ -19,7 +14,7 @@ const PreviewTotal = ({quantity, price}) => {
   
       // Verificar si quantity o price no son números válidos
       if (isNaN(quantity) || isNaN(price)) {
-        return '0';
+        return 0;
       }
   
       // Calcular y devolver el precio total con dos decimales
@@ -31,9 +26,10 @@ const PreviewTotal = ({quantity, price}) => {
 
   },[quantity, price])
 
-  // Renderizar el precio total
   return (
-    <span>Precio total: {total}</span>
+    <div className="previewTotalContainer">
+      <p className="previewTotal">{currency.code} {total ? total : '0.00'}</p>
+    </div>
   )
 }
 

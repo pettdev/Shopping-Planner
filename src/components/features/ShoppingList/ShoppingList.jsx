@@ -9,8 +9,8 @@ function ShoppingList() {
 
   return (
     <>
-      <MenuAddItem />
       <ItemList />
+      <MenuAddItem />
     </>
   )
 }

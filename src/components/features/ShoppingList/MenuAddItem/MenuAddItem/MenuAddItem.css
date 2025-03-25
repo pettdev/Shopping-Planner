@@ -1,0 +1,68 @@
+.quantityContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.buttonsContainer {
+  position: absolute;
+  right: 0;
+  display: flex;
+  gap: 0.25em;
+  padding-right: 1.5em;
+  user-select: none;
+}
+
+.minusButton, .plusButton {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid rgb(20, 20, 20);
+  background-color: rgb(29, 29, 29);
+}
+
+.minusButton:hover, .plusButton:hover {
+  cursor: pointer;
+  background-color: rgb(35, 35, 35);
+}
+
+.minusButton:active, .plusButton:active {
+  transform: scale(0.95);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.previewTotalContainer  {
+  background: rgb(29,29,29);
+  height: 5em;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.previewTotal {
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.cancelButton {
+  margin-bottom: 1em;
+}
+
+.addToListButton {
+  background-color: rgba(226, 43, 226, 0.4);
+  color: rgb(241, 131, 255);
+}
+.addToListButton:hover {
+  background-color: rgba(255, 18, 184, 0.4);
+  color: rgb(255, 112, 243);
+}

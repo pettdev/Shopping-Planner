@@ -45,7 +45,8 @@ const SelectOption = ({id, labelText, options, value, onChange, ...props}) => {
     if (!isOpen && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown')) {
       e.preventDefault()
       setIsOpen(true)
-      setHighlightedIndex(0)
+      // Establecer el índice resaltado al primer elemento si hay opciones disponibles
+      setHighlightedIndex(options.length > 0 ? 0 : -1)
       return
     }
 
@@ -97,27 +98,27 @@ const SelectOption = ({id, labelText, options, value, onChange, ...props}) => {
 
   // Chevron down icon
   const chevronDownIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="chevron-icon">
       <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
     </svg>
   )
 
   // Chevron up icon
   const chevronUpIcon = (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="chevron-icon">
       <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
     </svg>
   )
 
   return (
-    <Label htmlFor={id} labelText={labelText}>
-      <div 
-        className="select-option-container" 
-        ref={dropdownRef}
-        tabIndex="0"
-        onKeyDown={handleKeyDown}
-        {...props}
-      >
+    <div 
+      className="select-option-container" 
+      ref={dropdownRef}
+      tabIndex="0"
+      onKeyDown={handleKeyDown}
+      {...props}
+    >
+      <Label htmlFor={id} labelText={labelText}>
         <div 
           className="select-option" 
           onClick={() => setIsOpen(!isOpen)}
@@ -130,19 +131,10 @@ const SelectOption = ({id, labelText, options, value, onChange, ...props}) => {
           </span>
           <span className="dropdown-arrow">{isOpen ? chevronUpIcon : chevronDownIcon}</span>
         </div>
+      </Label>
         
         {isOpen && (
           <ul className="options-list" role="listbox">
-            <li 
-              className={`option ${"" === selectedOption ? 'selected' : ''} ${highlightedIndex === -1 ? 'highlighted' : ''}`}
-              onClick={() => handleOptionClick("")}
-              role="option"
-              aria-selected={"" === selectedOption}
-              ref={el => optionsRef.current[-1] = el}
-              data-disabled
-            >
-              Seleccionar opción
-            </li>
             {options.map((option, index) => (
               <li 
                 key={option} 
@@ -158,7 +150,6 @@ const SelectOption = ({id, labelText, options, value, onChange, ...props}) => {
           </ul>
         )}
       </div>
-    </Label>
   )
 }
 

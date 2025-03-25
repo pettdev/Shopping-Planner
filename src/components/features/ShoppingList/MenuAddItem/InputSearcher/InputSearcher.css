@@ -2,28 +2,52 @@
   position: relative;
 }
 
+.searchBox:has(.results) input {
+  border-radius: 20px 20px 0 0;
+  border-bottom: none;
+}
+
 .results {
   position: absolute;
   width: 100%;
   top: 100%;
   left: 0;
   border-radius: 0 0 20px 20px;
+  border: 1px solid transparent;
   box-sizing: border-box;
   z-index: 1;
   background-color: rgb(29, 29, 29);
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* When searchBox is hovered, style both input and results */
+.searchBox:hover input {
+  border: 1px solid rgba(133, 133, 133, 0.1);
+}
+
+/* Remove bottom border only when results are present */
+.searchBox:has(.results):hover input {
+  border-bottom: none;
+}
+
+.searchBox:hover .results {
+  border-left: 1px solid rgba(133, 133, 133, 0.1);
+  border-right: 1px solid rgba(133, 133, 133, 0.1);
+  border-bottom: 1px solid rgba(133, 133, 133, 0.1);
 }
 
 .selection {
   display: flex;
+  height: 3em;
   justify-content: space-between;
-  padding: 0 5px 0 5px;
-
+  padding: 0 1em 0 1em;
 }
 
 .selection:hover {
   cursor: pointer;
-  font-weight: 700;
-  background: #f3f3f3;
+  background: rgba(133, 133, 133, 0.1);
 }
 
 .itemProps {
@@ -31,9 +55,15 @@
 }
 
 .itemSearched {
-  color: red;
+  font-weight: bold;
+  color: gray;
 }
 
 .itemCoincidentialCharacter {
-  color: yellow;
+  color: gray;
+}
+
+/* Apply bottom border radius to the last selection item */
+.results .selection:last-child {
+  border-radius: 0 0 20px 20px;
 }

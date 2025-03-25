@@ -29,7 +29,6 @@ const InputSearcher = () => {
       <Input
         labelText="Producto"
         className="searcher"
-        id="searcher"
         type="text"
         value={inputValue}
         placeholder="Escribe un producto"

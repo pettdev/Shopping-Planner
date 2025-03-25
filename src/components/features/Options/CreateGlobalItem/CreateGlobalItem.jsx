@@ -82,10 +82,10 @@ export default function CreateGlobalItem() {
   return (
     <>
       {showForm ? (
-        <form onSubmit={handleSubmit} autoComplete="off">
+        <form onSubmit={handleSubmit} autoComplete="off" className='globalForm'>
           <Input 
             required
-            labelText="Nombre:"
+            labelText="Nombre"
             type="text" 
             id="name" 
             placeholder="Nombre del producto"
@@ -94,26 +94,26 @@ export default function CreateGlobalItem() {
           />
 
           <Input
-            labelText="Descripción:"
+            labelText="Descripción"
             type="textarea" 
             id="description" 
-            placeholder="Breve descripción"
+            placeholder="Breve descripción del producto"
             value={formData.description}
             onChange={handleChange}
           />
 
           <Input
-            labelText="Marca:"
+            labelText="Marca"
             type="text"
             id="brand"
-            placeholder="Ej: Pepsico, Nestlé"
+            placeholder="Marca del producto"
             value={formData.brand}
             onChange={handleChange}
           />
 
           <SelectOption
             required
-            labelText="Categoría:"
+            labelText="Categoría"
             id="category"
             options={categoryOptions}
             value={formData.category}
@@ -126,12 +126,12 @@ export default function CreateGlobalItem() {
 
           <Input
             required
-            labelText="Peso neto:"
+            labelText="Peso neto"
             type="number"
             step="0.01"
             min="0.01"
             id="netWeight"
-            placeholder="Ej: 1.5"
+            placeholder="0.00"
             value={formData.netWeight}
             onChange={handleChange}
           />

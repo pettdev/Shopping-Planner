@@ -11,8 +11,8 @@ const Label = ({htmlFor, labelText, children}) => {
   
   return (
     <label htmlFor={htmlFor}>
-      {labelText}
       {children}
+      <span className="floating-label">{labelText}</span>
     </label>
   )
 }

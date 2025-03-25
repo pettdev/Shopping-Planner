@@ -57,7 +57,7 @@ const MenuAddItem = () => {
   // Al hacer clic en Agregar
   const handleSubmit = (e) => {
     e.preventDefault()
-    const subtotal = quantity * price // Almacenar en VES (sin conversión)
+    const subtotal = quantity * price
     
     try {
       updateList({...item, quantity, price, subtotal})
@@ -74,47 +74,50 @@ const MenuAddItem = () => {
         <form onSubmit={(e) => handleSubmit(e)} autoComplete="off">
           <InputSearcher/>
 
-          <br/>
+        <div className='quantityContainer'>
 
+          {/* CANTIDAD */}
           <Input
+            className='quantityInput'
             required
             labelText='Cantidad'
             type={'text'}
             inputMode={'decimal'}
-            id='quantity'
             placeholder='Ej.: 1.50'
             value={quantity}
             onChange={e => handleNumberChange(e, setQuantity)}/>
 
-          {/* BOTÓN DISMINUIR EN 1 */}
-          <Button 
-            text={'-'} 
-            onClick={() => handleOperation('-')}/>
+          <div className='buttonsContainer'>
+            {/* BOTÓN DISMINUIR EN 1 */}
+            <Button 
+              className='minusButton'
+              text={'-'} 
+              onClick={() => handleOperation('-')}/>
 
-          {/* BOTÓN AUMENTAR EN 1 */}
-          <Button 
-            text={'+'} 
-            onClick={() => handleOperation('+')}/>
-          
-          <br/>
+            {/* BOTÓN AUMENTAR EN 1 */}
+            <Button 
+              className='plusButton'
+              text={'+'} 
+              onClick={() => handleOperation('+')}/>
+          </div>
+        </div>
+
           
           {/* PRECIO */}
           <Input
+            className='priceInput'
             required
             labelText='Precio'
             type={'text'}
             inputMode={'decimal'}
-            id='price'
             placeholder='Ej: 3.99'
             value={price}
             onChange={e => handleNumberChange(e, setPrice)}/>
 
-          <br/>
-
           {/* PREVISUALIZAR MONTO */}
-          <PreviewTotal quantity={quantity} price={price}/>
-
-          <br/>
+          <PreviewTotal 
+            quantity={quantity} 
+            price={price}/>
           
           {/* ENVIAR DATOS */}
           <Button
@@ -123,13 +126,14 @@ const MenuAddItem = () => {
 
           {/* CERRAR */}
           <Button
+            className='cancelButton'
             text={'Cancelar'}
             onClick={()=>{
               toggleShowForm()
               resetFields()}}/>
-              </form>
+        </form>
       ) : (
-        <Button text={'Agregar a la lista'} onClick={toggleShowForm} className='addButton'/>
+        <Button text={'Agregar a la lista'} onClick={toggleShowForm} className='addToListButton'/>
       )}
     </>
   )

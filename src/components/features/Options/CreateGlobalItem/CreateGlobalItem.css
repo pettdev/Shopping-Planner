@@ -4,6 +4,10 @@
 }
 
 .globalButton:hover {
-  background-color: rgba(168, 43, 226, 0.4);
-  color: rgb(216, 131, 255);
+  background-color: rgba(174, 0, 255, 0.4);
+  color: rgb(210, 113, 255);
+}
+
+.globalForm {
+  margin-top: 1em;
 }

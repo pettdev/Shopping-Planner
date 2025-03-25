@@ -149,9 +149,10 @@ const DollarRate = () => {
       {showInputs && (isToggleON && option === optionManual) && (
         <>
           <Input
-            labelText="Tasa:"
+            labelText="Tasa"
             onChange={manualValueHandler}
-            value={manualRate}/>
+            value={manualRate}
+            placeholder='0.00'/>
           <Button text="Aplicar" type="submit" />
           <Button text="Cancelar" onClick={cancelHandler} />
         </>

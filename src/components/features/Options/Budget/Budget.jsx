@@ -98,6 +98,7 @@ const Budget = () => {
       {(isToggleON && showBudgetInputs) && (
         <form onSubmit={onSubmitHandler}>
           <Input
+            labelText="Presupuesto"
             placeholder={`1000 ${currency.symbol}`}
             value={budgetListener}
             onChange={e => budgetOnChange(e)}/>
