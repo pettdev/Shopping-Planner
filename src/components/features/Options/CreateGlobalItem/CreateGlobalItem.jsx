@@ -138,7 +138,7 @@ export default function CreateGlobalItem() {
 
           <SelectOption
             required
-            labelText="Unidad de peso:"
+            labelText="Unidad de peso"
             id="weightUnit"
             options={weightUnitOptions.map(unit => unit.representation)}
             value={weightUnitOptions.find(u => u.symbol === formData.weightUnit)?.representation || ''}

@@ -50,25 +50,30 @@ export const BudgetVisualizer = ({ budget }) => {
   const availableText = available >= 0 ? 'Restante' : 'Faltante'
 
   return (
-    <div className="budget-visualizer">
-      <div className="budget-bar-container">
-        <div 
-          className="spendings-progress"
-          style={{ 
-            maxWidth: `${spendingPercentage}%`,
-            backgroundColor: colorStatus.divColor
-          }}
-        />
+    <div className="budget-component">
+      <div className="spend-budget-container">
+        
+        <div className="spend-container">
+          <span className='spend-text'>{availableText}</span>
+          <span className={available < 0 ? 'exceeded-amount spend-amount' : 'spend-amount'}>
+            {Math.abs(available)} {currency.code} ({colorStatus.text})
+          </span>
+        </div>
+
+        <div className="budget-container">
+          <span className='budget-text'>Presupuesto</span>
+          <span className='budget-amount'>{convertedBudget} {currency.code}</span>
+        </div>
       </div>
 
-      <div className="info-container">
-        <span className="bold-text">
-          {convertedBudget} {currency.code}
-        </span>
-        <span>{`${spendingPercentage}%`}</span>
-        <span className={available < 0 ? 'exceeded-text' : ''}>
-          {Math.abs(available)} {currency.code} {availableText}
-        </span>
+      <div className="budget-visualizer">
+        <div className="budget-bar-container">
+          <div className="spendings-progress"
+              style={{ 
+              maxWidth: `${spendingPercentage}%`,
+              backgroundColor: colorStatus.divColor}}>
+          </div>
+        </div>
       </div>
     </div>
   )

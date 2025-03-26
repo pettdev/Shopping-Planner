@@ -1,7 +1,7 @@
 import './DollarRate.css'
 import { useEffect, useState } from 'react'
 import { useCurrency, useDollarRate } from '../../../../context'
-import { Button, Input, SelectOption, ToggleSwitch } from '../../../common'
+import { Button, Input, SelectOption } from '../../../common'
 import { DecimalInputSanitizer } from '../../../../utils'
 import { getBCV, getParalelo } from '../../../../services/DollarRates/pyDolarVenezuelaAPI'
 import { exchangeVESforUSD as exchanger } from '../../../../context/CurrencyContext/helpers/exchangeVESforUSD'
@@ -9,7 +9,6 @@ import { exchangeVESforUSD as exchanger } from '../../../../context/CurrencyCont
 
 const DollarRate = () => {
   // React states
-  const [isToggleON, setIsToggleON] = useState(false)
   const [isApplied, setIsApplied] = useState(false)
   const [option, setOption] = useState('')
   const [manualRate, setManualRate] = useState('')
@@ -72,7 +71,7 @@ const DollarRate = () => {
  
   const selectDollarAsCurrency = (dollarRate) => {
     if (dollarRate > 1) {
-      if (isToggleON && !currency.isEqualTo(dollar)) {
+      if (option !== '' && !currency.isEqualTo(dollar)) {
         selectCurrency(dollar)
       }
     }
@@ -84,20 +83,23 @@ const DollarRate = () => {
   }
 
   useEffect(() => {
-    // Toggle OFF
-    if (!isToggleON) {
+    // Si hay una opción seleccionada, consideramos que está activado
+    const isActive = option !== ''
+    
+    // Si no hay opción seleccionada (desactivado)
+    if (!isActive) {
       exchanger.convertQuoteToBase()
       if (currency.isEqualTo(dollar)) {
         selectCurrency(bolivar)
       }
-    // Toggle ON
+    // Si hay opción seleccionada (activado)
     } else {
       if (rate > 1) {
         exchanger.convertBaseToQuote()
         selectCurrency(dollar)
       }
     }
-  }, [isToggleON, currency, dollar, bolivar, rate, selectCurrency])
+  }, [option, currency, dollar, bolivar, rate, selectCurrency])
 
   useEffect(() => {
     // Si la tasa manual es mayor a 0.01, se actualiza la tasa y se oculta el input
@@ -129,44 +131,42 @@ const DollarRate = () => {
   return (
     <form onSubmit={e => onSubmitHandler(e)}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <ToggleSwitch
-          label="Usar dólares"
-          checked={isToggleON}
-          onChange={(checked) => setIsToggleON(checked)}
+        
+        <SelectOption
+          labelText={'Moneda'}
+          value={option}
+          options={optionTexts}
+          onChange={e => onSelectedChange(e)}
         />
-        {isToggleON && showInputs && (
-          <SelectOption
-            value={option}
-            options={optionTexts}
-            onChange={e => onSelectedChange(e)}
-          />
-        )}
-        {!showInputs && (isToggleON && rate > 0.01) && (
+        {!showInputs && (option !== '' && rate > 0.01) && (
           <Button text='Editar' onClick={editHandler}/>
         )}
       </div>
 
-      {showInputs && (isToggleON && option === optionManual) && (
+      {showInputs && (option === optionManual) && (
         <>
-          <Input
-            labelText="Tasa"
-            onChange={manualValueHandler}
-            value={manualRate}
-            placeholder='0.00'/>
-          <Button text="Aplicar" type="submit" />
-          <Button text="Cancelar" onClick={cancelHandler} />
-        </>
+        <Input
+          labelText="Tasa"
+          id="manualRate"
+          type="text"
+          required
+          onChange={manualValueHandler}
+          value={manualRate}
+          placeholder='0.00'/>
+        <Button text="Aplicar" type="submit" />
+        <Button text="Cancelar" onClick={cancelHandler} />
+      </>
       )}
       {/* Si la tasa es manual, se muestra el input para editarla */}
-      {!showInputs && (isToggleON && rate > 0.01) && (
+      {!showInputs && (option !== '' && rate > 0.01) && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa personalizada.</div>
       )}
       {/* Si la tasa es la del Banco Central de Venezuela, se muestra el mensaje */}
-      {isToggleON && option === optionBCV && (
+      {option === optionBCV && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa Banco Central de Venezuela.</div>
       )}
       {/* Si la tasa es la del paralelo, se muestra el mensaje */}
-      {isToggleON && option === optionParalelo && (
+      {option === optionParalelo && (
         <div><span style={{ fontWeight: 'bold' }}>{rate} Bs/USD.</span>  Tasa EnParaleloVzla.</div>
       )}
     </form>

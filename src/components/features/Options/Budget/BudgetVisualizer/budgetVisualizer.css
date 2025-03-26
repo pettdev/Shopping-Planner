@@ -1,42 +1,55 @@
-.budget-visualizer span {
-  background-color: #0000001c;
-  border-radius: 4px;
-  padding: 2px 8px;
-  margin: 0px 5px 0px 0px;
-  display: inline-block;
-}
-
 .budget-visualizer {
   display: flex;
   flex-direction: column;
-  gap: 5px;
 }
 
-.budget-visualizer .budget-bar-container {
-  background-color: #dddddd;
-  height: 8px;
-  margin: 5px 0;
-  border-radius: 4px;
+.budget-bar-container {
+  background-color: rgba(29,29,29, 1);
+  height: 1em;
+  border-radius: 10px;
 }
 
 .budget-visualizer .spendings-progress {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 10px;
   transition: max-width 0.4s ease-out, background-color 0.3s ease-out;
 }
 
-.budget-visualizer .bold-text {
+.spend-text, .budget-text {
   font-weight: bold;
+  font-size: 0.8em;
 }
 
-.budget-visualizer .exceeded-text {
-  color: #e71454;
-  background-color: rgba(253, 157, 232, 0.459);
+.spend-amount, .budget-amount {
+  font-size: 1.1em;
 }
 
-.budget-visualizer .info-container {
+.spend-container, .budget-container {
   display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.spend-container {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.budget-container {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.spend-budget-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.budget-component {
+  border: 1px solid rgba(35,35,35, 1);
+  border-radius: 20px;
+  padding: 1em;
+}
+.budget-component:hover {
+  box-shadow: 0 0 5px rgba(35,35,35, 0.5);
 }
