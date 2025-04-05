@@ -39,25 +39,6 @@ npm start
 
 This will start the app and open it in your default web browser. You can now interact with the Shopping App.
 
-## Project Structure
-
-```
-shopping-app/
-├── src/
-│   ├── components/
-│   │   ├── AddItemMenu.js
-│   │   ├── ...
-│   ├── App.js
-│   ├── routes.js
-│   ├── ...
-├── public/
-│   ├── index.html
-│   ├── ...
-├── package.json
-├── README.md
-└── ...
-```
-
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any changes.
